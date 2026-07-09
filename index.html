@@ -25,9 +25,6 @@
     .nav-item.active { color: #FFFFFF; background: rgba(155,127,212,0.18); border-left-color: #9B7FD4; font-weight: 500; }
     .nav-item .nav-icon { font-size: 16px; width: 18px; text-align: center; }
     .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
-    .role-switch { display: flex; background: rgba(255,255,255,0.07); border-radius: 8px; padding: 3px; gap: 2px; }
-    .role-btn { flex: 1; padding: 5px 0; text-align: center; font-size: 11px; font-weight: 500; border-radius: 6px; cursor: pointer; color: rgba(255,255,255,0.5); transition: all 0.15s; letter-spacing: 0.5px; }
-    .role-btn.active { background: #9B7FD4; color: #FFFFFF; }
     .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
     .topbar { background: #FFFFFF; border-bottom: 1px solid #DDD5EE; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
     .topbar-title { font-family: 'Playfair Display', serif; font-size: 20px; color: #3D2C6B; }
@@ -50,6 +47,7 @@
     .btn-danger { background: transparent; color: #B84040; border: 1px solid #e8c0c0; }
     .btn-danger:hover { background: #fdf0f0; }
     .btn-sm { padding: 5px 11px; font-size: 12px; }
+    .btn-block { width: 100%; justify-content: center; padding: 11px 16px; font-size: 15px; }
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
     th { text-align: left; padding: 10px 14px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #7B6FA0; border-bottom: 1px solid #DDD5EE; font-weight: 500; background: #F7F4FC; }
@@ -77,6 +75,7 @@
     .form-input:focus { border-color: #9B7FD4; background: #FFFFFF; }
     select.form-input { cursor: pointer; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
     .announcement { padding: 14px 16px; background: #FFFFFF; border-radius: 0 8px 8px 0; margin-bottom: 12px; border: 1px solid #DDD5EE; border-left: 3px solid #9B7FD4; }
     .ann-meta { font-size: 11px; color: #7B6FA0; margin-bottom: 4px; }
     .ann-body { font-size: 14px; color: #3D2C6B; line-height: 1.5; }
@@ -92,6 +91,7 @@
     .cal-day.today { border-color: #9B7FD4; }
     .cal-date { font-size: 12px; font-weight: 500; margin-bottom: 3px; }
     .cal-event { font-size: 10px; background: #3D2C6B; color: #FFFFFF; border-radius: 3px; padding: 1px 5px; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+    .cal-event:hover { background: #9B7FD4; }
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
     .section-header h2 { font-size: 22px; }
     .search-input { padding: 8px 12px 8px 36px; border: 1px solid #DDD5EE; border-radius: 8px; font-size: 13px; background: #F7F4FC; outline: none; transition: border 0.15s; width: 220px; font-family: 'Source Sans 3', sans-serif; }
@@ -107,24 +107,40 @@
     .welcome-banner h2 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 4px; }
     .welcome-banner p { font-size: 14px; opacity: 0.7; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    /* Login */
+    .login-page { min-height: 100vh; background: #3D2C6B; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .login-card { background: #FFFFFF; border-radius: 20px; padding: 40px; width: 400px; max-width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-logo { text-align: center; margin-bottom: 28px; }
+    .login-logo .cross { font-size: 32px; color: #9B7FD4; margin-bottom: 8px; }
+    .login-logo .parish { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #7B6FA0; margin-bottom: 4px; }
+    .login-logo h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: #3D2C6B; }
+    .error-msg { background: #fdf0f0; border: 1px solid #e8c0c0; color: #B84040; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
+    .logout-btn { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: rgba(255,255,255,0.7); font-size: 12px; cursor: pointer; transition: all 0.15s; font-family: 'Source Sans 3', sans-serif; }
+    .logout-btn:hover { background: rgba(255,255,255,0.18); color: #FFFFFF; }
+    /* Event detail popup */
+    .event-popup { position: fixed; background: #FFFFFF; border: 1px solid #DDD5EE; border-radius: 12px; padding: 16px; width: 280px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); z-index: 200; }
+    .event-popup h4 { font-size: 16px; margin-bottom: 8px; }
+    .event-detail-row { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #7B6FA0; margin-bottom: 6px; }
+    .event-detail-row span:first-child { flex-shrink: 0; }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #DDD5EE; border-radius: 3px; }
     @media (max-width: 900px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .two-col { grid-template-columns: 1fr; }
+      .form-row-3 { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useRef, useEffect } = React;
 
     const C = {
-      navy: "#3D2C6B", gold: "#9B7FD4", goldLight: "#DDD0F5", cream: "#F7F4FC",
-      white: "#FFFFFF", muted: "#7B6FA0", border: "#DDD5EE",
-      danger: "#B84040", success: "#2E7D5A", info: "#5B3FBE",
+      navy:"#3D2C6B", gold:"#9B7FD4", goldLight:"#DDD0F5", cream:"#F7F4FC",
+      white:"#FFFFFF", muted:"#7B6FA0", border:"#DDD5EE",
+      danger:"#B84040", success:"#2E7D5A", info:"#5B3FBE",
     };
 
     const STAGES = ["Pre-Catechumenate","Catechumenate","Purification & Enlightenment","Mystagogy"];
@@ -132,15 +148,18 @@
     const STAGE_CLASS = ["stage-pre","stage-cat","stage-pe","stage-mys"];
     function stageClass(s) { return STAGE_CLASS[STAGES.indexOf(s)] || "stage-pre"; }
 
+    // Default teacher account
+    const DEFAULT_TEACHER = { email: "teacher@stcatherine.org", password: "ocia2026", name: "Fr. Michael", role: "admin" };
+
     const SEED_STUDENTS = [
-      {id:1,name:"Maria Santos",email:"maria.santos@email.com",phone:"972-555-0101",stage:"Catechumenate",attendance:85,notes:"Sponsored by John D.",joined:"2025-09-10"},
-      {id:2,name:"James Okafor",email:"james.okafor@email.com",phone:"972-555-0102",stage:"Pre-Catechumenate",attendance:70,notes:"Recently moved from Lagos",joined:"2026-01-15"},
-      {id:3,name:"Linda Chen",email:"linda.chen@email.com",phone:"972-555-0103",stage:"Catechumenate",attendance:92,notes:"",joined:"2025-09-10"},
-      {id:4,name:"Roberto Diaz",email:"rdiaz@email.com",phone:"972-555-0104",stage:"Purification & Enlightenment",attendance:96,notes:"Elect — Easter Vigil ready",joined:"2024-09-05"},
-      {id:5,name:"Aisha Williams",email:"aisha.w@email.com",phone:"972-555-0105",stage:"Catechumenate",attendance:78,notes:"Sponsor: Deacon Tom",joined:"2025-09-10"},
-      {id:6,name:"Patrick Murphy",email:"pmurphy@email.com",phone:"972-555-0106",stage:"Mystagogy",attendance:100,notes:"Baptized Easter 2025",joined:"2024-09-01"},
-      {id:7,name:"Fatima Al-Hassan",email:"fatima.h@email.com",phone:"972-555-0107",stage:"Pre-Catechumenate",attendance:60,notes:"Just inquiring",joined:"2026-03-01"},
-      {id:8,name:"David Kim",email:"dkim@email.com",phone:"972-555-0108",stage:"Catechumenate",attendance:88,notes:"",joined:"2025-09-10"},
+      {id:1,name:"Maria Santos",email:"maria.santos@email.com",password:"maria123",phone:"972-555-0101",stage:"Catechumenate",attendance:85,notes:"Sponsored by John D.",joined:"2025-09-10"},
+      {id:2,name:"James Okafor",email:"james.okafor@email.com",password:"james123",phone:"972-555-0102",stage:"Pre-Catechumenate",attendance:70,notes:"Recently moved from Lagos",joined:"2026-01-15"},
+      {id:3,name:"Linda Chen",email:"linda.chen@email.com",password:"linda123",phone:"972-555-0103",stage:"Catechumenate",attendance:92,notes:"",joined:"2025-09-10"},
+      {id:4,name:"Roberto Diaz",email:"rdiaz@email.com",password:"roberto123",phone:"972-555-0104",stage:"Purification & Enlightenment",attendance:96,notes:"Elect — Easter Vigil ready",joined:"2024-09-05"},
+      {id:5,name:"Aisha Williams",email:"aisha.w@email.com",password:"aisha123",phone:"972-555-0105",stage:"Catechumenate",attendance:78,notes:"Sponsor: Deacon Tom",joined:"2025-09-10"},
+      {id:6,name:"Patrick Murphy",email:"pmurphy@email.com",password:"patrick123",phone:"972-555-0106",stage:"Mystagogy",attendance:100,notes:"Baptized Easter 2025",joined:"2024-09-01"},
+      {id:7,name:"Fatima Al-Hassan",email:"fatima.h@email.com",password:"fatima123",phone:"972-555-0107",stage:"Pre-Catechumenate",attendance:60,notes:"Just inquiring",joined:"2026-03-01"},
+      {id:8,name:"David Kim",email:"dkim@email.com",password:"david123",phone:"972-555-0108",stage:"Catechumenate",attendance:88,notes:"",joined:"2025-09-10"},
     ];
     const SEED_ANN = [
       {id:1,title:"Easter Vigil Rehearsal",body:"All elect please attend the Easter Vigil rehearsal on Friday, April 4th at 7:00 pm in the main church. Bring your sponsor!",date:"2026-05-29",urgent:true},
@@ -155,13 +174,14 @@
       {id:5,name:"Diocese of Fort Worth OCIA Guide",type:"link",url:"https://fwdioc.org",category:"Reference"},
     ];
     const SEED_EVT = [
-      {id:1,title:"OCIA Session",date:"2026-06-04",type:"class"},
-      {id:2,title:"OCIA Session",date:"2026-06-11",type:"class"},
-      {id:3,title:"OCIA Session",date:"2026-06-18",type:"class"},
-      {id:4,title:"Retreat Day",date:"2026-06-21",type:"retreat"},
-      {id:5,title:"OCIA Session",date:"2026-06-25",type:"class"},
-      {id:6,title:"Rite of Welcome",date:"2026-07-06",type:"rite"},
+      {id:1,title:"OCIA Session",date:"2026-06-04",time:"7:00 PM",location:"Parish Hall",description:"Regular weekly session",type:"class"},
+      {id:2,title:"OCIA Session",date:"2026-06-11",time:"7:00 PM",location:"Parish Hall",description:"",type:"class"},
+      {id:3,title:"OCIA Session",date:"2026-06-18",time:"7:00 PM",location:"Parish Hall",description:"",type:"class"},
+      {id:4,title:"Retreat Day",date:"2026-06-21",time:"9:00 AM",location:"St. Catherine Parish Center",description:"Full day retreat. Lunch provided. All catechumens strongly encouraged.",type:"retreat"},
+      {id:5,title:"OCIA Session",date:"2026-06-25",time:"7:00 PM",location:"Parish Hall",description:"",type:"class"},
+      {id:6,title:"Rite of Welcome",date:"2026-07-06",time:"10:30 AM",location:"Main Church",description:"Formal Rite of Welcome for new catechumens",type:"rite"},
     ];
+    const SEED_TEACHER = { email: "teacher@stcatherine.org", password: "ocia2026", name: "Fr. Michael" };
 
     function useStorage(key, seed) {
       const [data, setData] = useState(() => { try { const s=localStorage.getItem(key); return s?JSON.parse(s):seed; } catch{return seed;} });
@@ -170,12 +190,12 @@
     }
 
     function StageTag({stage}) { return <span className={`badge-stage ${stageClass(stage)}`}>{stage}</span>; }
-
     function MatIcon({type}) {
       const m={pdf:{bg:"#FEE2E2",ic:"📄"},drive:{bg:"#DBEAFE",ic:"🔗"},link:{bg:"#D1FAE5",ic:"🌐"}};
       const t=m[type]||m.link;
       return <div className="material-icon" style={{background:t.bg}}>{t.ic}</div>;
     }
+    function initials(name) { return (name||"").split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase(); }
 
     function Modal({title,onClose,children,footer}) {
       return (
@@ -189,6 +209,55 @@
       );
     }
 
+    // ── LOGIN ──
+    function LoginPage({onLogin}) {
+      const [email,setEmail]=useState("");
+      const [password,setPassword]=useState("");
+      const [error,setError]=useState("");
+      const [students]=useStorage("ocia_students",SEED_STUDENTS);
+      const [teacher]=useStorage("ocia_teacher",SEED_TEACHER);
+
+      const login = () => {
+        setError("");
+        // Check teacher
+        if(email.trim().toLowerCase()===teacher.email.toLowerCase() && password===teacher.password) {
+          onLogin({...teacher, role:"admin"});
+          return;
+        }
+        // Check students
+        const s = students.find(s=>s.email.toLowerCase()===email.trim().toLowerCase() && s.password===password);
+        if(s) { onLogin({...s, role:"student"}); return; }
+        setError("Incorrect email or password. Please try again.");
+      };
+
+      const handleKey = (e) => { if(e.key==="Enter") login(); };
+
+      return (
+        <div className="login-page">
+          <div className="login-card">
+            <div className="login-logo">
+              <div className="cross">✝</div>
+              <div className="parish">St. Catherine of Siena</div>
+              <h2>OCIA Program</h2>
+              <p style={{fontSize:13,color:C.muted,marginTop:4}}>Carrollton, Texas</p>
+            </div>
+            {error&&<div className="error-msg">{error}</div>}
+            <div className="form-group">
+              <label className="form-label">Email Address</label>
+              <input className="form-input" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={handleKey} placeholder="your@email.com" autoFocus/>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input className="form-input" type="password" value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={handleKey} placeholder="••••••••"/>
+            </div>
+            <button className="btn btn-primary btn-block" onClick={login}>Sign In</button>
+            <p style={{textAlign:"center",fontSize:12,color:C.muted,marginTop:16}}>Contact your teacher if you need help logging in.</p>
+          </div>
+        </div>
+      );
+    }
+
+    // ── ADMIN VIEWS ──
     function AdminDashboard({students,announcements,events}) {
       const stages=STAGES.map(s=>({name:s,count:students.filter(x=>x.stage===s).length}));
       const avgAtt=students.length?Math.round(students.reduce((a,b)=>a+b.attendance,0)/students.length):0;
@@ -224,7 +293,10 @@
                     <div style={{fontSize:10,textTransform:"uppercase",letterSpacing:1}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
                     <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
                   </div>
-                  <div><div style={{fontSize:14,fontWeight:500}}>{ev.title}</div><div style={{fontSize:12,color:C.muted,textTransform:"capitalize"}}>{ev.type}</div></div>
+                  <div>
+                    <div style={{fontSize:14,fontWeight:500}}>{ev.title}</div>
+                    <div style={{fontSize:12,color:C.muted}}>{ev.time&&ev.time} {ev.location&&`· ${ev.location}`}</div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -249,7 +321,7 @@
       const [modal,setModal]=useState(null);
       const [form,setForm]=useState({});
       const filtered=students.filter(s=>(stageFilter==="All"||s.stage===stageFilter)&&(s.name.toLowerCase().includes(search.toLowerCase())||s.email.toLowerCase().includes(search.toLowerCase())));
-      const openAdd=()=>{setForm({name:"",email:"",phone:"",stage:"Pre-Catechumenate",attendance:100,notes:""});setModal("add");};
+      const openAdd=()=>{setForm({name:"",email:"",password:"",phone:"",stage:"Pre-Catechumenate",attendance:100,notes:""});setModal("add");};
       const openEdit=(s)=>{setForm({...s});setModal("edit");};
       const openView=(s)=>{setForm({...s});setModal("view");};
       const save=()=>{
@@ -259,7 +331,6 @@
         setModal(null);
       };
       const remove=(id)=>{if(confirm("Remove this student?"))setStudents(students.filter(s=>s.id!==id));};
-      const initials=(name)=>name.split(" ").map(n=>n[0]).join("").slice(0,2);
       return (
         <>
           <div className="section-header">
@@ -283,7 +354,7 @@
                       <td><a href={`tel:${s.phone}`} style={{color:C.navy,textDecoration:"none"}}>{s.phone}</a></td>
                       <td><StageTag stage={s.stage}/></td>
                       <td><div style={{display:"flex",alignItems:"center",gap:8}}><div className="progress-bar" style={{width:60}}><div className="progress-fill" style={{width:`${s.attendance}%`}}/></div><span style={{fontSize:12,color:C.muted}}>{s.attendance}%</span></div></td>
-                      <td style={{fontSize:12,color:C.muted,maxWidth:160,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{s.notes}</td>
+                      <td style={{fontSize:12,color:C.muted,maxWidth:140,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{s.notes}</td>
                       <td><div style={{display:"flex",gap:4}}><button className="btn btn-outline btn-sm" onClick={()=>openView(s)}>View</button><button className="btn btn-outline btn-sm" onClick={()=>openEdit(s)}>Edit</button><button className="btn btn-danger btn-sm" onClick={()=>remove(s.id)}>✕</button></div></td>
                     </tr>
                   ))}
@@ -298,7 +369,10 @@
                 <div className="form-group"><label className="form-label">Full Name</label><input className="form-input" value={form.name||""} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Full name"/></div>
                 <div className="form-group"><label className="form-label">Phone</label><input className="form-input" value={form.phone||""} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="972-555-0100"/></div>
               </div>
-              <div className="form-group"><label className="form-label">Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm({...form,email:e.target.value})} placeholder="email@example.com"/></div>
+              <div className="form-row">
+                <div className="form-group"><label className="form-label">Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm({...form,email:e.target.value})} placeholder="email@example.com"/></div>
+                <div className="form-group"><label className="form-label">Login Password</label><input className="form-input" type="text" value={form.password||""} onChange={e=>setForm({...form,password:e.target.value})} placeholder="Set student password"/></div>
+              </div>
               <div className="form-row">
                 <div className="form-group"><label className="form-label">Stage</label><select className="form-input" value={form.stage||STAGES[0]} onChange={e=>setForm({...form,stage:e.target.value})}>{STAGES.map(s=><option key={s}>{s}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">Attendance %</label><input className="form-input" type="number" min="0" max="100" value={form.attendance||0} onChange={e=>setForm({...form,attendance:Number(e.target.value)})}/></div>
@@ -313,7 +387,7 @@
                 <div style={{width:56,height:56,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,fontFamily:"Playfair Display,serif",fontWeight:700}}>{initials(form.name||"")}</div>
                 <div><div style={{fontFamily:"Playfair Display,serif",fontSize:20}}>{form.name}</div><StageTag stage={form.stage}/></div>
               </div>
-              {[["Email",form.email],["Phone",form.phone],["Joined",form.joined],["Attendance",`${form.attendance}%`]].map(([k,v])=>(
+              {[["Email",form.email],["Phone",form.phone],["Joined",form.joined],["Attendance",`${form.attendance}%`],["Login Password",form.password]].map(([k,v])=>(
                 <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}`,fontSize:14}}>
                   <span style={{color:C.muted}}>{k}</span><span style={{fontWeight:500}}>{v}</span>
                 </div>
@@ -393,7 +467,10 @@
 
     function AdminCalendar({events,setEvents}) {
       const [modal,setModal]=useState(false);
+      const [editModal,setEditModal]=useState(false);
       const [form,setForm]=useState({});
+      const [popup,setPopup]=useState(null);
+      const popupRef=useRef(null);
       const today=new Date();
       const [viewDate,setViewDate]=useState(new Date(today.getFullYear(),today.getMonth(),1));
       const year=viewDate.getFullYear(),month=viewDate.getMonth();
@@ -406,15 +483,34 @@
       for(let d=1;d<=daysInMonth;d++)cells.push({day:d,other:false});
       while(cells.length%7!==0)cells.push({day:cells.length-firstDay-daysInMonth+1,other:true});
       const eventsForDay=(d)=>{const ds=`${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;return events.filter(e=>e.date===ds);};
-      const openAdd=()=>{setForm({title:"",date:todayStr,type:"class"});setModal(true);};
+      const openAdd=()=>{setForm({title:"",date:todayStr,time:"7:00 PM",location:"Parish Hall",description:"",type:"class"});setModal(true);};
+      const openEdit=(ev,e)=>{e.stopPropagation();setPopup(null);setForm({...ev});setEditModal(true);};
       const save=()=>{if(!form.title||!form.date)return;setEvents([...events,{...form,id:Date.now()}]);setModal(false);};
-      const remove=(id)=>setEvents(events.filter(e=>e.id!==id));
+      const saveEdit=()=>{if(!form.title||!form.date)return;setEvents(events.map(e=>e.id===form.id?form:e));setEditModal(false);};
+      const remove=(id)=>{setEvents(events.filter(e=>e.id!==id));setPopup(null);};
+      const showPopup=(ev,e)=>{e.stopPropagation();const r=e.target.getBoundingClientRect();setPopup({ev,x:r.left,y:r.bottom+4});};
+      useEffect(()=>{const h=()=>setPopup(null);document.addEventListener("click",h);return()=>document.removeEventListener("click",h);},[]);
       const monthName=viewDate.toLocaleString("en",{month:"long",year:"numeric"});
       const upcoming=events.filter(e=>e.date>=todayStr).sort((a,b)=>a.date.localeCompare(b.date));
+      const EventForm=({onSave,onClose,title})=>(
+        <Modal title={title} onClose={onClose}
+          footer={<><button className="btn btn-outline" onClick={onClose}>Cancel</button><button className="btn btn-primary" onClick={onSave}>Save</button></>}>
+          <div className="form-group"><label className="form-label">Event Title</label><input className="form-input" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="OCIA Session, Rite of Welcome…"/></div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">Date</label><input className="form-input" type="date" value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></div>
+            <div className="form-group"><label className="form-label">Time</label><input className="form-input" type="text" value={form.time||""} onChange={e=>setForm({...form,time:e.target.value})} placeholder="7:00 PM"/></div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">Location</label><input className="form-input" value={form.location||""} onChange={e=>setForm({...form,location:e.target.value})} placeholder="Parish Hall"/></div>
+            <div className="form-group"><label className="form-label">Type</label><select className="form-input" value={form.type} onChange={e=>setForm({...form,type:e.target.value})}><option value="class">Class Session</option><option value="rite">Rite / Liturgy</option><option value="retreat">Retreat</option><option value="meeting">Meeting</option><option value="other">Other</option></select></div>
+          </div>
+          <div className="form-group"><label className="form-label">Description / Notes</label><textarea className="form-input" rows={3} value={form.description||""} onChange={e=>setForm({...form,description:e.target.value})} placeholder="Any details students should know…" style={{resize:"vertical"}}/></div>
+        </Modal>
+      );
       return (
         <>
           <div className="section-header"><h2>Class Calendar</h2><button className="btn btn-primary" onClick={openAdd}>+ Add Event</button></div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 280px",gap:20}}>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:20}}>
             <div className="card">
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
                 <h3 style={{fontSize:17}}>{monthName}</h3>
@@ -431,7 +527,7 @@
                   return (
                     <div key={i} className={`cal-day${cell.other?" other-month":""}${ds===todayStr?" today":""}`}>
                       <div className="cal-date" style={{color:ds===todayStr?C.gold:C.navy}}>{cell.day}</div>
-                      {evs.map(ev=><div key={ev.id} className="cal-event" title={ev.title}>{ev.title}</div>)}
+                      {evs.map(ev=><div key={ev.id} className="cal-event" title={ev.title} onClick={(e)=>showPopup(ev,e)}>{ev.title}</div>)}
                     </div>
                   );
                 })}
@@ -441,36 +537,47 @@
               <h3 style={{fontSize:15,marginBottom:14}}>Upcoming</h3>
               {upcoming.length===0&&<p style={{fontSize:13,color:C.muted}}>No upcoming events</p>}
               {upcoming.map(ev=>(
-                <div key={ev.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 0",borderBottom:`1px solid ${C.border}`}}>
-                  <div><div style={{fontSize:13,fontWeight:500}}>{ev.title}</div><div style={{fontSize:11,color:C.muted}}>{ev.date} · {ev.type}</div></div>
-                  <button className="btn btn-danger btn-sm" onClick={()=>remove(ev.id)} style={{fontSize:11,padding:"3px 8px"}}>✕</button>
+                <div key={ev.id} style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}`}}>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:13,fontWeight:500}}>{ev.title}</div>
+                    <div style={{fontSize:11,color:C.muted}}>{ev.date}{ev.time&&` · ${ev.time}`}</div>
+                    {ev.location&&<div style={{fontSize:11,color:C.muted}}>📍 {ev.location}</div>}
+                  </div>
+                  <div style={{display:"flex",gap:4,flexShrink:0,marginLeft:6}}>
+                    <button className="btn btn-outline btn-sm" onClick={(e)=>openEdit(ev,e)} style={{fontSize:11,padding:"3px 8px"}}>Edit</button>
+                    <button className="btn btn-danger btn-sm" onClick={()=>remove(ev.id)} style={{fontSize:11,padding:"3px 8px"}}>✕</button>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-          {modal&&(
-            <Modal title="Add Event" onClose={()=>setModal(false)}
-              footer={<><button className="btn btn-outline" onClick={()=>setModal(false)}>Cancel</button><button className="btn btn-primary" onClick={save}>Save</button></>}>
-              <div className="form-group"><label className="form-label">Event Title</label><input className="form-input" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="OCIA Session, Rite of Welcome…"/></div>
-              <div className="form-row">
-                <div className="form-group"><label className="form-label">Date</label><input className="form-input" type="date" value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></div>
-                <div className="form-group"><label className="form-label">Type</label><select className="form-input" value={form.type} onChange={e=>setForm({...form,type:e.target.value})}><option value="class">Class Session</option><option value="rite">Rite / Liturgy</option><option value="retreat">Retreat</option><option value="meeting">Meeting</option><option value="other">Other</option></select></div>
+          {modal&&<EventForm title="Add Event" onSave={save} onClose={()=>setModal(false)}/>}
+          {editModal&&<EventForm title="Edit Event" onSave={saveEdit} onClose={()=>setEditModal(false)}/>}
+          {popup&&(
+            <div className="event-popup" ref={popupRef} style={{top:Math.min(popup.y,window.innerHeight-200),left:Math.min(popup.x,window.innerWidth-300)}} onClick={e=>e.stopPropagation()}>
+              <h4>{popup.ev.title}</h4>
+              {popup.ev.date&&<div className="event-detail-row"><span>📅</span><span>{popup.ev.date}{popup.ev.time&&` at ${popup.ev.time}`}</span></div>}
+              {popup.ev.location&&<div className="event-detail-row"><span>📍</span><span>{popup.ev.location}</span></div>}
+              {popup.ev.description&&<div className="event-detail-row"><span>📝</span><span>{popup.ev.description}</span></div>}
+              <div style={{display:"flex",gap:6,marginTop:12}}>
+                <button className="btn btn-outline btn-sm" style={{flex:1}} onClick={(e)=>openEdit(popup.ev,e)}>Edit</button>
+                <button className="btn btn-danger btn-sm" style={{flex:1}} onClick={()=>remove(popup.ev.id)}>Delete</button>
               </div>
-            </Modal>
+            </div>
           )}
         </>
       );
     }
 
+    // ── STUDENT VIEWS ──
     function StudentDashboard({student,announcements,events}) {
       const today=new Date().toISOString().slice(0,10);
       const upcoming=events.filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4);
-      const initials=(name)=>name.split(" ").map(n=>n[0]).join("").slice(0,2);
       return (
         <>
           <div className="welcome-banner">
             <h2>Welcome back, {student.name.split(" ")[0]} ✝</h2>
-            <p style={{marginTop:4}}>Your journey: <strong style={{color:C.goldLight}}>{student.stage}</strong></p>
+            <p style={{marginTop:4}}>Your journey: <strong style={{color:"#DDD0F5"}}>{student.stage}</strong></p>
           </div>
           <div className="two-col" style={{marginBottom:20}}>
             <div className="card">
@@ -515,14 +622,22 @@
             <div className="card">
               <h3 style={{fontSize:16,marginBottom:14}}>Upcoming Sessions</h3>
               {upcoming.map(ev=>(
-                <div key={ev.id} style={{display:"flex",gap:12,alignItems:"center",marginBottom:12}}>
-                  <div style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:44,flexShrink:0}}>
-                    <div style={{fontSize:9,textTransform:"uppercase",letterSpacing:1,color:C.muted}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
-                    <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,color:C.navy,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+                <div key={ev.id} style={{padding:"10px 0",borderBottom:`1px solid ${C.border}`}}>
+                  <div style={{display:"flex",gap:12,alignItems:"center"}}>
+                    <div style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:44,flexShrink:0}}>
+                      <div style={{fontSize:9,textTransform:"uppercase",letterSpacing:1,color:C.muted}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
+                      <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,color:C.navy,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+                    </div>
+                    <div>
+                      <div style={{fontSize:14,fontWeight:500}}>{ev.title}</div>
+                      {ev.time&&<div style={{fontSize:12,color:C.muted}}>🕖 {ev.time}</div>}
+                      {ev.location&&<div style={{fontSize:12,color:C.muted}}>📍 {ev.location}</div>}
+                    </div>
                   </div>
-                  <div><div style={{fontSize:14,fontWeight:500}}>{ev.title}</div><div style={{fontSize:12,color:C.muted,textTransform:"capitalize"}}>{ev.type}</div></div>
+                  {ev.description&&<div style={{marginTop:6,fontSize:12,color:C.muted,paddingLeft:56}}>{ev.description}</div>}
                 </div>
               ))}
+              {upcoming.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No upcoming events</p></div>}
             </div>
           </div>
         </>
@@ -567,20 +682,114 @@
       );
     }
 
+    function StudentCalendar({events}) {
+      const today=new Date();
+      const [viewDate,setViewDate]=useState(new Date(today.getFullYear(),today.getMonth(),1));
+      const [selected,setSelected]=useState(null);
+      const year=viewDate.getFullYear(),month=viewDate.getMonth();
+      const firstDay=new Date(year,month,1).getDay();
+      const daysInMonth=new Date(year,month+1,0).getDate();
+      const daysInPrev=new Date(year,month,0).getDate();
+      const todayStr=today.toISOString().slice(0,10);
+      const cells=[];
+      for(let i=firstDay-1;i>=0;i--)cells.push({day:daysInPrev-i,other:true});
+      for(let d=1;d<=daysInMonth;d++)cells.push({day:d,other:false});
+      while(cells.length%7!==0)cells.push({day:cells.length-firstDay-daysInMonth+1,other:true});
+      const eventsForDay=(d)=>{const ds=`${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;return events.filter(e=>e.date===ds);};
+      const upcoming=events.filter(e=>e.date>=todayStr).sort((a,b)=>a.date.localeCompare(b.date));
+      return (
+        <>
+          <div className="section-header"><h2>Class Calendar</h2></div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:20}}>
+            <div className="card">
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+                <h3 style={{fontSize:17}}>{viewDate.toLocaleString("en",{month:"long",year:"numeric"})}</h3>
+                <div style={{display:"flex",gap:6}}>
+                  <button className="btn btn-outline btn-sm" onClick={()=>setViewDate(new Date(year,month-1,1))}>‹ Prev</button>
+                  <button className="btn btn-outline btn-sm" onClick={()=>setViewDate(new Date(year,month+1,1))}>Next ›</button>
+                </div>
+              </div>
+              <div className="cal-grid">
+                {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=><div key={d} className="cal-day-header">{d}</div>)}
+                {cells.map((cell,i)=>{
+                  const ds=cell.other?null:`${year}-${String(month+1).padStart(2,"0")}-${String(cell.day).padStart(2,"0")}`;
+                  const evs=cell.other?[]:eventsForDay(cell.day);
+                  return (
+                    <div key={i} className={`cal-day${cell.other?" other-month":""}${ds===todayStr?" today":""}`}>
+                      <div className="cal-date" style={{color:ds===todayStr?C.gold:C.navy}}>{cell.day}</div>
+                      {evs.map(ev=><div key={ev.id} className="cal-event" onClick={()=>setSelected(ev)}>{ev.title}</div>)}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="card">
+              <h3 style={{fontSize:15,marginBottom:14}}>Upcoming</h3>
+              {upcoming.map(ev=>(
+                <div key={ev.id} style={{padding:"10px 0",borderBottom:`1px solid ${C.border}`,cursor:"pointer"}} onClick={()=>setSelected(ev)}>
+                  <div style={{fontSize:13,fontWeight:500,color:C.navy}}>{ev.title}</div>
+                  <div style={{fontSize:11,color:C.muted}}>{ev.date}{ev.time&&` · ${ev.time}`}</div>
+                  {ev.location&&<div style={{fontSize:11,color:C.muted}}>📍 {ev.location}</div>}
+                </div>
+              ))}
+              {upcoming.length===0&&<p style={{fontSize:13,color:C.muted}}>No upcoming events</p>}
+            </div>
+          </div>
+          {selected&&(
+            <Modal title={selected.title} onClose={()=>setSelected(null)}
+              footer={<button className="btn btn-primary" onClick={()=>setSelected(null)}>Close</button>}>
+              {selected.date&&<div className="event-detail-row" style={{marginBottom:10,fontSize:14}}><span>📅</span><span>{selected.date}{selected.time&&` at ${selected.time}`}</span></div>}
+              {selected.location&&<div className="event-detail-row" style={{marginBottom:10,fontSize:14}}><span>📍</span><span>{selected.location}</span></div>}
+              {selected.description&&<div style={{marginTop:10,padding:12,background:C.cream,borderRadius:8,fontSize:14,color:C.navy,lineHeight:1.6}}>{selected.description}</div>}
+            </Modal>
+          )}
+        </>
+      );
+    }
+
+    // ── SETTINGS ──
+    function AdminSettings({teacher,setTeacher}) {
+      const [form,setForm]=useState({...teacher});
+      const [saved,setSaved]=useState(false);
+      const save=()=>{setTeacher(form);setSaved(true);setTimeout(()=>setSaved(false),2000);};
+      return (
+        <>
+          <div className="section-header"><h2>Settings</h2></div>
+          <div className="card" style={{maxWidth:480}}>
+            <h3 style={{fontSize:16,marginBottom:16}}>Teacher Account</h3>
+            <div className="form-group"><label className="form-label">Your Name</label><input className="form-input" value={form.name||""} onChange={e=>setForm({...form,name:e.target.value})}/></div>
+            <div className="form-group"><label className="form-label">Login Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm({...form,email:e.target.value})}/></div>
+            <div className="form-group"><label className="form-label">Password</label><input className="form-input" type="text" value={form.password||""} onChange={e=>setForm({...form,password:e.target.value})}/></div>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <button className="btn btn-primary" onClick={save}>Save Changes</button>
+              {saved&&<span style={{fontSize:13,color:C.success}}>✓ Saved!</span>}
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    // ── MAIN APP ──
     function App() {
       const [students,setStudents]=useStorage("ocia_students",SEED_STUDENTS);
       const [announcements,setAnnouncements]=useStorage("ocia_announcements",SEED_ANN);
       const [materials,setMaterials]=useStorage("ocia_materials",SEED_MAT);
       const [events,setEvents]=useStorage("ocia_events",SEED_EVT);
-      const [role,setRole]=useState("admin");
+      const [teacher,setTeacher]=useStorage("ocia_teacher",SEED_TEACHER);
+      const [currentUser,setCurrentUser]=useState(null);
       const [page,setPage]=useState("dashboard");
-      const [studentId,setStudentId]=useState(SEED_STUDENTS[0].id);
-      const student=students.find(s=>s.id===studentId)||students[0];
-      const adminNav=[{id:"dashboard",label:"Dashboard",icon:"🏠"},{id:"students",label:"Catechumens",icon:"👥"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Calendar",icon:"📅"}];
-      const studentNav=[{id:"dashboard",label:"My Journey",icon:"✝"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"}];
-      const nav=role==="admin"?adminNav:studentNav;
-      const titles={dashboard:role==="admin"?"Overview":"My Journey",students:"Catechumens",announcements:"Announcements",materials:"Materials & Downloads",calendar:"Class Calendar"};
-      const switchRole=(r)=>{setRole(r);setPage("dashboard");};
+
+      if(!currentUser) return <LoginPage onLogin={(u)=>{setCurrentUser(u);setPage("dashboard");}}/>;
+
+      const isAdmin=currentUser.role==="admin";
+      const adminNav=[{id:"dashboard",label:"Dashboard",icon:"🏠"},{id:"students",label:"Catechumens",icon:"👥"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Calendar",icon:"📅"},{id:"settings",label:"Settings",icon:"⚙️"}];
+      const studentNav=[{id:"dashboard",label:"My Journey",icon:"✝"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Calendar",icon:"📅"}];
+      const nav=isAdmin?adminNav:studentNav;
+      const titles={dashboard:isAdmin?"Overview":"My Journey",students:"Catechumens",announcements:"Announcements",materials:"Materials & Downloads",calendar:"Class Calendar",settings:"Settings"};
+
+      // Get fresh student data for logged-in student
+      const liveStudent=isAdmin?null:(students.find(s=>s.id===currentUser.id)||currentUser);
+
       return (
         <div className="app">
           <div className="sidebar">
@@ -597,38 +806,32 @@
               ))}
             </div>
             <div className="sidebar-footer">
-              {role==="student"&&students.length>0&&(
-                <div style={{marginBottom:10}}>
-                  <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",marginBottom:4,letterSpacing:1,textTransform:"uppercase"}}>Viewing as</div>
-                  <select style={{width:"100%",background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:6,color:C.white,padding:"5px 8px",fontSize:12,cursor:"pointer"}} value={studentId} onChange={e=>setStudentId(Number(e.target.value))}>
-                    {students.map(s=><option key={s.id} value={s.id} style={{color:C.navy}}>{s.name}</option>)}
-                  </select>
-                </div>
-              )}
-              <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",marginBottom:6,letterSpacing:1,textTransform:"uppercase"}}>View as</div>
-              <div className="role-switch">
-                <div className={`role-btn${role==="admin"?" active":""}`} onClick={()=>switchRole("admin")}>Teacher</div>
-                <div className={`role-btn${role==="student"?" active":""}`} onClick={()=>switchRole("student")}>Student</div>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
+                <div style={{width:28,height:28,borderRadius:"50%",background:"rgba(255,255,255,0.12)",color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{initials(currentUser.name)}</div>
+                <div style={{flex:1,minWidth:0}}><div style={{fontSize:12,color:C.white,fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{currentUser.name}</div><div style={{fontSize:10,color:"rgba(255,255,255,0.4)"}}>{isAdmin?"Teacher":"Student"}</div></div>
               </div>
+              <button className="logout-btn" style={{width:"100%",justifyContent:"center"}} onClick={()=>{setCurrentUser(null);setPage("dashboard");}}>Sign Out</button>
             </div>
           </div>
           <div className="main">
             <div className="topbar">
               <div className="topbar-title">{titles[page]}</div>
               <div className="topbar-right">
-                <span style={{fontSize:13,color:C.muted}}>{role==="admin"?"Teacher View":student?.name}</span>
-                <div className="avatar">{role==="admin"?"T":student?.name?.split(" ").map(n=>n[0]).join("").slice(0,2)}</div>
+                <span style={{fontSize:13,color:C.muted}}>{currentUser.name}</span>
+                <div className="avatar">{initials(currentUser.name)}</div>
               </div>
             </div>
             <div className="content">
-              {role==="admin"&&page==="dashboard"&&<AdminDashboard students={students} announcements={announcements} events={events}/>}
-              {role==="admin"&&page==="students"&&<AdminStudents students={students} setStudents={setStudents}/>}
-              {role==="admin"&&page==="announcements"&&<AdminAnnouncements announcements={announcements} setAnnouncements={setAnnouncements}/>}
-              {role==="admin"&&page==="materials"&&<AdminMaterials materials={materials} setMaterials={setMaterials}/>}
-              {role==="admin"&&page==="calendar"&&<AdminCalendar events={events} setEvents={setEvents}/>}
-              {role==="student"&&page==="dashboard"&&<StudentDashboard student={student} announcements={announcements} events={events}/>}
-              {role==="student"&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
-              {role==="student"&&page==="materials"&&<StudentMaterials materials={materials}/>}
+              {isAdmin&&page==="dashboard"&&<AdminDashboard students={students} announcements={announcements} events={events}/>}
+              {isAdmin&&page==="students"&&<AdminStudents students={students} setStudents={setStudents}/>}
+              {isAdmin&&page==="announcements"&&<AdminAnnouncements announcements={announcements} setAnnouncements={setAnnouncements}/>}
+              {isAdmin&&page==="materials"&&<AdminMaterials materials={materials} setMaterials={setMaterials}/>}
+              {isAdmin&&page==="calendar"&&<AdminCalendar events={events} setEvents={setEvents}/>}
+              {isAdmin&&page==="settings"&&<AdminSettings teacher={teacher} setTeacher={setTeacher}/>}
+              {!isAdmin&&page==="dashboard"&&<StudentDashboard student={liveStudent} announcements={announcements} events={events}/>}
+              {!isAdmin&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
+              {!isAdmin&&page==="materials"&&<StudentMaterials materials={materials}/>}
+              {!isAdmin&&page==="calendar"&&<StudentCalendar events={events}/>}
             </div>
           </div>
         </div>
