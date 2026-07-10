@@ -143,10 +143,9 @@
       danger:"#B84040", success:"#2E7D5A", info:"#5B3FBE",
     };
 
-    const STAGES = ["Pre-Catechumenate","Catechumenate","Purification & Enlightenment","Mystagogy"];
-    const STAGE_SHORT = ["Pre-Cat","Catechumenate","P&E","Mystagogy"];
-    const STAGE_CLASS = ["stage-pre","stage-cat","stage-pe","stage-mys"];
-    function stageClass(s) { return STAGE_CLASS[STAGES.indexOf(s)] || "stage-pre"; }
+    const DEFAULT_STAGES = ["Pre-Catechumenate","Catechumenate","Purification & Enlightenment","Mystagogy"];
+    const STAGE_CLASS = ["stage-pre","stage-cat","stage-pe","stage-mys","stage-pre","stage-cat","stage-pe","stage-mys"];
+    function stageClass(stages, s) { const i=stages.indexOf(s); return STAGE_CLASS[i] || "stage-pre"; }
 
     // Default teacher account
     const DEFAULT_TEACHER = { email: "teacher@stcatherine.org", password: "ocia2026", name: "Fr. Michael", role: "admin" };
@@ -189,7 +188,7 @@
       return [data, save];
     }
 
-    function StageTag({stage}) { return <span className={`badge-stage ${stageClass(stage)}`}>{stage}</span>; }
+    function StageTag({stage,stages=DEFAULT_STAGES}) { return <span className={`badge-stage ${STAGE_CLASS[stages.indexOf(stage)%STAGE_CLASS.length]||"stage-pre"}`}>{stage}</span>; }
     function MatIcon({type}) {
       const m={pdf:{bg:"#FEE2E2",ic:"📄"},drive:{bg:"#DBEAFE",ic:"🔗"},link:{bg:"#D1FAE5",ic:"🌐"}};
       const t=m[type]||m.link;
@@ -258,26 +257,28 @@
     }
 
     // ── ADMIN VIEWS ──
-    function AdminDashboard({students,announcements,events}) {
-      const stages=STAGES.map(s=>({name:s,count:students.filter(x=>x.stage===s).length}));
+    function AdminDashboard({students,announcements,events,stages}) {
+      const stageCounts=stages.map(s=>({name:s,count:students.filter(x=>x.stage===s).length}));
       const avgAtt=students.length?Math.round(students.reduce((a,b)=>a+b.attendance,0)/students.length):0;
       const today=new Date().toISOString().slice(0,10);
       const upcoming=events.filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
+      const lastStage=stages[stages.length-1]||"";
+      const secondLastStage=stages[stages.length-2]||"";
       return (
         <>
           <div className="stats-grid">
             <div className="stat-card"><div className="stat-label">Total Catechumens</div><div className="stat-value">{students.length}</div><div className="stat-sub">Active in program</div></div>
             <div className="stat-card"><div className="stat-label">Avg. Attendance</div><div className="stat-value">{avgAtt}%</div><div className="stat-sub">This term</div></div>
-            <div className="stat-card"><div className="stat-label">Ready for Rites</div><div className="stat-value">{students.filter(s=>s.stage==="Purification & Enlightenment").length}</div><div className="stat-sub">P&amp;E stage</div></div>
-            <div className="stat-card"><div className="stat-label">Mystagogy</div><div className="stat-value">{students.filter(s=>s.stage==="Mystagogy").length}</div><div className="stat-sub">Newly initiated</div></div>
+            <div className="stat-card"><div className="stat-label">Ready for Rites</div><div className="stat-value">{students.filter(s=>s.stage===secondLastStage).length}</div><div className="stat-sub">{secondLastStage}</div></div>
+            <div className="stat-card"><div className="stat-label">{lastStage}</div><div className="stat-value">{students.filter(s=>s.stage===lastStage).length}</div><div className="stat-sub">Newly initiated</div></div>
           </div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:20}}>
             <div className="card">
               <h3 style={{fontSize:16,marginBottom:16}}>Journey Progress</h3>
-              {stages.map((s,i)=>(
+              {stageCounts.map((s,i)=>(
                 <div key={s.name} style={{marginBottom:14}}>
                   <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
-                    <span className={`badge-stage ${STAGE_CLASS[i]}`}>{STAGE_SHORT[i]}</span>
+                    <span className={`badge-stage ${STAGE_CLASS[i%STAGE_CLASS.length]}`}>{s.name}</span>
                     <span style={{fontSize:13,color:C.muted}}>{s.count} students</span>
                   </div>
                   <div className="progress-bar"><div className="progress-fill" style={{width:`${students.length?(s.count/students.length)*100:0}%`}}/></div>
@@ -315,7 +316,7 @@
       );
     }
 
-    function AdminStudents({students,setStudents}) {
+    function AdminStudents({students,setStudents,stages}) {
       const [search,setSearch]=useState("");
       const [stageFilter,setStageFilter]=useState("All");
       const [modal,setModal]=useState(null);
@@ -337,7 +338,7 @@
             <h2>Catechumens</h2>
             <div style={{display:"flex",gap:10,alignItems:"center"}}>
               <div className="search-wrap"><span className="search-icon">🔍</span><input className="search-input" placeholder="Search students…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
-              <select className="form-input" style={{width:180}} value={stageFilter} onChange={e=>setStageFilter(e.target.value)}><option>All</option>{STAGES.map(s=><option key={s}>{s}</option>)}</select>
+              <select className="form-input" style={{width:180}} value={stageFilter} onChange={e=>setStageFilter(e.target.value)}><option>All</option>{stages.map(s=><option key={s}>{s}</option>)}</select>
               <button className="btn btn-primary" onClick={openAdd}>+ Add Student</button>
             </div>
           </div>
@@ -352,7 +353,7 @@
                       <td><div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:32,height:32,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:600,flexShrink:0}}>{initials(s.name)}</div><span style={{fontWeight:500}}>{s.name}</span></div></td>
                       <td><a href={`mailto:${s.email}`} style={{color:C.info,textDecoration:"none"}}>{s.email}</a></td>
                       <td><a href={`tel:${s.phone}`} style={{color:C.navy,textDecoration:"none"}}>{s.phone}</a></td>
-                      <td><StageTag stage={s.stage}/></td>
+                      <td><StageTag stage={s.stage} stages={stages}/></td>
                       <td><div style={{display:"flex",alignItems:"center",gap:8}}><div className="progress-bar" style={{width:60}}><div className="progress-fill" style={{width:`${s.attendance}%`}}/></div><span style={{fontSize:12,color:C.muted}}>{s.attendance}%</span></div></td>
                       <td style={{fontSize:12,color:C.muted,maxWidth:140,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{s.notes}</td>
                       <td><div style={{display:"flex",gap:4}}><button className="btn btn-outline btn-sm" onClick={()=>openView(s)}>View</button><button className="btn btn-outline btn-sm" onClick={()=>openEdit(s)}>Edit</button><button className="btn btn-danger btn-sm" onClick={()=>remove(s.id)}>✕</button></div></td>
@@ -374,7 +375,7 @@
                 <div className="form-group"><label className="form-label">Login Password</label><input className="form-input" type="text" value={form.password||""} onChange={e=>setForm({...form,password:e.target.value})} placeholder="Set student password"/></div>
               </div>
               <div className="form-row">
-                <div className="form-group"><label className="form-label">Stage</label><select className="form-input" value={form.stage||STAGES[0]} onChange={e=>setForm({...form,stage:e.target.value})}>{STAGES.map(s=><option key={s}>{s}</option>)}</select></div>
+                <div className="form-group"><label className="form-label">Stage</label><select className="form-input" value={form.stage||stages[0]} onChange={e=>setForm({...form,stage:e.target.value})}>{stages.map(s=><option key={s}>{s}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">Attendance %</label><input className="form-input" type="number" min="0" max="100" value={form.attendance||0} onChange={e=>setForm({...form,attendance:Number(e.target.value)})}/></div>
               </div>
               <div className="form-group"><label className="form-label">Notes</label><textarea className="form-input" rows={3} value={form.notes||""} onChange={e=>setForm({...form,notes:e.target.value})} placeholder="Sponsor name, background…" style={{resize:"vertical"}}/></div>
@@ -385,7 +386,7 @@
               footer={<><button className="btn btn-outline" onClick={()=>{setModal(null);setTimeout(()=>openEdit(form),50);}}>Edit</button><button className="btn btn-primary" onClick={()=>setModal(null)}>Close</button></>}>
               <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:20}}>
                 <div style={{width:56,height:56,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,fontFamily:"Playfair Display,serif",fontWeight:700}}>{initials(form.name||"")}</div>
-                <div><div style={{fontFamily:"Playfair Display,serif",fontSize:20}}>{form.name}</div><StageTag stage={form.stage}/></div>
+                <div><div style={{fontFamily:"Playfair Display,serif",fontSize:20}}>{form.name}</div><StageTag stage={form.stage} stages={stages}/></div>
               </div>
               {[["Email",form.email],["Phone",form.phone],["Joined",form.joined],["Attendance",`${form.attendance}%`],["Login Password",form.password]].map(([k,v])=>(
                 <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}`,fontSize:14}}>
@@ -583,7 +584,7 @@
     }
 
     // ── STUDENT VIEWS ──
-    function StudentDashboard({student,announcements,events}) {
+    function StudentDashboard({student,announcements,events,stages}) {
       const today=new Date().toISOString().slice(0,10);
       const upcoming=events.filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4);
       return (
@@ -596,7 +597,7 @@
             <div className="card">
               <div style={{display:"flex",gap:16,alignItems:"center"}}>
                 <div style={{width:52,height:52,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700}}>{initials(student.name)}</div>
-                <div><div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>{student.name}</div><StageTag stage={student.stage}/></div>
+                <div><div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>{student.name}</div><StageTag stage={student.stage} stages={stages}/></div>
               </div>
               <div style={{marginTop:16}}>
                 <div style={{fontSize:12,color:C.muted,marginBottom:5}}>Attendance this term</div>
@@ -608,8 +609,8 @@
             </div>
             <div className="card">
               <div style={{fontSize:13,color:C.muted,marginBottom:8}}>Your OCIA journey</div>
-              {STAGES.map((s,i)=>{
-                const done=STAGES.indexOf(student.stage)>i;
+              {stages.map((s,i)=>{
+                const done=stages.indexOf(student.stage)>i;
                 const current=s===student.stage;
                 return (
                   <div key={s} style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
@@ -761,21 +762,100 @@
     }
 
     // ── SETTINGS ──
-    function AdminSettings({teacher,setTeacher}) {
+    function AdminSettings({teacher,setTeacher,stages,setStages,students,setStudents}) {
       const [form,setForm]=useState({...teacher});
       const [saved,setSaved]=useState(false);
-      const save=()=>{setTeacher(form);setSaved(true);setTimeout(()=>setSaved(false),2000);};
+      const [newStage,setNewStage]=useState("");
+      const [editingIdx,setEditingIdx]=useState(null);
+      const [editingVal,setEditingVal]=useState("");
+
+      const saveTeacher=()=>{setTeacher(form);setSaved(true);setTimeout(()=>setSaved(false),2000);};
+
+      const addStage=()=>{
+        const t=newStage.trim();
+        if(!t||stages.includes(t))return;
+        setStages([...stages,t]);
+        setNewStage("");
+      };
+
+      const deleteStage=(idx)=>{
+        const name=stages[idx];
+        const inUse=students.some(s=>s.stage===name);
+        if(inUse){alert(`Cannot delete "${name}" — ${students.filter(s=>s.stage===name).length} student(s) are currently in this stage. Reassign them first.`);return;}
+        if(!confirm(`Delete stage "${name}"?`))return;
+        setStages(stages.filter((_,i)=>i!==idx));
+      };
+
+      const startEdit=(idx)=>{setEditingIdx(idx);setEditingVal(stages[idx]);};
+
+      const saveEdit=(idx)=>{
+        const t=editingVal.trim();
+        if(!t){setEditingIdx(null);return;}
+        const oldName=stages[idx];
+        const newStages=stages.map((s,i)=>i===idx?t:s);
+        setStages(newStages);
+        // Update all students who had the old stage name
+        setStudents(students.map(s=>s.stage===oldName?{...s,stage:t}:s));
+        setEditingIdx(null);
+      };
+
+      const moveStage=(idx,dir)=>{
+        const arr=[...stages];
+        const swap=idx+dir;
+        if(swap<0||swap>=arr.length)return;
+        [arr[idx],arr[swap]]=[arr[swap],arr[idx]];
+        setStages(arr);
+      };
+
       return (
         <>
           <div className="section-header"><h2>Settings</h2></div>
-          <div className="card" style={{maxWidth:480}}>
-            <h3 style={{fontSize:16,marginBottom:16}}>Teacher Account</h3>
-            <div className="form-group"><label className="form-label">Your Name</label><input className="form-input" value={form.name||""} onChange={e=>setForm({...form,name:e.target.value})}/></div>
-            <div className="form-group"><label className="form-label">Login Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm({...form,email:e.target.value})}/></div>
-            <div className="form-group"><label className="form-label">Password</label><input className="form-input" type="text" value={form.password||""} onChange={e=>setForm({...form,password:e.target.value})}/></div>
-            <div style={{display:"flex",alignItems:"center",gap:12}}>
-              <button className="btn btn-primary" onClick={save}>Save Changes</button>
-              {saved&&<span style={{fontSize:13,color:C.success}}>✓ Saved!</span>}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,alignItems:"start"}}>
+            <div className="card">
+              <h3 style={{fontSize:16,marginBottom:16}}>Teacher Account</h3>
+              <div className="form-group"><label className="form-label">Your Name</label><input className="form-input" value={form.name||""} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/></div>
+              <div className="form-group"><label className="form-label">Login Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm(f=>({...f,email:e.target.value}))}/></div>
+              <div className="form-group"><label className="form-label">Password</label><input className="form-input" type="text" value={form.password||""} onChange={e=>setForm(f=>({...f,password:e.target.value}))}/></div>
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <button className="btn btn-primary" onClick={saveTeacher}>Save Changes</button>
+                {saved&&<span style={{fontSize:13,color:C.success}}>✓ Saved!</span>}
+              </div>
+            </div>
+
+            <div className="card">
+              <h3 style={{fontSize:16,marginBottom:4}}>Journey Stages</h3>
+              <p style={{fontSize:13,color:C.muted,marginBottom:16}}>Add, rename, reorder, or remove stages. Changes apply to the whole program.</p>
+              {stages.map((s,i)=>(
+                <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 0",borderBottom:`1px solid ${C.border}`}}>
+                  <span className={`badge-stage ${STAGE_CLASS[i%STAGE_CLASS.length]}`} style={{minWidth:8,flexShrink:0}}>{i+1}</span>
+                  {editingIdx===i ? (
+                    <input className="form-input" style={{flex:1,padding:"5px 8px",fontSize:13}} value={editingVal}
+                      onChange={e=>setEditingVal(e.target.value)}
+                      onKeyDown={e=>{if(e.key==="Enter")saveEdit(i);if(e.key==="Escape")setEditingIdx(null);}}
+                      autoFocus/>
+                  ) : (
+                    <span style={{flex:1,fontSize:14}}>{s}</span>
+                  )}
+                  <div style={{display:"flex",gap:3,flexShrink:0}}>
+                    {editingIdx===i ? (
+                      <><button className="btn btn-primary btn-sm" onClick={()=>saveEdit(i)}>✓</button><button className="btn btn-outline btn-sm" onClick={()=>setEditingIdx(null)}>✕</button></>
+                    ) : (
+                      <>
+                        <button className="btn btn-outline btn-sm" title="Move up" onClick={()=>moveStage(i,-1)} disabled={i===0} style={{padding:"4px 7px",opacity:i===0?0.3:1}}>↑</button>
+                        <button className="btn btn-outline btn-sm" title="Move down" onClick={()=>moveStage(i,1)} disabled={i===stages.length-1} style={{padding:"4px 7px",opacity:i===stages.length-1?0.3:1}}>↓</button>
+                        <button className="btn btn-outline btn-sm" onClick={()=>startEdit(i)}>Edit</button>
+                        <button className="btn btn-danger btn-sm" onClick={()=>deleteStage(i)}>✕</button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div style={{display:"flex",gap:8,marginTop:14}}>
+                <input className="form-input" value={newStage} onChange={e=>setNewStage(e.target.value)}
+                  onKeyDown={e=>e.key==="Enter"&&addStage()}
+                  placeholder="New stage name…" style={{flex:1}}/>
+                <button className="btn btn-primary" onClick={addStage}>+ Add</button>
+              </div>
             </div>
           </div>
         </>
@@ -789,6 +869,7 @@
       const [materials,setMaterials]=useStorage("ocia_materials",SEED_MAT);
       const [events,setEvents]=useStorage("ocia_events",SEED_EVT);
       const [teacher,setTeacher]=useStorage("ocia_teacher",SEED_TEACHER);
+      const [stages,setStages]=useStorage("ocia_stages",DEFAULT_STAGES);
       const [currentUser,setCurrentUser]=useState(null);
       const [page,setPage]=useState("dashboard");
 
@@ -835,13 +916,13 @@
               </div>
             </div>
             <div className="content">
-              {isAdmin&&page==="dashboard"&&<AdminDashboard students={students} announcements={announcements} events={events}/>}
-              {isAdmin&&page==="students"&&<AdminStudents students={students} setStudents={setStudents}/>}
+              {isAdmin&&page==="dashboard"&&<AdminDashboard students={students} announcements={announcements} events={events} stages={stages}/>}
+              {isAdmin&&page==="students"&&<AdminStudents students={students} setStudents={setStudents} stages={stages}/>}
               {isAdmin&&page==="announcements"&&<AdminAnnouncements announcements={announcements} setAnnouncements={setAnnouncements}/>}
               {isAdmin&&page==="materials"&&<AdminMaterials materials={materials} setMaterials={setMaterials}/>}
               {isAdmin&&page==="calendar"&&<AdminCalendar events={events} setEvents={setEvents}/>}
-              {isAdmin&&page==="settings"&&<AdminSettings teacher={teacher} setTeacher={setTeacher}/>}
-              {!isAdmin&&page==="dashboard"&&<StudentDashboard student={liveStudent} announcements={announcements} events={events}/>}
+              {isAdmin&&page==="settings"&&<AdminSettings teacher={teacher} setTeacher={setTeacher} stages={stages} setStages={setStages} students={students} setStudents={setStudents}/>}
+              {!isAdmin&&page==="dashboard"&&<StudentDashboard student={liveStudent} announcements={announcements} events={events} stages={stages}/>}
               {!isAdmin&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
               {!isAdmin&&page==="materials"&&<StudentMaterials materials={materials}/>}
               {!isAdmin&&page==="calendar"&&<StudentCalendar events={events}/>}
