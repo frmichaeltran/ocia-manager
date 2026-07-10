@@ -285,20 +285,31 @@
     function LoginPage({onLogin}) {
       const [email,setEmail]=useState("");
       const [password,setPassword]=useState("");
+      const [showPw,setShowPw]=useState(false);
       const [error,setError]=useState("");
       const [students]=useStorage("ocia_students",SEED_STUDENTS);
       const [teacher]=useStorage("ocia_teacher",SEED_TEACHER);
 
       const login = () => {
         setError("");
-        // Check teacher
-        if(email.trim().toLowerCase()===teacher.email.toLowerCase() && password===teacher.password) {
+        const e = email.trim().toLowerCase();
+        const p = password.trim();
+        // Always check hardcoded default teacher first (works on any device)
+        if(e===SEED_TEACHER.email.toLowerCase() && p===SEED_TEACHER.password) {
+          onLogin({...SEED_TEACHER, role:"admin"});
+          return;
+        }
+        // Check saved teacher account
+        if(e===teacher.email.toLowerCase() && p===teacher.password) {
           onLogin({...teacher, role:"admin"});
           return;
         }
-        // Check students
-        const s = students.find(s=>s.email.toLowerCase()===email.trim().toLowerCase() && s.password===password);
-        if(s) { onLogin({...s, role:"student"}); return; }
+        // Check seed students (works on any device)
+        const seedStudent = SEED_STUDENTS.find(s=>s.email.toLowerCase()===e && s.password===p);
+        if(seedStudent) { onLogin({...seedStudent, role:"student"}); return; }
+        // Check saved students
+        const savedStudent = students.find(s=>s.email.toLowerCase()===e && s.password===p);
+        if(savedStudent) { onLogin({...savedStudent, role:"student"}); return; }
         setError("Incorrect email or password. Please try again.");
       };
 
@@ -316,11 +327,14 @@
             {error&&<div className="error-msg">{error}</div>}
             <div className="form-group">
               <label className="form-label">Email Address</label>
-              <input className="form-input" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={handleKey} placeholder="your@email.com" autoFocus/>
+              <input className="form-input" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={handleKey} placeholder="your@email.com" autoFocus autoCapitalize="none" autoCorrect="off" spellCheck="false"/>
             </div>
             <div className="form-group">
               <label className="form-label">Password</label>
-              <input className="form-input" type="password" value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={handleKey} placeholder="••••••••"/>
+              <div style={{position:"relative"}}>
+                <input className="form-input" type={showPw?"text":"password"} value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={handleKey} placeholder="••••••••" style={{paddingRight:44}}/>
+                <button onClick={()=>setShowPw(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:16,color:"#7B6FA0",padding:"4px"}}>{showPw?"🙈":"👁️"}</button>
+              </div>
             </div>
             <button className="btn btn-primary btn-block" onClick={login}>Sign In</button>
             <p style={{textAlign:"center",fontSize:12,color:C.muted,marginTop:16}}>Contact your teacher if you need help logging in.</p>
