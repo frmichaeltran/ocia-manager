@@ -283,37 +283,27 @@
 
     // ── LOGIN ──
     function LoginPage({onLogin}) {
-      const [email,setEmail]=useState("");
+      const [username,setUsername]=useState("");
       const [password,setPassword]=useState("");
       const [showPw,setShowPw]=useState(false);
       const [error,setError]=useState("");
-      const [students]=useStorage("ocia_students",SEED_STUDENTS);
-      const [teacher]=useStorage("ocia_teacher",SEED_TEACHER);
 
-      const login = () => {
+      const loginAsTeacher = () => {
         setError("");
-        const e = email.trim().toLowerCase();
-        const p = password.trim();
-        // Always check hardcoded default teacher first (works on any device)
-        if(e===SEED_TEACHER.email.toLowerCase() && p===SEED_TEACHER.password) {
-          onLogin({...SEED_TEACHER, role:"admin"});
+        const u=username.trim().toLowerCase();
+        const p=password.trim();
+        if(u==="mary" && p==="ruby") {
+          onLogin({name:"Mary", role:"admin"});
           return;
         }
-        // Check saved teacher account
-        if(e===teacher.email.toLowerCase() && p===teacher.password) {
-          onLogin({...teacher, role:"admin"});
-          return;
-        }
-        // Check seed students (works on any device)
-        const seedStudent = SEED_STUDENTS.find(s=>s.email.toLowerCase()===e && s.password===p);
-        if(seedStudent) { onLogin({...seedStudent, role:"student"}); return; }
-        // Check saved students
-        const savedStudent = students.find(s=>s.email.toLowerCase()===e && s.password===p);
-        if(savedStudent) { onLogin({...savedStudent, role:"student"}); return; }
-        setError("Incorrect email or password. Please try again.");
+        setError("Incorrect username or password. Please try again.");
       };
 
-      const handleKey = (e) => { if(e.key==="Enter") login(); };
+      const loginAsStudent = () => {
+        onLogin({name:"Student", role:"student", id:null});
+      };
+
+      const handleKey = (e) => { if(e.key==="Enter") loginAsTeacher(); };
 
       return (
         <div className="login-page">
@@ -322,22 +312,35 @@
               <div className="cross">✝</div>
               <div className="parish">St. Catherine of Siena</div>
               <h2>OCIA Program</h2>
-              <p style={{fontSize:13,color:C.muted,marginTop:4}}>Sign in to access your portal</p>
+              <p style={{fontSize:13,color:"#7B6FA0",marginTop:4}}>Carrollton, Texas</p>
             </div>
+
             {error&&<div className="error-msg">{error}</div>}
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
-              <input className="form-input" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={handleKey} placeholder="your@email.com" autoFocus autoCapitalize="none" autoCorrect="off" spellCheck="false"/>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Password</label>
-              <div style={{position:"relative"}}>
-                <input className="form-input" type={showPw?"text":"password"} value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={handleKey} placeholder="••••••••" style={{paddingRight:44}}/>
-                <button onClick={()=>setShowPw(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:16,color:"#7B6FA0",padding:"4px"}}>{showPw?"🙈":"👁️"}</button>
+
+            <div style={{marginBottom:20}}>
+              <div className="form-group">
+                <label className="form-label">Username</label>
+                <input className="form-input" type="text" value={username} onChange={e=>setUsername(e.target.value)} onKeyDown={handleKey} placeholder="Enter username" autoCapitalize="none" autoCorrect="off" spellCheck="false"/>
               </div>
+              <div className="form-group">
+                <label className="form-label">Password</label>
+                <div style={{position:"relative"}}>
+                  <input className="form-input" type={showPw?"text":"password"} value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={handleKey} placeholder="••••••••" style={{paddingRight:44}}/>
+                  <button onClick={()=>setShowPw(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:16,color:"#7B6FA0",padding:"4px"}}>{showPw?"🙈":"👁️"}</button>
+                </div>
+              </div>
+              <button className="btn btn-primary btn-block" onClick={loginAsTeacher}>Sign In as Teacher</button>
             </div>
-            <button className="btn btn-primary btn-block" onClick={login}>Sign In</button>
-            <p style={{textAlign:"center",fontSize:12,color:C.muted,marginTop:16}}>Contact your teacher if you need help logging in.</p>
+
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
+              <div style={{flex:1,height:1,background:"#DDD5EE"}}/>
+              <span style={{fontSize:12,color:"#7B6FA0"}}>or</span>
+              <div style={{flex:1,height:1,background:"#DDD5EE"}}/>
+            </div>
+
+            <button className="btn btn-gold btn-block" onClick={loginAsStudent}>
+              ✝ Login as Student
+            </button>
           </div>
         </div>
       );
@@ -677,37 +680,8 @@
       return (
         <>
           <div className="welcome-banner">
-            <h2>Welcome back, {student.name.split(" ")[0]} ✝</h2>
-            <p style={{marginTop:4}}>Your journey: <strong style={{color:"#DDD0F5"}}>{student.stage}</strong></p>
-          </div>
-          <div className="two-col" style={{marginBottom:20}}>
-            <div className="card">
-              <div style={{display:"flex",gap:16,alignItems:"center"}}>
-                <div style={{width:52,height:52,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700}}>{initials(student.name)}</div>
-                <div><div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>{student.name}</div><StageTag stage={student.stage} stages={stages}/></div>
-              </div>
-              <div style={{marginTop:16}}>
-                <div style={{fontSize:12,color:C.muted,marginBottom:5}}>Attendance this term</div>
-                <div style={{display:"flex",alignItems:"center",gap:10}}>
-                  <div className="progress-bar" style={{flex:1}}><div className="progress-fill" style={{width:`${student.attendance}%`}}/></div>
-                  <span style={{fontSize:14,fontWeight:600}}>{student.attendance}%</span>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div style={{fontSize:13,color:C.muted,marginBottom:8}}>Your OCIA journey</div>
-              {stages.map((s,i)=>{
-                const done=stages.indexOf(student.stage)>i;
-                const current=s===student.stage;
-                return (
-                  <div key={s} style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
-                    <div style={{width:20,height:20,borderRadius:"50%",background:done?C.success:current?C.gold:C.border,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:done||current?C.white:C.muted,flexShrink:0}}>{done?"✓":i+1}</div>
-                    <span style={{fontSize:13,fontWeight:current?500:400,color:current?C.navy:C.muted}}>{s}</span>
-                    {current&&<span style={{fontSize:10,background:C.goldLight,color:C.navy,padding:"1px 7px",borderRadius:10,fontWeight:600}}>Current</span>}
-                  </div>
-                );
-              })}
-            </div>
+            <h2>Welcome, Catechumen ✝</h2>
+            <p style={{marginTop:4}}>St. Catherine of Siena — OCIA Program</p>
           </div>
           <div className="two-col">
             <div className="card">
@@ -719,6 +693,7 @@
                   <div className="ann-body">{a.body}</div>
                 </div>
               ))}
+              {announcements.length===0&&<div className="empty"><div className="empty-icon">📢</div><p>No announcements yet</p></div>}
             </div>
             <div className="card">
               <h3 style={{fontSize:16,marginBottom:14}}>Upcoming Sessions</h3>
@@ -969,8 +944,8 @@
       const nav=isAdmin?adminNav:studentNav;
       const titles={dashboard:isAdmin?"Overview":"My Journey",students:"Catechumens",announcements:"Announcements",materials:"Materials & Downloads",calendar:"Class Calendar",settings:"Settings"};
 
-      // Get fresh student data for logged-in student
-      const liveStudent=isAdmin?null:(students.find(s=>s.id===currentUser.id)||currentUser);
+      // For shared student login, show general student view (no specific student data)
+      const liveStudent=isAdmin?null:(students.find(s=>s.id===currentUser.id)||{name:"Student",stage:stages[0]||"",attendance:0});
 
       const navigate=(id)=>{setPage(id);setSidebarOpen(false);};
       // Bottom nav shows first 4 items on mobile
@@ -996,8 +971,11 @@
             </div>
             <div className="sidebar-footer">
               <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
-                <div style={{width:30,height:30,borderRadius:"50%",background:"rgba(255,255,255,0.12)",color:"#DDD0F5",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{initials(currentUser.name)}</div>
-                <div style={{flex:1,minWidth:0}}><div style={{fontSize:12,color:"#FFFFFF",fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{currentUser.name}</div><div style={{fontSize:10,color:"rgba(255,255,255,0.4)"}}>{isAdmin?"Teacher":"Student"}</div></div>
+                <div style={{width:30,height:30,borderRadius:"50%",background:"rgba(255,255,255,0.12)",color:"#DDD0F5",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{isAdmin?"M":"✝"}</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:12,color:"#FFFFFF",fontWeight:500}}>{isAdmin?"Mary":"Student Portal"}</div>
+                  <div style={{fontSize:10,color:"rgba(255,255,255,0.4)"}}>{isAdmin?"Teacher":"St. Catherine OCIA"}</div>
+                </div>
               </div>
               <button className="logout-btn" style={{width:"100%",justifyContent:"center"}} onClick={()=>{setCurrentUser(null);setPage("dashboard");setSidebarOpen(false);}}>Sign Out</button>
             </div>
@@ -1010,7 +988,7 @@
               </button>
               <div className="topbar-title">{titles[page]}</div>
               <div className="topbar-right">
-                <div className="avatar" title={currentUser.name}>{initials(currentUser.name)}</div>
+                <div className="avatar" title={isAdmin?"Mary":"Student"}>{isAdmin?"M":"✝"}</div>
               </div>
             </div>
 
