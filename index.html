@@ -824,14 +824,10 @@
     }
 
     // ── SETTINGS ──
-    function AdminSettings({teacher,setTeacher,stages,setStages,students,setStudents}) {
-      const [form,setForm]=useState({...teacher});
-      const [saved,setSaved]=useState(false);
+    function AdminSettings({stages,setStages,students,setStudents}) {
       const [newStage,setNewStage]=useState("");
       const [editingIdx,setEditingIdx]=useState(null);
       const [editingVal,setEditingVal]=useState("");
-
-      const saveTeacher=()=>{setTeacher(form);setSaved(true);setTimeout(()=>setSaved(false),2000);};
 
       const addStage=()=>{
         const t=newStage.trim();
@@ -856,7 +852,6 @@
         const oldName=stages[idx];
         const newStages=stages.map((s,i)=>i===idx?t:s);
         setStages(newStages);
-        // Update all students who had the old stage name
         setStudents(students.map(s=>s.stage===oldName?{...s,stage:t}:s));
         setEditingIdx(null);
       };
@@ -872,52 +867,39 @@
       return (
         <>
           <div className="section-header"><h2>Settings</h2></div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,alignItems:"start"}}>
-            <div className="card">
-              <h3 style={{fontSize:16,marginBottom:16}}>Teacher Account</h3>
-              <div className="form-group"><label className="form-label">Your Name</label><input className="form-input" value={form.name||""} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/></div>
-              <div className="form-group"><label className="form-label">Login Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm(f=>({...f,email:e.target.value}))}/></div>
-              <div className="form-group"><label className="form-label">Password</label><input className="form-input" type="text" value={form.password||""} onChange={e=>setForm(f=>({...f,password:e.target.value}))}/></div>
-              <div style={{display:"flex",alignItems:"center",gap:12}}>
-                <button className="btn btn-primary" onClick={saveTeacher}>Save Changes</button>
-                {saved&&<span style={{fontSize:13,color:C.success}}>✓ Saved!</span>}
-              </div>
-            </div>
-
-            <div className="card">
-              <h3 style={{fontSize:16,marginBottom:4}}>Journey Stages</h3>
-              <p style={{fontSize:13,color:C.muted,marginBottom:16}}>Add, rename, reorder, or remove stages. Changes apply to the whole program.</p>
-              {stages.map((s,i)=>(
-                <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 0",borderBottom:`1px solid ${C.border}`}}>
-                  <span className={`badge-stage ${STAGE_CLASS[i%STAGE_CLASS.length]}`} style={{minWidth:8,flexShrink:0}}>{i+1}</span>
+          <div className="card" style={{maxWidth:520}}>
+            <h3 style={{fontSize:16,marginBottom:4}}>Journey Stages</h3>
+            <p style={{fontSize:13,color:C.muted,marginBottom:16}}>Add, rename, reorder, or remove stages. Changes apply to the whole program.</p>
+            {stages.map((s,i)=>(
+              <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 0",borderBottom:`1px solid ${C.border}`}}>
+                <span className={`badge-stage ${STAGE_CLASS[i%STAGE_CLASS.length]}`} style={{minWidth:24,textAlign:"center",flexShrink:0}}>{i+1}</span>
+                {editingIdx===i ? (
+                  <input className="form-input" style={{flex:1,padding:"5px 8px",fontSize:13}} value={editingVal}
+                    onChange={e=>setEditingVal(e.target.value)}
+                    onKeyDown={e=>{if(e.key==="Enter")saveEdit(i);if(e.key==="Escape")setEditingIdx(null);}}
+                    autoFocus/>
+                ) : (
+                  <span style={{flex:1,fontSize:14}}>{s}</span>
+                )}
+                <div style={{display:"flex",gap:3,flexShrink:0}}>
                   {editingIdx===i ? (
-                    <input className="form-input" style={{flex:1,padding:"5px 8px",fontSize:13}} value={editingVal}
-                      onChange={e=>setEditingVal(e.target.value)}
-                      onKeyDown={e=>{if(e.key==="Enter")saveEdit(i);if(e.key==="Escape")setEditingIdx(null);}}
-                      autoFocus/>
+                    <><button className="btn btn-primary btn-sm" onClick={()=>saveEdit(i)}>✓</button><button className="btn btn-outline btn-sm" onClick={()=>setEditingIdx(null)}>✕</button></>
                   ) : (
-                    <span style={{flex:1,fontSize:14}}>{s}</span>
+                    <>
+                      <button className="btn btn-outline btn-sm" onClick={()=>moveStage(i,-1)} disabled={i===0} style={{padding:"4px 7px",opacity:i===0?0.3:1}}>↑</button>
+                      <button className="btn btn-outline btn-sm" onClick={()=>moveStage(i,1)} disabled={i===stages.length-1} style={{padding:"4px 7px",opacity:i===stages.length-1?0.3:1}}>↓</button>
+                      <button className="btn btn-outline btn-sm" onClick={()=>startEdit(i)}>Edit</button>
+                      <button className="btn btn-danger btn-sm" onClick={()=>deleteStage(i)}>✕</button>
+                    </>
                   )}
-                  <div style={{display:"flex",gap:3,flexShrink:0}}>
-                    {editingIdx===i ? (
-                      <><button className="btn btn-primary btn-sm" onClick={()=>saveEdit(i)}>✓</button><button className="btn btn-outline btn-sm" onClick={()=>setEditingIdx(null)}>✕</button></>
-                    ) : (
-                      <>
-                        <button className="btn btn-outline btn-sm" title="Move up" onClick={()=>moveStage(i,-1)} disabled={i===0} style={{padding:"4px 7px",opacity:i===0?0.3:1}}>↑</button>
-                        <button className="btn btn-outline btn-sm" title="Move down" onClick={()=>moveStage(i,1)} disabled={i===stages.length-1} style={{padding:"4px 7px",opacity:i===stages.length-1?0.3:1}}>↓</button>
-                        <button className="btn btn-outline btn-sm" onClick={()=>startEdit(i)}>Edit</button>
-                        <button className="btn btn-danger btn-sm" onClick={()=>deleteStage(i)}>✕</button>
-                      </>
-                    )}
-                  </div>
                 </div>
-              ))}
-              <div style={{display:"flex",gap:8,marginTop:14}}>
-                <input className="form-input" value={newStage} onChange={e=>setNewStage(e.target.value)}
-                  onKeyDown={e=>e.key==="Enter"&&addStage()}
-                  placeholder="New stage name…" style={{flex:1}}/>
-                <button className="btn btn-primary" onClick={addStage}>+ Add</button>
               </div>
+            ))}
+            <div style={{display:"flex",gap:8,marginTop:14}}>
+              <input className="form-input" value={newStage} onChange={e=>setNewStage(e.target.value)}
+                onKeyDown={e=>e.key==="Enter"&&addStage()}
+                placeholder="New stage name…" style={{flex:1}}/>
+              <button className="btn btn-primary" onClick={addStage}>+ Add</button>
             </div>
           </div>
         </>
@@ -930,7 +912,6 @@
       const [announcements,setAnnouncements]=useStorage("ocia_announcements",SEED_ANN);
       const [materials,setMaterials]=useStorage("ocia_materials",SEED_MAT);
       const [events,setEvents]=useStorage("ocia_events",SEED_EVT);
-      const [teacher,setTeacher]=useStorage("ocia_teacher",SEED_TEACHER);
       const [stages,setStages]=useStorage("ocia_stages",DEFAULT_STAGES);
       const [currentUser,setCurrentUser]=useState(null);
       const [page,setPage]=useState("dashboard");
@@ -998,7 +979,7 @@
               {isAdmin&&page==="announcements"&&<AdminAnnouncements announcements={announcements} setAnnouncements={setAnnouncements}/>}
               {isAdmin&&page==="materials"&&<AdminMaterials materials={materials} setMaterials={setMaterials}/>}
               {isAdmin&&page==="calendar"&&<AdminCalendar events={events} setEvents={setEvents}/>}
-              {isAdmin&&page==="settings"&&<AdminSettings teacher={teacher} setTeacher={setTeacher} stages={stages} setStages={setStages} students={students} setStudents={setStudents}/>}
+              {isAdmin&&page==="settings"&&<AdminSettings stages={stages} setStages={setStages} students={students} setStudents={setStudents}/>}
               {!isAdmin&&page==="dashboard"&&<StudentDashboard student={liveStudent} announcements={announcements} events={events} stages={stages}/>}
               {!isAdmin&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
               {!isAdmin&&page==="materials"&&<StudentMaterials materials={materials}/>}
