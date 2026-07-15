@@ -776,41 +776,51 @@
       return (
         <>
           <div className="section-header"><h2>Class Calendar</h2></div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:20}}>
-            <div className="card">
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-                <h3 style={{fontSize:17}}>{viewDate.toLocaleString("en",{month:"long",year:"numeric"})}</h3>
-                <div style={{display:"flex",gap:6}}>
-                  <button className="btn btn-outline btn-sm" onClick={()=>setViewDate(new Date(year,month-1,1))}>‹ Prev</button>
-                  <button className="btn btn-outline btn-sm" onClick={()=>setViewDate(new Date(year,month+1,1))}>Next ›</button>
-                </div>
-              </div>
-              <div className="cal-grid">
-                {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=><div key={d} className="cal-day-header">{d}</div>)}
-                {cells.map((cell,i)=>{
-                  const ds=cell.other?null:`${year}-${String(month+1).padStart(2,"0")}-${String(cell.day).padStart(2,"0")}`;
-                  const evs=cell.other?[]:eventsForDay(cell.day);
-                  return (
-                    <div key={i} className={`cal-day${cell.other?" other-month":""}${ds===todayStr?" today":""}`}>
-                      <div className="cal-date" style={{color:ds===todayStr?C.gold:C.navy}}>{cell.day}</div>
-                      {evs.map(ev=><div key={ev.id} className="cal-event" onClick={()=>setSelected(ev)}>{ev.title}</div>)}
-                    </div>
-                  );
-                })}
+
+          {/* Calendar grid */}
+          <div className="card" style={{marginBottom:16}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+              <h3 style={{fontSize:16}}>{viewDate.toLocaleString("en",{month:"long",year:"numeric"})}</h3>
+              <div style={{display:"flex",gap:6}}>
+                <button className="btn btn-outline btn-sm" onClick={()=>setViewDate(new Date(year,month-1,1))}>‹</button>
+                <button className="btn btn-outline btn-sm" onClick={()=>setViewDate(new Date(year,month+1,1))}>›</button>
               </div>
             </div>
-            <div className="card">
-              <h3 style={{fontSize:15,marginBottom:14}}>Upcoming</h3>
-              {upcoming.map(ev=>(
-                <div key={ev.id} style={{padding:"10px 0",borderBottom:`1px solid ${C.border}`,cursor:"pointer"}} onClick={()=>setSelected(ev)}>
-                  <div style={{fontSize:13,fontWeight:500,color:C.navy}}>{ev.title}</div>
-                  <div style={{fontSize:11,color:C.muted}}>{ev.date}{ev.time&&` · ${ev.time}`}</div>
-                  {ev.location&&<div style={{fontSize:11,color:C.muted}}>📍 {ev.location}</div>}
-                </div>
-              ))}
-              {upcoming.length===0&&<p style={{fontSize:13,color:C.muted}}>No upcoming events</p>}
+            <div className="cal-grid">
+              {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=><div key={d} className="cal-day-header">{d}</div>)}
+              {cells.map((cell,i)=>{
+                const ds=cell.other?null:`${year}-${String(month+1).padStart(2,"0")}-${String(cell.day).padStart(2,"0")}`;
+                const evs=cell.other?[]:eventsForDay(cell.day);
+                return (
+                  <div key={i} className={`cal-day${cell.other?" other-month":""}${ds===todayStr?" today":""}`}>
+                    <div className="cal-date" style={{color:ds===todayStr?C.gold:C.navy}}>{cell.day}</div>
+                    {evs.map(ev=><div key={ev.id} className="cal-event" onClick={()=>setSelected(ev)}>{ev.title}</div>)}
+                  </div>
+                );
+              })}
             </div>
           </div>
+
+          {/* Upcoming events — full width below calendar */}
+          <div className="card">
+            <h3 style={{fontSize:15,marginBottom:14}}>Upcoming Events</h3>
+            {upcoming.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No upcoming events</p></div>}
+            {upcoming.map(ev=>(
+              <div key={ev.id} style={{display:"flex",gap:12,alignItems:"center",padding:"12px 0",borderBottom:`1px solid ${C.border}`,cursor:"pointer"}} onClick={()=>setSelected(ev)}>
+                <div style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:46,flexShrink:0}}>
+                  <div style={{fontSize:9,textTransform:"uppercase",letterSpacing:1,color:C.muted}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
+                  <div style={{fontSize:20,fontFamily:"Playfair Display,serif",fontWeight:700,color:C.navy,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+                </div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:14,fontWeight:500,color:C.navy}}>{ev.title}</div>
+                  {ev.time&&<div style={{fontSize:12,color:C.muted}}>🕖 {ev.time}</div>}
+                  {ev.location&&<div style={{fontSize:12,color:C.muted}}>📍 {ev.location}</div>}
+                </div>
+                <span style={{fontSize:12,color:C.gold}}>›</span>
+              </div>
+            ))}
+          </div>
+
           {selected&&(
             <Modal title={selected.title} onClose={()=>setSelected(null)}
               footer={<button className="btn btn-primary" onClick={()=>setSelected(null)}>Close</button>}>
@@ -917,13 +927,13 @@
       const [page,setPage]=useState("dashboard");
       const [sidebarOpen,setSidebarOpen]=useState(false);
 
-      if(!currentUser) return <LoginPage onLogin={(u)=>{setCurrentUser(u);setPage("dashboard");}}/>;
+      if(!currentUser) return <LoginPage onLogin={(u)=>{setCurrentUser(u);setPage(u.role==="admin"?"dashboard":"announcements");}}/>;
 
       const isAdmin=currentUser.role==="admin";
       const adminNav=[{id:"dashboard",label:"Dashboard",icon:"🏠"},{id:"students",label:"Catechumens",icon:"👥"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Calendar",icon:"📅"},{id:"settings",label:"Settings",icon:"⚙️"}];
-      const studentNav=[{id:"dashboard",label:"My Journey",icon:"✝"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Calendar",icon:"📅"}];
+      const studentNav=[{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Calendar",icon:"📅"}];
       const nav=isAdmin?adminNav:studentNav;
-      const titles={dashboard:isAdmin?"Overview":"My Journey",students:"Catechumens",announcements:"Announcements",materials:"Materials & Downloads",calendar:"Class Calendar",settings:"Settings"};
+      const titles={dashboard:"Overview",students:"Catechumens",announcements:"Announcements",materials:"Materials & Downloads",calendar:"Class Calendar",settings:"Settings"};
 
       // For shared student login, show general student view (no specific student data)
       const liveStudent=isAdmin?null:(students.find(s=>s.id===currentUser.id)||{name:"Student",stage:stages[0]||"",attendance:0});
@@ -980,7 +990,6 @@
               {isAdmin&&page==="materials"&&<AdminMaterials materials={materials} setMaterials={setMaterials}/>}
               {isAdmin&&page==="calendar"&&<AdminCalendar events={events} setEvents={setEvents}/>}
               {isAdmin&&page==="settings"&&<AdminSettings stages={stages} setStages={setStages} students={students} setStudents={setStudents}/>}
-              {!isAdmin&&page==="dashboard"&&<StudentDashboard student={liveStudent} announcements={announcements} events={events} stages={stages}/>}
               {!isAdmin&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
               {!isAdmin&&page==="materials"&&<StudentMaterials materials={materials}/>}
               {!isAdmin&&page==="calendar"&&<StudentCalendar events={events}/>}
