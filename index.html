@@ -580,36 +580,27 @@
             <button className="btn btn-primary" onClick={openAdd}>+ Add Session</button>
           </div>
           <div className="card" style={{padding:0}}>
-            <div className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th style={{width:"22%"}}>Date</th>
-                    <th style={{width:"48%"}}>Content</th>
-                    <th style={{width:"20%"}}>Catechist</th>
-                    <th style={{width:"10%"}}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {sorted.length===0&&(
-                    <tr><td colSpan={4}><div className="empty"><div className="empty-icon">📅</div><p>No sessions yet — add one!</p></div></td></tr>
-                  )}
-                  {sorted.map(ev=>(
-                    <tr key={ev.id}>
-                      <td style={{fontSize:13,fontWeight:500,color:C.navy,whiteSpace:"nowrap"}}>{fmt(ev.date)}</td>
-                      <td style={{fontSize:14,color:C.navy}}>{ev.content||ev.title||"—"}</td>
-                      <td style={{fontSize:13,color:C.muted}}>{ev.catechist||"—"}</td>
-                      <td>
-                        <div style={{display:"flex",gap:4}}>
-                          <button className="btn btn-outline btn-sm" onClick={()=>openEdit(ev)}>Edit</button>
-                          <button className="btn btn-danger btn-sm" onClick={()=>remove(ev.id)}>✕</button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            {sorted.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions yet — add one!</p></div>}
+            {sorted.map((ev,i)=>(
+              <div key={ev.id} style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:i<sorted.length-1?`1px solid ${C.border}`:"none"}}>
+                {/* Date badge */}
+                <div style={{background:C.navy,color:C.goldLight,borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:48,flexShrink:0}}>
+                  <div style={{fontSize:9,textTransform:"uppercase",letterSpacing:1,opacity:0.7}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
+                  <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+                  <div style={{fontSize:9,opacity:0.7}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
+                </div>
+                {/* Content */}
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:14,color:C.navy,marginBottom:3,lineHeight:1.4}}>{ev.content||ev.title||"—"}</div>
+                  <div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist||"—"}</div>
+                </div>
+                {/* Actions */}
+                <div style={{display:"flex",flexDirection:"column",gap:4,flexShrink:0}}>
+                  <button className="btn btn-outline btn-sm" onClick={()=>openEdit(ev)}>Edit</button>
+                  <button className="btn btn-danger btn-sm" onClick={()=>remove(ev.id)}>✕</button>
+                </div>
+              </div>
+            ))}
           </div>
           {(modal==="add"||modal==="edit")&&(
             <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&setModal(false)}>
@@ -725,41 +716,36 @@
       const todayStr=new Date().toISOString().slice(0,10);
       const upcoming=sorted.filter(e=>e.date>=todayStr);
       const past=sorted.filter(e=>e.date<todayStr);
-      const fmt=(d)=>{try{return new Date(d+"T12:00:00").toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"2-digit"});}catch{return d;}};
-      const Row=({ev,dim})=>(
-        <tr style={{opacity:dim?0.5:1}}>
-          <td style={{fontSize:13,fontWeight:500,whiteSpace:"nowrap",color:dim?C.muted:C.navy}}>{fmt(ev.date)}</td>
-          <td style={{fontSize:14,color:dim?C.muted:C.navy}}>{ev.content||ev.title||"—"}</td>
-          <td style={{fontSize:13,color:C.muted}}>{ev.catechist||"—"}</td>
-        </tr>
+      const SessionCard=({ev,dim})=>(
+        <div style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:`1px solid ${C.border}`,opacity:dim?0.5:1}}>
+          <div style={{background:dim?C.muted:C.navy,color:"#DDD0F5",borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:48,flexShrink:0}}>
+            <div style={{fontSize:9,textTransform:"uppercase",letterSpacing:1,opacity:0.8}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
+            <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+            <div style={{fontSize:9,opacity:0.8}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
+          </div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:14,color:dim?C.muted:C.navy,marginBottom:3,lineHeight:1.4}}>{ev.content||ev.title||"—"}</div>
+            <div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist||"—"}</div>
+          </div>
+        </div>
       );
       return (
         <>
           <div className="section-header"><h2>Class Schedule</h2></div>
           {upcoming.length>0&&(
             <div className="card" style={{padding:0,marginBottom:16}}>
-              <div style={{padding:"12px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
+              <div style={{padding:"10px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
                 <span style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.navy}}>Upcoming Sessions</span>
               </div>
-              <div className="table-wrap">
-                <table>
-                  <thead><tr><th>Date</th><th>Content</th><th>Catechist</th></tr></thead>
-                  <tbody>{upcoming.map(ev=><Row key={ev.id} ev={ev} dim={false}/>)}</tbody>
-                </table>
-              </div>
+              {upcoming.map(ev=><SessionCard key={ev.id} ev={ev} dim={false}/>)}
             </div>
           )}
           {past.length>0&&(
             <div className="card" style={{padding:0}}>
-              <div style={{padding:"12px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
+              <div style={{padding:"10px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
                 <span style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.muted}}>Past Sessions</span>
               </div>
-              <div className="table-wrap">
-                <table>
-                  <thead><tr><th>Date</th><th>Content</th><th>Catechist</th></tr></thead>
-                  <tbody>{past.slice().reverse().map(ev=><Row key={ev.id} ev={ev} dim={true}/>)}</tbody>
-                </table>
-              </div>
+              {past.slice().reverse().map(ev=><SessionCard key={ev.id} ev={ev} dim={true}/>)}
             </div>
           )}
           {events.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions scheduled yet</p></div>}
