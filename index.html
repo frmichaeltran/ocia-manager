@@ -92,11 +92,10 @@
 
     /* ── MODAL ── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: flex-end; justify-content: center; z-index: 100; padding: 0; }
-    .modal { background: #FFFFFF; border-radius: 20px 20px 0 0; width: 100%; max-width: 560px; max-height: 92dvh; overflow-y: auto; display: flex; flex-direction: column; -webkit-overflow-scrolling: touch; }
-    .modal-header { padding: 20px 20px 0; display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; }
+    .modal { background: #FFFFFF; border-radius: 20px 20px 0 0; width: 100%; max-width: 560px; max-height: 92dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .modal-header { padding: 20px 20px 0; display: flex; align-items: flex-start; justify-content: space-between; position: sticky; top: 0; background: #FFFFFF; z-index: 1; padding-bottom: 12px; border-bottom: 1px solid #DDD5EE; }
     .modal-header h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #3D2C6B; }
-    .modal-body { padding: 16px 20px; flex: 1; overflow-y: auto; }
-    .modal-footer { padding: 0 20px 20px; display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0; border-top: 1px solid #DDD5EE; padding-top: 14px; margin-top: 4px; }
+    .modal-body { padding: 16px 20px 24px; }
     .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #7B6FA0; line-height: 1; padding: 4px 8px; border-radius: 4px; }
 
     /* ── FORM ── */
@@ -274,8 +273,10 @@
         <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
           <div className="modal">
             <div className="modal-header"><h3>{title}</h3><button className="close-btn" onClick={onClose}>×</button></div>
-            <div className="modal-body">{children}</div>
-            {footer&&<div className="modal-footer">{footer}</div>}
+            <div className="modal-body">
+              {children}
+              {footer&&<div style={{display:"flex",justifyContent:"flex-end",gap:8,marginTop:16,paddingTop:14,borderTop:`1px solid #DDD5EE`}}>{footer}</div>}
+            </div>
           </div>
         </div>
       );
