@@ -14,171 +14,105 @@
     body { font-family: 'Source Sans 3', sans-serif; background: #F7F4FC; color: #3D2C6B; -webkit-tap-highlight-color: transparent; }
     h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
     .app { display: flex; height: 100dvh; overflow: hidden; }
-
-    /* ── SIDEBAR (desktop) ── */
     .sidebar { width: 220px; background: #3D2C6B; display: flex; flex-direction: column; flex-shrink: 0; transition: transform 0.25s; z-index: 50; }
     .sidebar-logo { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
     .sidebar-logo .parish { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #9B7FD4; margin-bottom: 4px; }
-    .sidebar-logo h2 { font-family: 'Playfair Display', serif; color: #FFFFFF; font-size: 16px; line-height: 1.3; }
+    .sidebar-logo h2 { font-family: 'Playfair Display', serif; color: #FFF; font-size: 16px; line-height: 1.3; }
     .sidebar-logo .badge { display: inline-block; margin-top: 6px; background: #DDD0F5; color: #3D2C6B; font-size: 9px; font-weight: 600; letter-spacing: 1px; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; }
     .sidebar-nav { flex: 1; padding: 16px 0; overflow-y: auto; }
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 400; transition: all 0.15s; border-left: 3px solid transparent; }
-    .nav-item:hover { color: #FFFFFF; background: rgba(255,255,255,0.05); }
-    .nav-item.active { color: #FFFFFF; background: rgba(155,127,212,0.18); border-left-color: #9B7FD4; font-weight: 500; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 14px; border-left: 3px solid transparent; transition: all 0.15s; }
+    .nav-item:hover { color: #FFF; background: rgba(255,255,255,0.05); }
+    .nav-item.active { color: #FFF; background: rgba(155,127,212,0.18); border-left-color: #9B7FD4; font-weight: 500; }
     .nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
     .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
-
-    /* ── MAIN ── */
     .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-    .topbar { background: #FFFFFF; border-bottom: 1px solid #DDD5EE; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 10px; }
+    .topbar { background: #FFF; border-bottom: 1px solid #DDD5EE; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 10px; }
     .topbar-title { font-family: 'Playfair Display', serif; font-size: 18px; color: #3D2C6B; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .topbar-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-    .avatar { width: 34px; height: 34px; border-radius: 50%; background: #3D2C6B; color: #DDD0F5; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; font-family: 'Playfair Display', serif; cursor: pointer; flex-shrink: 0; }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; background: #3D2C6B; color: #DDD0F5; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
     .content { flex: 1; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch; }
-
-    /* ── HAMBURGER ── */
     .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; flex-shrink: 0; }
-    .hamburger span { display: block; width: 22px; height: 2px; background: #3D2C6B; margin: 5px 0; border-radius: 2px; transition: all 0.2s; }
-
-    /* ── MOBILE OVERLAY ── */
+    .hamburger span { display: block; width: 22px; height: 2px; background: #3D2C6B; margin: 5px 0; border-radius: 2px; }
     .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 49; }
-
-    /* ── BOTTOM NAV (mobile only) ── */
     .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #3D2C6B; border-top: 1px solid rgba(255,255,255,0.1); z-index: 40; padding-bottom: env(safe-area-inset-bottom); }
     .bottom-nav-inner { display: flex; }
-    .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 4px 8px; cursor: pointer; color: rgba(255,255,255,0.5); transition: all 0.15s; min-width: 0; }
+    .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 4px 8px; cursor: pointer; color: rgba(255,255,255,0.5); min-width: 0; }
     .bottom-nav-item.active { color: #9B7FD4; }
     .bottom-nav-item .bn-icon { font-size: 20px; margin-bottom: 3px; }
-    .bottom-nav-item .bn-label { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
-
-    /* ── CARDS ── */
-    .card { background: #FFFFFF; border: 1px solid #DDD5EE; border-radius: 12px; padding: 16px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-    .stat-card { background: #FFFFFF; border: 1px solid #DDD5EE; border-radius: 12px; padding: 14px 16px; }
+    .bottom-nav-item .bn-label { font-size: 10px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+    .card { background: #FFF; border: 1px solid #DDD5EE; border-radius: 12px; padding: 16px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: #FFF; border: 1px solid #DDD5EE; border-radius: 12px; padding: 14px 16px; }
     .stat-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #7B6FA0; margin-bottom: 4px; }
     .stat-value { font-family: 'Playfair Display', serif; font-size: 26px; color: #3D2C6B; }
     .stat-sub { font-size: 11px; color: #7B6FA0; margin-top: 2px; }
-
-    /* ── BUTTONS ── */
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; font-family: 'Source Sans 3', sans-serif; touch-action: manipulation; }
-    .btn-primary { background: #3D2C6B; color: #FFFFFF; }
-    .btn-primary:active { background: #2e1f54; }
-    .btn-gold { background: #9B7FD4; color: #FFFFFF; }
-    .btn-gold:active { background: #8166c0; }
+    .btn-primary { background: #3D2C6B; color: #FFF; }
+    .btn-gold { background: #9B7FD4; color: #FFF; }
     .btn-outline { background: transparent; color: #3D2C6B; border: 1px solid #DDD5EE; }
-    .btn-outline:active { background: #F7F4FC; }
     .btn-danger { background: transparent; color: #B84040; border: 1px solid #e8c0c0; }
-    .btn-danger:active { background: #fdf0f0; }
     .btn-sm { padding: 6px 12px; font-size: 12px; }
     .btn-block { width: 100%; justify-content: center; padding: 13px 16px; font-size: 15px; }
-
-    /* ── TABLE ── */
-    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 540px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 500px; }
     th { text-align: left; padding: 10px 12px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #7B6FA0; border-bottom: 1px solid #DDD5EE; font-weight: 500; background: #F7F4FC; }
     td { padding: 12px 12px; border-bottom: 1px solid #DDD5EE; color: #3D2C6B; vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
-
-    /* ── STAGE BADGES ── */
     .badge-stage { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
     .stage-pre { background: #FEF3C7; color: #92400E; }
     .stage-cat { background: #DBEAFE; color: #1E40AF; }
     .stage-pe { background: #EDE9FE; color: #5B21B6; }
     .stage-mys { background: #D1FAE5; color: #065F46; }
-
-    /* ── PROGRESS ── */
     .progress-bar { height: 6px; background: #DDD5EE; border-radius: 3px; overflow: hidden; }
-    .progress-fill { height: 100%; background: #9B7FD4; border-radius: 3px; transition: width 0.3s; }
-
-    /* ── MODAL ── */
+    .progress-fill { height: 100%; background: #9B7FD4; border-radius: 3px; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
-    .modal { background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 500px; }
-    .modal-header { padding: 20px 20px 12px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #DDD5EE; }
+    .modal { background: #FFF; border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { padding: 20px 20px 12px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #DDD5EE; position: sticky; top: 0; background: #FFF; z-index: 1; }
     .modal-header h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #3D2C6B; }
     .modal-body { padding: 16px 20px 20px; }
-    .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #7B6FA0; line-height: 1; padding: 4px 8px; border-radius: 4px; }
-
-    /* ── FORM ── */
+    .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #7B6FA0; padding: 4px 8px; }
     .form-group { margin-bottom: 14px; }
     .form-label { display: block; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: #7B6FA0; margin-bottom: 5px; }
     .form-input { width: 100%; padding: 11px 12px; border: 1px solid #DDD5EE; border-radius: 8px; font-size: 16px; font-family: 'Source Sans 3', sans-serif; color: #3D2C6B; background: #F7F4FC; outline: none; transition: border 0.15s; -webkit-appearance: none; }
-    .form-input:focus { border-color: #9B7FD4; background: #FFFFFF; }
+    .form-input:focus { border-color: #9B7FD4; background: #FFF; }
     select.form-input { cursor: pointer; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-
-    /* ── ANNOUNCEMENTS ── */
-    .announcement { padding: 14px 16px; background: #FFFFFF; border-radius: 0 8px 8px 0; margin-bottom: 12px; border: 1px solid #DDD5EE; border-left: 3px solid #9B7FD4; }
+    .announcement { padding: 14px 16px; background: #FFF; border-radius: 0 8px 8px 0; margin-bottom: 12px; border: 1px solid #DDD5EE; border-left: 3px solid #9B7FD4; }
     .ann-meta { font-size: 11px; color: #7B6FA0; margin-bottom: 4px; }
     .ann-body { font-size: 14px; color: #3D2C6B; line-height: 1.6; }
-
-    /* ── MATERIALS ── */
-    .material-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #DDD5EE; border-radius: 10px; background: #FFFFFF; margin-bottom: 10px; }
+    .material-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #DDD5EE; border-radius: 10px; background: #FFF; margin-bottom: 10px; }
     .material-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
     .material-info { flex: 1; min-width: 0; }
     .material-name { font-size: 14px; font-weight: 500; color: #3D2C6B; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .material-meta { font-size: 12px; color: #7B6FA0; margin-top: 2px; }
-
-    /* ── CALENDAR ── */
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-    .cal-day-header { text-align: center; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #7B6FA0; padding: 6px 0; }
-    .cal-day { min-height: 52px; border: 1px solid #DDD5EE; border-radius: 4px; padding: 4px; background: #FFFFFF; }
-    .cal-day.other-month { background: #F7F4FC; opacity: 0.4; }
-    .cal-day.today { border-color: #9B7FD4; }
-    .cal-date { font-size: 11px; font-weight: 500; margin-bottom: 2px; }
-    .cal-event { font-size: 9px; background: #3D2C6B; color: #FFFFFF; border-radius: 2px; padding: 1px 4px; margin-bottom: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
-    .cal-event:active { background: #9B7FD4; }
-
-    /* ── SECTION HEADER ── */
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
     .section-header h2 { font-size: 20px; }
-
-    /* ── SEARCH ── */
-    .search-input { padding: 9px 12px 9px 36px; border: 1px solid #DDD5EE; border-radius: 8px; font-size: 14px; background: #F7F4FC; outline: none; transition: border 0.15s; width: 100%; max-width: 220px; font-family: 'Source Sans 3', sans-serif; }
-    .search-input:focus { border-color: #9B7FD4; background: #FFFFFF; }
+    .search-input { padding: 9px 12px 9px 36px; border: 1px solid #DDD5EE; border-radius: 8px; font-size: 14px; background: #F7F4FC; outline: none; width: 100%; max-width: 220px; font-family: 'Source Sans 3', sans-serif; }
+    .search-input:focus { border-color: #9B7FD4; background: #FFF; }
     .search-wrap { position: relative; }
     .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #7B6FA0; font-size: 14px; }
     input[type=checkbox] { accent-color: #3D2C6B; width: 16px; height: 16px; cursor: pointer; }
-
-    /* ── EMPTY ── */
     .empty { text-align: center; padding: 40px 20px; color: #7B6FA0; }
     .empty-icon { font-size: 32px; margin-bottom: 10px; opacity: 0.4; }
     .empty p { font-size: 14px; }
-
-    /* ── WELCOME BANNER ── */
-    .welcome-banner { background: #3D2C6B; border-radius: 14px; padding: 20px 22px; color: #FFFFFF; margin-bottom: 20px; position: relative; overflow: hidden; }
+    .welcome-banner { background: #3D2C6B; border-radius: 14px; padding: 20px 22px; color: #FFF; margin-bottom: 20px; position: relative; overflow: hidden; }
     .welcome-banner::before { content: '✝'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 64px; opacity: 0.08; }
     .welcome-banner h2 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 4px; }
     .welcome-banner p { font-size: 13px; opacity: 0.7; }
-
-    /* ── TWO COL ── */
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-    /* ── LOGIN ── */
     .login-page { min-height: 100dvh; background: #3D2C6B; display: flex; align-items: center; justify-content: center; padding: 20px; }
-    .login-card { background: #FFFFFF; border-radius: 20px; padding: 36px 28px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-card { background: #FFF; border-radius: 20px; padding: 36px 28px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
     .login-logo { text-align: center; margin-bottom: 28px; }
     .login-logo .cross { font-size: 32px; color: #9B7FD4; margin-bottom: 8px; }
     .login-logo .parish { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #7B6FA0; margin-bottom: 4px; }
     .login-logo h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: #3D2C6B; }
     .error-msg { background: #fdf0f0; border: 1px solid #e8c0c0; color: #B84040; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
-    .logout-btn { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: rgba(255,255,255,0.7); font-size: 12px; cursor: pointer; transition: all 0.15s; font-family: 'Source Sans 3', sans-serif; }
-    .logout-btn:active { background: rgba(255,255,255,0.18); color: #FFFFFF; }
-
-    /* ── EVENT POPUP ── */
-    .event-popup { position: fixed; background: #FFFFFF; border: 1px solid #DDD5EE; border-radius: 12px; padding: 16px; width: 260px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); z-index: 200; }
-    .event-popup h4 { font-size: 15px; margin-bottom: 8px; }
-    .event-detail-row { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #7B6FA0; margin-bottom: 6px; }
-    .event-detail-row span:first-child { flex-shrink: 0; }
-
-    /* ── STUDENT CARD ── */
-    .student-card { background: #FFFFFF; border: 1px solid #DDD5EE; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
-
+    .logout-btn { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: rgba(255,255,255,0.7); font-size: 12px; cursor: pointer; font-family: 'Source Sans 3', sans-serif; }
+    .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100dvh; background: #3D2C6B; color: #FFF; gap: 16px; }
+    .loading-screen .cross { font-size: 40px; color: #9B7FD4; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
     ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #DDD5EE; border-radius: 2px; }
-
-    /* ── MOBILE BREAKPOINT ── */
     @media (max-width: 768px) {
       .sidebar { position: fixed; top: 0; left: 0; bottom: 0; transform: translateX(-100%); }
       .sidebar.open { transform: translateX(0); box-shadow: 4px 0 20px rgba(0,0,0,0.3); }
@@ -186,752 +120,691 @@
       .hamburger { display: block; }
       .bottom-nav { display: block; }
       .content { padding: 14px 14px 80px; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
       .two-col { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
-      .form-row-3 { grid-template-columns: 1fr 1fr; }
       .section-header { flex-direction: column; align-items: flex-start; }
       .section-header > div { width: 100%; }
       .search-input { max-width: 100%; }
       .topbar { padding: 12px 14px; }
-      .card { padding: 14px; }
-      /* Calendar mobile: stack calendar + upcoming */
-      .cal-desktop-grid { display: block !important; }
-      .cal-upcoming-panel { margin-top: 16px; }
     }
-    @media (min-width: 769px) {
-      .sidebar-overlay { display: none !important; }
-    }
+    @media (min-width: 769px) { .sidebar-overlay { display: none !important; } }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState, useRef, useEffect } = React;
+<div id="root"></div>
 
-    const C = {
-      navy:"#3D2C6B", gold:"#9B7FD4", goldLight:"#DDD0F5", cream:"#F7F4FC",
-      white:"#FFFFFF", muted:"#7B6FA0", border:"#DDD5EE",
-      danger:"#B84040", success:"#2E7D5A", info:"#5B3FBE",
-    };
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+  import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
-    const DEFAULT_STAGES = ["Pre-Catechumenate","Catechumenate","Purification & Enlightenment","Mystagogy"];
-    const STAGE_CLASS = ["stage-pre","stage-cat","stage-pe","stage-mys","stage-pre","stage-cat","stage-pe","stage-mys"];
-    function stageClass(stages, s) { const i=stages.indexOf(s); return STAGE_CLASS[i] || "stage-pre"; }
+  const firebaseConfig = {
+    apiKey: "AIzaSyCk2f8a_388w6XqP6TR61iC-Kg3vvGG69U",
+    authDomain: "ocia-manager-f0ca6.firebaseapp.com",
+    projectId: "ocia-manager-f0ca6",
+    storageBucket: "ocia-manager-f0ca6.firebasestorage.app",
+    messagingSenderId: "89072820821",
+    appId: "1:89072820821:web:108c88b78630794c7c2adc"
+  };
 
-    // Default teacher account
-    const DEFAULT_TEACHER = { email: "teacher@stcatherine.org", password: "ocia2026", name: "Fr. Michael", role: "admin" };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.__db = db;
+  window.__firebase = { collection, doc, onSnapshot, setDoc, deleteDoc, getDocs, writeBatch };
+</script>
 
-    const SEED_STUDENTS = [
-      {id:1,name:"Maria Santos",email:"maria.santos@email.com",password:"maria123",phone:"972-555-0101",stage:"Catechumenate",attendance:85,notes:"Sponsored by John D.",joined:"2025-09-10"},
-      {id:2,name:"James Okafor",email:"james.okafor@email.com",password:"james123",phone:"972-555-0102",stage:"Pre-Catechumenate",attendance:70,notes:"Recently moved from Lagos",joined:"2026-01-15"},
-      {id:3,name:"Linda Chen",email:"linda.chen@email.com",password:"linda123",phone:"972-555-0103",stage:"Catechumenate",attendance:92,notes:"",joined:"2025-09-10"},
-      {id:4,name:"Roberto Diaz",email:"rdiaz@email.com",password:"roberto123",phone:"972-555-0104",stage:"Purification & Enlightenment",attendance:96,notes:"Elect — Easter Vigil ready",joined:"2024-09-05"},
-      {id:5,name:"Aisha Williams",email:"aisha.w@email.com",password:"aisha123",phone:"972-555-0105",stage:"Catechumenate",attendance:78,notes:"Sponsor: Deacon Tom",joined:"2025-09-10"},
-      {id:6,name:"Patrick Murphy",email:"pmurphy@email.com",password:"patrick123",phone:"972-555-0106",stage:"Mystagogy",attendance:100,notes:"Baptized Easter 2025",joined:"2024-09-01"},
-      {id:7,name:"Fatima Al-Hassan",email:"fatima.h@email.com",password:"fatima123",phone:"972-555-0107",stage:"Pre-Catechumenate",attendance:60,notes:"Just inquiring",joined:"2026-03-01"},
-      {id:8,name:"David Kim",email:"dkim@email.com",password:"david123",phone:"972-555-0108",stage:"Catechumenate",attendance:88,notes:"",joined:"2025-09-10"},
-    ];
-    const SEED_ANN = [
-      {id:1,title:"Easter Vigil Rehearsal",body:"All elect please attend the Easter Vigil rehearsal on Friday, April 4th at 7:00 pm in the main church. Bring your sponsor!",date:"2026-05-29",urgent:true},
-      {id:2,title:"Session this Wednesday",body:"This Wednesday we will cover the Sacrament of Baptism. Please read Chapter 12 in your OCIA workbook beforehand.",date:"2026-06-01",urgent:false},
-      {id:3,title:"Retreat Day — June 21",body:"Our annual retreat will be held on Saturday, June 21st. All catechumens are strongly encouraged to attend. Lunch is provided.",date:"2026-05-20",urgent:false},
-    ];
-    const SEED_MAT = [
-      {id:1,name:"OCIA Workbook (Official)",type:"pdf",url:"https://www.usccb.org/sites/default/files/flipbooks/catechism/",category:"Textbook"},
-      {id:2,name:"Catechism of the Catholic Church",type:"link",url:"https://www.usccb.org/sites/default/files/flipbooks/catechism/",category:"Reference"},
-      {id:3,name:"Week 5 — The Creed Slides",type:"drive",url:"https://drive.google.com/",category:"Slides"},
-      {id:4,name:"Prayer Booklet for Catechumens",type:"pdf",url:"https://drive.google.com/",category:"Prayer"},
-      {id:5,name:"Diocese of Fort Worth OCIA Guide",type:"link",url:"https://fwdioc.org",category:"Reference"},
-    ];
-    const SEED_EVT = [
-      {id:1,date:"2026-06-04",content:"Introduction to the OCIA Process",catechist:"Fr. Michael"},
-      {id:2,date:"2026-06-11",content:"The Sacrament of Baptism",catechist:"Fr. Michael"},
-      {id:3,date:"2026-06-18",content:"The Creed — What Catholics Believe",catechist:"Fr. Michael"},
-      {id:4,date:"2026-06-21",content:"Retreat Day — Full Day (9am–4pm)",catechist:"Fr. Michael"},
-      {id:5,date:"2026-06-25",content:"The Sacraments of Initiation",catechist:"Fr. Michael"},
-      {id:6,date:"2026-07-06",content:"Rite of Welcome Ceremony",catechist:"Fr. Michael"},
-    ];
-    const SEED_TEACHER = { email: "teacher@stcatherine.org", password: "ocia2026", name: "Fr. Michael" };
+<script type="text/babel">
+  const { useState, useEffect, useRef } = React;
 
-    function useStorage(key, seed) {
-      const [data, setData] = useState(() => { try { const s=localStorage.getItem(key); return s?JSON.parse(s):seed; } catch{return seed;} });
-      const save = (v) => { setData(v); try{localStorage.setItem(key,JSON.stringify(v));}catch{} };
-      return [data, save];
-    }
+  const C = {
+    navy:"#3D2C6B", gold:"#9B7FD4", goldLight:"#DDD0F5", cream:"#F7F4FC",
+    white:"#FFF", muted:"#7B6FA0", border:"#DDD5EE", danger:"#B84040", success:"#2E7D5A",
+  };
 
-    function StageTag({stage,stages=DEFAULT_STAGES}) { return <span className={`badge-stage ${STAGE_CLASS[stages.indexOf(stage)%STAGE_CLASS.length]||"stage-pre"}`}>{stage}</span>; }
-    function MatIcon({type}) {
-      const m={pdf:{bg:"#FEE2E2",ic:"📄"},drive:{bg:"#DBEAFE",ic:"🔗"},link:{bg:"#D1FAE5",ic:"🌐"}};
-      const t=m[type]||m.link;
-      return <div className="material-icon" style={{background:t.bg}}>{t.ic}</div>;
-    }
-    function initials(name) { return (name||"").split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase(); }
+  const DEFAULT_STAGES = ["Pre-Catechumenate","Catechumenate","Purification & Enlightenment","Mystagogy"];
+  const STAGE_CLASS = ["stage-pre","stage-cat","stage-pe","stage-mys","stage-pre","stage-cat","stage-pe","stage-mys"];
 
-    function Modal({title,onClose,children,footer}) {
-      return (
-        <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
-          <div className="modal">
-            <div className="modal-header"><h3>{title}</h3><button className="close-btn" onClick={onClose}>×</button></div>
-            <div className="modal-body">
-              {children}
-              {footer&&<div style={{display:"flex",justifyContent:"flex-end",gap:8,marginTop:16,paddingTop:14,borderTop:`1px solid #DDD5EE`}}>{footer}</div>}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // ── LOGIN ──
-    function LoginPage({onLogin}) {
-      const [username,setUsername]=useState("");
-      const [password,setPassword]=useState("");
-      const [showPw,setShowPw]=useState(false);
-      const [error,setError]=useState("");
-
-      const loginAsTeacher = () => {
-        setError("");
-        const u=username.trim().toLowerCase();
-        const p=password.trim();
-        if(u==="mary" && p==="ruby") {
-          onLogin({name:"Mary", role:"admin"});
-          return;
+  // ── FIREBASE HELPERS ──
+  function useCollection(colName, seedData) {
+    const [data, setData] = useState(null); // null = loading
+    useEffect(() => {
+      const db = window.__db;
+      const { collection, onSnapshot, setDoc, doc } = window.__firebase;
+      if (!db) return;
+      const col = collection(db, colName);
+      const unsub = onSnapshot(col, async snap => {
+        if (snap.empty && seedData && seedData.length > 0) {
+          // Seed initial data
+          for (const item of seedData) {
+            await setDoc(doc(db, colName, String(item.id)), item);
+          }
+        } else {
+          setData(snap.docs.map(d => d.data()));
         }
-        setError("Incorrect username or password. Please try again.");
-      };
+      });
+      return unsub;
+    }, [colName]);
+    return data;
+  }
 
-      const loginAsStudent = () => {
-        onLogin({name:"Student", role:"student", id:null});
-      };
+  async function saveItem(colName, item) {
+    const { doc, setDoc } = window.__firebase;
+    const db = window.__db;
+    await setDoc(doc(db, colName, String(item.id)), item);
+  }
 
-      const handleKey = (e) => { if(e.key==="Enter") loginAsTeacher(); };
+  async function removeItem(colName, id) {
+    const { doc, deleteDoc } = window.__firebase;
+    const db = window.__db;
+    await deleteDoc(doc(db, colName, String(id)));
+  }
 
-      return (
-        <div className="login-page">
-          <div className="login-card">
-            <div className="login-logo">
-              <div className="cross">✝</div>
-              <div className="parish">St. Catherine of Siena</div>
-              <h2>OCIA Program</h2>
-              <p style={{fontSize:13,color:"#7B6FA0",marginTop:4}}>Carrollton, Texas</p>
-            </div>
+  async function saveConfig(key, value) {
+    const { doc, setDoc } = window.__firebase;
+    const db = window.__db;
+    await setDoc(doc(db, "config", key), { value });
+  }
 
-            {error&&<div className="error-msg">{error}</div>}
+  function useConfig(key, defaultValue) {
+    const [value, setValue] = useState(defaultValue);
+    useEffect(() => {
+      const db = window.__db;
+      const { doc, onSnapshot } = window.__firebase;
+      if (!db) return;
+      const unsub = onSnapshot(doc(db, "config", key), snap => {
+        if (snap.exists()) setValue(snap.data().value);
+        else setValue(defaultValue);
+      });
+      return unsub;
+    }, [key]);
+    return [value, (v) => { setValue(v); saveConfig(key, v); }];
+  }
 
-            <div style={{marginBottom:20}}>
-              <div className="form-group">
-                <label className="form-label">Username</label>
-                <input className="form-input" type="text" value={username} onChange={e=>setUsername(e.target.value)} onKeyDown={handleKey} placeholder="Enter username" autoCapitalize="none" autoCorrect="off" spellCheck="false"/>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Password</label>
-                <div style={{position:"relative"}}>
-                  <input className="form-input" type={showPw?"text":"password"} value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={handleKey} placeholder="••••••••" style={{paddingRight:44}}/>
-                  <button onClick={()=>setShowPw(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:16,color:"#7B6FA0",padding:"4px"}}>{showPw?"🙈":"👁️"}</button>
-                </div>
-              </div>
-              <button className="btn btn-primary btn-block" onClick={loginAsTeacher}>Sign In as Teacher</button>
-            </div>
+  // ── SEED DATA ──
+  const SEED_STUDENTS = [
+    {id:1,name:"Maria Santos",email:"maria.santos@email.com",phone:"972-555-0101",stage:"Catechumenate",attendance:85,notes:"Sponsored by John D.",joined:"2025-09-10"},
+    {id:2,name:"James Okafor",email:"james.okafor@email.com",phone:"972-555-0102",stage:"Pre-Catechumenate",attendance:70,notes:"",joined:"2026-01-15"},
+    {id:3,name:"Linda Chen",email:"linda.chen@email.com",phone:"972-555-0103",stage:"Catechumenate",attendance:92,notes:"",joined:"2025-09-10"},
+  ];
+  const SEED_ANN = [
+    {id:1,title:"Session this Wednesday",body:"This Wednesday we will cover the Sacrament of Baptism. Please read Chapter 12 beforehand.",date:"2026-06-01",urgent:false},
+    {id:2,title:"Retreat Day — June 21",body:"Our annual retreat will be held on Saturday, June 21st. All catechumens are strongly encouraged to attend.",date:"2026-05-20",urgent:false},
+  ];
+  const SEED_MAT = [
+    {id:1,name:"Catechism of the Catholic Church",type:"link",url:"https://www.usccb.org/sites/default/files/flipbooks/catechism/",category:"Reference"},
+    {id:2,name:"Prayer Booklet for Catechumens",type:"pdf",url:"https://drive.google.com/",category:"Prayer"},
+  ];
+  const SEED_EVT = [
+    {id:1,date:"2026-06-04",content:"Introduction to the OCIA Process",catechist:"Fr. Michael"},
+    {id:2,date:"2026-06-11",content:"The Sacrament of Baptism",catechist:"Fr. Michael"},
+    {id:3,date:"2026-06-18",content:"The Creed — What Catholics Believe",catechist:"Fr. Michael"},
+  ];
 
-            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
-              <div style={{flex:1,height:1,background:"#DDD5EE"}}/>
-              <span style={{fontSize:12,color:"#7B6FA0"}}>or</span>
-              <div style={{flex:1,height:1,background:"#DDD5EE"}}/>
-            </div>
+  function initials(name) { return (name||"").split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase(); }
+  function StageTag({stage,stages=DEFAULT_STAGES}) { return <span className={`badge-stage ${STAGE_CLASS[stages.indexOf(stage)%STAGE_CLASS.length]||"stage-pre"}`}>{stage}</span>; }
+  function MatIcon({type}) {
+    const m={pdf:{bg:"#FEE2E2",ic:"📄"},drive:{bg:"#DBEAFE",ic:"🔗"},link:{bg:"#D1FAE5",ic:"🌐"}};
+    const t=m[type]||m.link;
+    return <div className="material-icon" style={{background:t.bg}}>{t.ic}</div>;
+  }
 
-            <button className="btn btn-gold btn-block" onClick={loginAsStudent}>
-              ✝ Login as Student
-            </button>
-          </div>
+  function Modal({title,onClose,children}) {
+    return (
+      <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+        <div className="modal">
+          <div className="modal-header"><h3>{title}</h3><button className="close-btn" onClick={onClose}>×</button></div>
+          <div className="modal-body">{children}</div>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
-    // ── ADMIN VIEWS ──
-    function AdminDashboard({students,announcements,events,stages}) {
-      const stageCounts=stages.map(s=>({name:s,count:students.filter(x=>x.stage===s).length}));
-      const avgAtt=students.length?Math.round(students.reduce((a,b)=>a+b.attendance,0)/students.length):0;
-      const today=new Date().toISOString().slice(0,10);
-      const upcoming=events.filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
-      const lastStage=stages[stages.length-1]||"";
-      const secondLastStage=stages[stages.length-2]||"";
-      return (
-        <>
-          <div className="stats-grid">
-            <div className="stat-card"><div className="stat-label">Total Catechumens</div><div className="stat-value">{students.length}</div><div className="stat-sub">Active in program</div></div>
-            <div className="stat-card"><div className="stat-label">Avg. Attendance</div><div className="stat-value">{avgAtt}%</div><div className="stat-sub">This term</div></div>
-            <div className="stat-card"><div className="stat-label">Ready for Rites</div><div className="stat-value">{students.filter(s=>s.stage===secondLastStage).length}</div><div className="stat-sub">{secondLastStage}</div></div>
-            <div className="stat-card"><div className="stat-label">{lastStage}</div><div className="stat-value">{students.filter(s=>s.stage===lastStage).length}</div><div className="stat-sub">Newly initiated</div></div>
+  function ModalButtons({onCancel,onSave,saveLabel="Save"}) {
+    return (
+      <div style={{display:"flex",gap:8,marginTop:16,paddingTop:14,borderTop:`1px solid ${C.border}`}}>
+        <button className="btn btn-outline" style={{flex:1}} onClick={onCancel}>Cancel</button>
+        <button className="btn btn-primary" style={{flex:2}} onClick={onSave}>✓ {saveLabel}</button>
+      </div>
+    );
+  }
+
+  // ── LOGIN ──
+  function LoginPage({onLogin}) {
+    const [username,setUsername]=useState("");
+    const [password,setPassword]=useState("");
+    const [showPw,setShowPw]=useState(false);
+    const [error,setError]=useState("");
+    const login=()=>{
+      setError("");
+      if(username.trim().toLowerCase()==="mary"&&password.trim()==="ruby"){onLogin({name:"Mary",role:"admin"});return;}
+      setError("Incorrect username or password.");
+    };
+    return (
+      <div className="login-page">
+        <div className="login-card">
+          <div className="login-logo">
+            <div className="cross">✝</div>
+            <div className="parish">St. Catherine of Siena</div>
+            <h2>OCIA Program</h2>
+            <p style={{fontSize:13,color:C.muted,marginTop:4}}>Carrollton, Texas</p>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:20}}>
-            <div className="card">
-              <h3 style={{fontSize:16,marginBottom:16}}>Journey Progress</h3>
-              {stageCounts.map((s,i)=>(
-                <div key={s.name} style={{marginBottom:14}}>
-                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
-                    <span className={`badge-stage ${STAGE_CLASS[i%STAGE_CLASS.length]}`}>{s.name}</span>
-                    <span style={{fontSize:13,color:C.muted}}>{s.count} students</span>
-                  </div>
-                  <div className="progress-bar"><div className="progress-fill" style={{width:`${students.length?(s.count/students.length)*100:0}%`}}/></div>
-                </div>
-              ))}
+          {error&&<div className="error-msg">{error}</div>}
+          <div className="form-group">
+            <label className="form-label">Username</label>
+            <input className="form-input" type="text" value={username} onChange={e=>setUsername(e.target.value)} onKeyDown={e=>e.key==="Enter"&&login()} placeholder="Enter username" autoCapitalize="none" autoCorrect="off"/>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Password</label>
+            <div style={{position:"relative"}}>
+              <input className="form-input" type={showPw?"text":"password"} value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={e=>e.key==="Enter"&&login()} placeholder="••••••••" style={{paddingRight:44}}/>
+              <button onClick={()=>setShowPw(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:16,color:C.muted}}>{showPw?"🙈":"👁️"}</button>
             </div>
-            <div className="card">
-              <h3 style={{fontSize:16,marginBottom:16}}>Upcoming Events</h3>
-              {upcoming.length===0&&<div className="empty"><p>No upcoming events</p></div>}
-              {upcoming.map(ev=>(
-                <div key={ev.id} style={{display:"flex",gap:12,alignItems:"flex-start",marginBottom:14}}>
-                  <div style={{background:C.navy,color:C.goldLight,borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:44,flexShrink:0}}>
-                    <div style={{fontSize:10,textTransform:"uppercase",letterSpacing:1}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
-                    <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+          </div>
+          <button className="btn btn-primary btn-block" onClick={login} style={{marginBottom:12}}>Sign In as Teacher</button>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
+            <div style={{flex:1,height:1,background:C.border}}/><span style={{fontSize:12,color:C.muted}}>or</span><div style={{flex:1,height:1,background:C.border}}/>
+          </div>
+          <button className="btn btn-gold btn-block" onClick={()=>onLogin({name:"Student",role:"student"})}>✝ Login as Student</button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── ADMIN DASHBOARD ──
+  function AdminDashboard({students,announcements,events,stages}) {
+    const today=new Date().toISOString().slice(0,10);
+    const upcoming=(events||[]).filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
+    const avgAtt=(students||[]).length?Math.round((students||[]).reduce((a,b)=>a+b.attendance,0)/(students||[]).length):0;
+    return (
+      <>
+        <div className="stats-grid">
+          <div className="stat-card"><div className="stat-label">Catechumens</div><div className="stat-value">{(students||[]).length}</div><div className="stat-sub">Active</div></div>
+          <div className="stat-card"><div className="stat-label">Avg Attendance</div><div className="stat-value">{avgAtt}%</div><div className="stat-sub">This term</div></div>
+          <div className="stat-card"><div className="stat-label">Announcements</div><div className="stat-value">{(announcements||[]).length}</div><div className="stat-sub">Posted</div></div>
+          <div className="stat-card"><div className="stat-label">Sessions</div><div className="stat-value">{(events||[]).length}</div><div className="stat-sub">Scheduled</div></div>
+        </div>
+        <div className="two-col" style={{marginBottom:20}}>
+          <div className="card">
+            <h3 style={{fontSize:16,marginBottom:14}}>Journey Progress</h3>
+            {(stages||DEFAULT_STAGES).map((s,i)=>{
+              const count=(students||[]).filter(x=>x.stage===s).length;
+              return (
+                <div key={s} style={{marginBottom:12}}>
+                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+                    <span className={`badge-stage ${STAGE_CLASS[i%STAGE_CLASS.length]}`}>{s}</span>
+                    <span style={{fontSize:13,color:C.muted}}>{count}</span>
                   </div>
-                  <div>
-                    <div style={{fontSize:14,fontWeight:500}}>{ev.title}</div>
-                    <div style={{fontSize:12,color:C.muted}}>{ev.time&&ev.time} {ev.location&&`· ${ev.location}`}</div>
-                  </div>
+                  <div className="progress-bar"><div className="progress-fill" style={{width:`${(students||[]).length?(count/(students||[]).length)*100:0}%`}}/></div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
           <div className="card">
-            <h3 style={{fontSize:16,marginBottom:14}}>Recent Announcements</h3>
-            {announcements.slice(0,2).map(a=>(
-              <div key={a.id} className="announcement">
-                <div className="ann-meta">{a.date}{a.urgent&&<span style={{color:C.danger,fontWeight:600}}> · Urgent</span>}</div>
-                <div style={{fontWeight:500,fontSize:14,marginBottom:3}}>{a.title}</div>
-                <div className="ann-body">{a.body}</div>
-              </div>
-            ))}
-          </div>
-        </>
-      );
-    }
-
-    function AdminStudents({students,setStudents,stages}) {
-      const [search,setSearch]=useState("");
-      const [stageFilter,setStageFilter]=useState("All");
-      const [modal,setModal]=useState(null);
-      const [form,setForm]=useState({});
-      const filtered=students.filter(s=>(stageFilter==="All"||s.stage===stageFilter)&&(s.name.toLowerCase().includes(search.toLowerCase())||s.email.toLowerCase().includes(search.toLowerCase())));
-      const openAdd=()=>{setForm({name:"",email:"",password:"",phone:"",stage:"Pre-Catechumenate",attendance:100,notes:""});setModal("add");};
-      const openEdit=(s)=>{setForm({...s});setModal("edit");};
-      const openView=(s)=>{setForm({...s});setModal("view");};
-      const save=()=>{
-        if(!form.name||!form.email)return;
-        if(modal==="add")setStudents([...students,{...form,id:Date.now(),joined:new Date().toISOString().slice(0,10)}]);
-        else setStudents(students.map(s=>s.id===form.id?form:s));
-        setModal(null);
-      };
-      const remove=(id)=>{if(confirm("Remove this student?"))setStudents(students.filter(s=>s.id!==id));};
-      return (
-        <>
-          <div className="section-header">
-            <h2>Catechumens</h2>
-            <div style={{display:"flex",gap:10,alignItems:"center"}}>
-              <div className="search-wrap"><span className="search-icon">🔍</span><input className="search-input" placeholder="Search students…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
-              <select className="form-input" style={{width:180}} value={stageFilter} onChange={e=>setStageFilter(e.target.value)}><option>All</option>{stages.map(s=><option key={s}>{s}</option>)}</select>
-              <button className="btn btn-primary" onClick={openAdd}>+ Add Student</button>
-            </div>
-          </div>
-          <div className="card" style={{padding:0}}>
-            <div className="table-wrap">
-              <table>
-                <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Stage</th><th>Attendance</th><th>Notes</th><th></th></tr></thead>
-                <tbody>
-                  {filtered.length===0&&<tr><td colSpan={7}><div className="empty"><div className="empty-icon">👤</div><p>No students found</p></div></td></tr>}
-                  {filtered.map(s=>(
-                    <tr key={s.id}>
-                      <td><div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:32,height:32,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:600,flexShrink:0}}>{initials(s.name)}</div><span style={{fontWeight:500}}>{s.name}</span></div></td>
-                      <td><a href={`mailto:${s.email}`} style={{color:C.info,textDecoration:"none"}}>{s.email}</a></td>
-                      <td><a href={`tel:${s.phone}`} style={{color:C.navy,textDecoration:"none"}}>{s.phone}</a></td>
-                      <td><StageTag stage={s.stage} stages={stages}/></td>
-                      <td><div style={{display:"flex",alignItems:"center",gap:8}}><div className="progress-bar" style={{width:60}}><div className="progress-fill" style={{width:`${s.attendance}%`}}/></div><span style={{fontSize:12,color:C.muted}}>{s.attendance}%</span></div></td>
-                      <td style={{fontSize:12,color:C.muted,maxWidth:140,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{s.notes}</td>
-                      <td><div style={{display:"flex",gap:4}}><button className="btn btn-outline btn-sm" onClick={()=>openView(s)}>View</button><button className="btn btn-outline btn-sm" onClick={()=>openEdit(s)}>Edit</button><button className="btn btn-danger btn-sm" onClick={()=>remove(s.id)}>✕</button></div></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          {(modal==="add"||modal==="edit")&&(
-            <Modal title={modal==="add"?"Add Catechumen":"Edit Student"} onClose={()=>setModal(null)}
-              footer={<><button className="btn btn-outline" onClick={()=>setModal(null)}>Cancel</button><button className="btn btn-primary" onClick={save}>Save</button></>}>
-              <div className="form-row">
-                <div className="form-group"><label className="form-label">Full Name</label><input className="form-input" value={form.name||""} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Full name"/></div>
-                <div className="form-group"><label className="form-label">Phone</label><input className="form-input" value={form.phone||""} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="972-555-0100"/></div>
-              </div>
-              <div className="form-row">
-                <div className="form-group"><label className="form-label">Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm({...form,email:e.target.value})} placeholder="email@example.com"/></div>
-                <div className="form-group"><label className="form-label">Login Password</label><input className="form-input" type="text" value={form.password||""} onChange={e=>setForm({...form,password:e.target.value})} placeholder="Set student password"/></div>
-              </div>
-              <div className="form-row">
-                <div className="form-group"><label className="form-label">Stage</label><select className="form-input" value={form.stage||stages[0]} onChange={e=>setForm({...form,stage:e.target.value})}>{stages.map(s=><option key={s}>{s}</option>)}</select></div>
-                <div className="form-group"><label className="form-label">Attendance %</label><input className="form-input" type="number" min="0" max="100" value={form.attendance||0} onChange={e=>setForm({...form,attendance:Number(e.target.value)})}/></div>
-              </div>
-              <div className="form-group"><label className="form-label">Notes</label><textarea className="form-input" rows={3} value={form.notes||""} onChange={e=>setForm({...form,notes:e.target.value})} placeholder="Sponsor name, background…" style={{resize:"vertical"}}/></div>
-            </Modal>
-          )}
-          {modal==="view"&&(
-            <Modal title="Student Profile" onClose={()=>setModal(null)}
-              footer={<><button className="btn btn-outline" onClick={()=>{setModal(null);setTimeout(()=>openEdit(form),50);}}>Edit</button><button className="btn btn-primary" onClick={()=>setModal(null)}>Close</button></>}>
-              <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:20}}>
-                <div style={{width:56,height:56,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,fontFamily:"Playfair Display,serif",fontWeight:700}}>{initials(form.name||"")}</div>
-                <div><div style={{fontFamily:"Playfair Display,serif",fontSize:20}}>{form.name}</div><StageTag stage={form.stage} stages={stages}/></div>
-              </div>
-              {[["Email",form.email],["Phone",form.phone],["Joined",form.joined],["Attendance",`${form.attendance}%`],["Login Password",form.password]].map(([k,v])=>(
-                <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}`,fontSize:14}}>
-                  <span style={{color:C.muted}}>{k}</span><span style={{fontWeight:500}}>{v}</span>
-                </div>
-              ))}
-              {form.notes&&<div style={{marginTop:14,padding:12,background:C.cream,borderRadius:8,fontSize:13,color:C.muted}}>{form.notes}</div>}
-            </Modal>
-          )}
-        </>
-      );
-    }
-
-    function AdminAnnouncements({announcements,setAnnouncements}) {
-      const [modal,setModal]=useState(false);
-      const [form,setForm]=useState({});
-      const openAdd=()=>{setForm({title:"",body:"",urgent:false});setModal(true);};
-      const save=()=>{if(!form.title||!form.body)return;setAnnouncements([{...form,id:Date.now(),date:new Date().toISOString().slice(0,10)},...announcements]);setModal(false);};
-      const remove=(id)=>{if(confirm("Delete?"))setAnnouncements(announcements.filter(a=>a.id!==id));};
-      return (
-        <>
-          <div className="section-header"><h2>Announcements</h2><button className="btn btn-primary" onClick={openAdd}>+ New Announcement</button></div>
-          {announcements.map(a=>(
-            <div key={a.id} className="announcement">
-              <div className="ann-meta">{a.date}{a.urgent&&<span style={{color:C.danger,fontWeight:600}}> · Urgent</span>}</div>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-                <div><div style={{fontWeight:500,fontSize:15,marginBottom:4}}>{a.title}</div><div className="ann-body">{a.body}</div></div>
-                <button className="btn btn-danger btn-sm" style={{marginLeft:12,flexShrink:0}} onClick={()=>remove(a.id)}>Delete</button>
-              </div>
-            </div>
-          ))}
-          {announcements.length===0&&<div className="empty"><div className="empty-icon">📢</div><p>No announcements yet</p></div>}
-          {modal&&(
-            <Modal title="New Announcement" onClose={()=>setModal(false)}
-              footer={<><button className="btn btn-outline" onClick={()=>setModal(false)}>Cancel</button><button className="btn btn-primary" onClick={save}>Post</button></>}>
-              <div className="form-group"><label className="form-label">Title</label><input className="form-input" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="Session this Wednesday…"/></div>
-              <div className="form-group"><label className="form-label">Message</label><textarea className="form-input" rows={4} value={form.body} onChange={e=>setForm({...form,body:e.target.value})} placeholder="Details…" style={{resize:"vertical"}}/></div>
-              <div style={{display:"flex",alignItems:"center",gap:8}}><input type="checkbox" id="urgent" checked={form.urgent} onChange={e=>setForm({...form,urgent:e.target.checked})}/><label htmlFor="urgent" style={{fontSize:14,cursor:"pointer"}}>Mark as urgent</label></div>
-            </Modal>
-          )}
-        </>
-      );
-    }
-
-    function AdminMaterials({materials,setMaterials}) {
-      const [modal,setModal]=useState(false);
-      const [form,setForm]=useState({});
-      const openAdd=()=>{setForm({name:"",type:"pdf",url:"",category:""});setModal(true);};
-      const save=()=>{if(!form.name||!form.url)return;setMaterials([...materials,{...form,id:Date.now()}]);setModal(false);};
-      const remove=(id)=>{if(confirm("Remove?"))setMaterials(materials.filter(m=>m.id!==id));};
-      return (
-        <>
-          <div className="section-header"><h2>Materials &amp; Downloads</h2><button className="btn btn-primary" onClick={openAdd}>+ Add Material</button></div>
-          {materials.map(m=>(
-            <div key={m.id} className="material-item">
-              <MatIcon type={m.type}/>
-              <div className="material-info"><div className="material-name">{m.name}</div><div className="material-meta">{m.category} · {m.type.toUpperCase()}</div></div>
-              <div style={{display:"flex",gap:6}}>
-                <a href={m.url} target="_blank" rel="noreferrer"><button className="btn btn-outline btn-sm">Open ↗</button></a>
-                <button className="btn btn-danger btn-sm" onClick={()=>remove(m.id)}>✕</button>
-              </div>
-            </div>
-          ))}
-          {materials.length===0&&<div className="empty"><div className="empty-icon">📁</div><p>No materials yet</p></div>}
-          {modal&&(
-            <Modal title="Add Material" onClose={()=>setModal(false)}
-              footer={<><button className="btn btn-outline" onClick={()=>setModal(false)}>Cancel</button><button className="btn btn-primary" onClick={save}>Save</button></>}>
-              <div className="form-group"><label className="form-label">Name</label><input className="form-input" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="OCIA Workbook Ch. 5"/></div>
-              <div className="form-row">
-                <div className="form-group"><label className="form-label">Type</label><select className="form-input" value={form.type} onChange={e=>setForm({...form,type:e.target.value})}><option value="pdf">PDF</option><option value="drive">Google Drive</option><option value="link">Website Link</option></select></div>
-                <div className="form-group"><label className="form-label">Category</label><input className="form-input" value={form.category} onChange={e=>setForm({...form,category:e.target.value})} placeholder="Slides, Prayer…"/></div>
-              </div>
-              <div className="form-group"><label className="form-label">URL / Link</label><input className="form-input" type="url" value={form.url} onChange={e=>setForm({...form,url:e.target.value})} placeholder="https://…"/></div>
-            </Modal>
-          )}
-        </>
-      );
-    }
-
-    function AdminCalendar({events,setEvents}) {
-      const [modal,setModal]=useState(false);
-      const [form,setForm]=useState({});
-      const [error,setError]=useState("");
-      const sorted=events.slice().sort((a,b)=>a.date.localeCompare(b.date));
-      const openAdd=()=>{setForm({date:"",content:"",catechist:"Fr. Michael"});setError("");setModal("add");};
-      const openEdit=(ev)=>{setForm({...ev});setError("");setModal("edit");};
-      const save=()=>{
-        if(!form.date){setError("Please select a date.");return;}
-        if(!form.content){setError("Please enter the session content.");return;}
-        if(modal==="add")setEvents([...events,{...form,id:Date.now()}]);
-        else setEvents(events.map(e=>e.id===form.id?form:e));
-        setModal(false);setError("");
-      };
-      const remove=(id)=>{if(confirm("Remove this session?"))setEvents(events.filter(e=>e.id!==id));};
-      const fmt=(d)=>{try{return new Date(d+"T12:00:00").toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"2-digit"});}catch{return d;}};
-      return (
-        <>
-          <div className="section-header">
-            <h2>Class Schedule</h2>
-            <button className="btn btn-primary" onClick={openAdd}>+ Add Session</button>
-          </div>
-          <div className="card" style={{padding:0}}>
-            {sorted.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions yet — add one!</p></div>}
-            {sorted.map((ev,i)=>(
-              <div key={ev.id} style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:i<sorted.length-1?`1px solid ${C.border}`:"none"}}>
-                {/* Date badge */}
-                <div style={{background:C.navy,color:C.goldLight,borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:48,flexShrink:0}}>
-                  <div style={{fontSize:9,textTransform:"uppercase",letterSpacing:1,opacity:0.7}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
+            <h3 style={{fontSize:16,marginBottom:14}}>Upcoming Sessions</h3>
+            {upcoming.length===0&&<div className="empty"><p>No upcoming sessions</p></div>}
+            {upcoming.map(ev=>(
+              <div key={ev.id} style={{display:"flex",gap:12,alignItems:"flex-start",marginBottom:12}}>
+                <div style={{background:C.navy,color:C.goldLight,borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:44,flexShrink:0}}>
+                  <div style={{fontSize:9,textTransform:"uppercase"}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
                   <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
-                  <div style={{fontSize:9,opacity:0.7}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
                 </div>
-                {/* Content */}
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:14,color:C.navy,marginBottom:3,lineHeight:1.4}}>{ev.content||ev.title||"—"}</div>
-                  <div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist||"—"}</div>
-                </div>
-                {/* Actions */}
-                <div style={{display:"flex",flexDirection:"column",gap:4,flexShrink:0}}>
-                  <button className="btn btn-outline btn-sm" onClick={()=>openEdit(ev)}>Edit</button>
-                  <button className="btn btn-danger btn-sm" onClick={()=>remove(ev.id)}>✕</button>
-                </div>
+                <div><div style={{fontSize:13,fontWeight:500}}>{ev.content}</div><div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist}</div></div>
               </div>
             ))}
           </div>
-          {(modal==="add"||modal==="edit")&&(
-            <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&setModal(false)}>
-              <div className="modal">
-                <div className="modal-header">
-                  <h3>{modal==="add"?"Add Session":"Edit Session"}</h3>
-                  <button className="close-btn" onClick={()=>setModal(false)}>×</button>
-                </div>
-                <div className="modal-body">
-                  {error&&<div className="error-msg">{error}</div>}
-                  <div className="form-group"><label className="form-label">Date</label><input className="form-input" type="date" value={form.date||""} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
-                  <div className="form-group"><label className="form-label">Content</label><textarea className="form-input" rows={3} value={form.content||""} onChange={e=>setForm(f=>({...f,content:e.target.value}))} placeholder="Topic or description for this session…" style={{resize:"vertical"}}/></div>
-                  <div className="form-group"><label className="form-label">Catechist</label><input className="form-input" value={form.catechist||""} onChange={e=>setForm(f=>({...f,catechist:e.target.value}))} placeholder="Fr. Michael"/></div>
-                  <div style={{display:"flex",gap:8,paddingTop:14,borderTop:`1px solid #DDD5EE`,marginTop:8}}>
-                    <button className="btn btn-outline" style={{flex:1}} onClick={()=>setModal(false)}>Cancel</button>
-                    <button className="btn btn-primary" style={{flex:2}} onClick={save}>✓ Save Session</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </>
-      );
-    }
-
-    // ── STUDENT VIEWS ──
-    function StudentDashboard({student,announcements,events,stages}) {
-      const today=new Date().toISOString().slice(0,10);
-      const upcoming=events.filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4);
-      return (
-        <>
-          <div className="welcome-banner">
-            <h2>Welcome, Catechumen ✝</h2>
-            <p style={{marginTop:4}}>St. Catherine of Siena — OCIA Program</p>
-          </div>
-          <div className="two-col">
-            <div className="card">
-              <h3 style={{fontSize:16,marginBottom:14}}>Latest Announcements</h3>
-              {announcements.slice(0,3).map(a=>(
-                <div key={a.id} className="announcement">
-                  <div className="ann-meta">{a.date}{a.urgent&&<span style={{color:C.danger,fontWeight:600}}> · Urgent</span>}</div>
-                  <div style={{fontWeight:500,fontSize:14,marginBottom:3}}>{a.title}</div>
-                  <div className="ann-body">{a.body}</div>
-                </div>
-              ))}
-              {announcements.length===0&&<div className="empty"><div className="empty-icon">📢</div><p>No announcements yet</p></div>}
-            </div>
-            <div className="card">
-              <h3 style={{fontSize:16,marginBottom:14}}>Upcoming Sessions</h3>
-              {upcoming.map(ev=>(
-                <div key={ev.id} style={{padding:"10px 0",borderBottom:`1px solid ${C.border}`}}>
-                  <div style={{display:"flex",gap:12,alignItems:"center"}}>
-                    <div style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:44,flexShrink:0}}>
-                      <div style={{fontSize:9,textTransform:"uppercase",letterSpacing:1,color:C.muted}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
-                      <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,color:C.navy,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
-                    </div>
-                    <div>
-                      <div style={{fontSize:14,fontWeight:500}}>{ev.title}</div>
-                      {ev.time&&<div style={{fontSize:12,color:C.muted}}>🕖 {ev.time}</div>}
-                      {ev.location&&<div style={{fontSize:12,color:C.muted}}>📍 {ev.location}</div>}
-                    </div>
-                  </div>
-                  {ev.description&&<div style={{marginTop:6,fontSize:12,color:C.muted,paddingLeft:56}}>{ev.description}</div>}
-                </div>
-              ))}
-              {upcoming.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No upcoming events</p></div>}
-            </div>
-          </div>
-        </>
-      );
-    }
-
-    function StudentMaterials({materials}) {
-      const cats=[...new Set(materials.map(m=>m.category))];
-      return (
-        <>
-          <div className="section-header"><h2>Materials &amp; Resources</h2></div>
-          {cats.map(cat=>(
-            <div key={cat} style={{marginBottom:24}}>
-              <h3 style={{fontSize:15,color:C.muted,marginBottom:12,textTransform:"uppercase",letterSpacing:1,fontFamily:"Source Sans 3,sans-serif",fontWeight:500}}>{cat}</h3>
-              {materials.filter(m=>m.category===cat).map(m=>(
-                <div key={m.id} className="material-item">
-                  <MatIcon type={m.type}/>
-                  <div className="material-info"><div className="material-name">{m.name}</div><div className="material-meta">{m.type==="pdf"?"PDF Document":m.type==="drive"?"Google Drive":"External Link"}</div></div>
-                  <a href={m.url} target="_blank" rel="noreferrer"><button className="btn btn-gold btn-sm">Open ↗</button></a>
-                </div>
-              ))}
-            </div>
-          ))}
-          {materials.length===0&&<div className="empty"><div className="empty-icon">📚</div><p>No materials uploaded yet</p></div>}
-        </>
-      );
-    }
-
-    function StudentAnnouncements({announcements}) {
-      return (
-        <>
-          <div className="section-header"><h2>Announcements</h2></div>
-          {announcements.map(a=>(
+        </div>
+        <div className="card">
+          <h3 style={{fontSize:16,marginBottom:14}}>Recent Announcements</h3>
+          {(announcements||[]).slice(0,2).map(a=>(
             <div key={a.id} className="announcement">
               <div className="ann-meta">{a.date}{a.urgent&&<span style={{color:C.danger,fontWeight:600}}> · Urgent</span>}</div>
-              <div style={{fontWeight:500,fontSize:15,marginBottom:4}}>{a.title}</div>
+              <div style={{fontWeight:500,fontSize:14,marginBottom:3}}>{a.title}</div>
               <div className="ann-body">{a.body}</div>
             </div>
           ))}
-          {announcements.length===0&&<div className="empty"><div className="empty-icon">📢</div><p>No announcements yet</p></div>}
-        </>
-      );
-    }
+        </div>
+      </>
+    );
+  }
 
-    function StudentCalendar({events}) {
-      const sorted=events.slice().sort((a,b)=>a.date.localeCompare(b.date));
-      const todayStr=new Date().toISOString().slice(0,10);
-      const upcoming=sorted.filter(e=>e.date>=todayStr);
-      const past=sorted.filter(e=>e.date<todayStr);
-      const SessionCard=({ev,dim})=>(
-        <div style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:`1px solid ${C.border}`,opacity:dim?0.5:1}}>
-          <div style={{background:dim?C.muted:C.navy,color:"#DDD0F5",borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:48,flexShrink:0}}>
-            <div style={{fontSize:9,textTransform:"uppercase",letterSpacing:1,opacity:0.8}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
-            <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
-            <div style={{fontSize:9,opacity:0.8}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
-          </div>
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{fontSize:14,color:dim?C.muted:C.navy,marginBottom:3,lineHeight:1.4}}>{ev.content||ev.title||"—"}</div>
-            <div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist||"—"}</div>
+  // ── ADMIN STUDENTS ──
+  function AdminStudents({students,stages}) {
+    const [search,setSearch]=useState("");
+    const [stageFilter,setStageFilter]=useState("All");
+    const [modal,setModal]=useState(null);
+    const [form,setForm]=useState({});
+    const filtered=(students||[]).filter(s=>(stageFilter==="All"||s.stage===stageFilter)&&(s.name.toLowerCase().includes(search.toLowerCase())||s.email.toLowerCase().includes(search.toLowerCase())));
+    const openAdd=()=>{setForm({name:"",email:"",phone:"",stage:(stages||DEFAULT_STAGES)[0],attendance:100,notes:""});setModal("add");};
+    const openEdit=(s)=>{setForm({...s});setModal("edit");};
+    const openView=(s)=>{setForm({...s});setModal("view");};
+    const save=async()=>{
+      if(!form.name||!form.email)return;
+      const item={...form,id:form.id||Date.now(),joined:form.joined||new Date().toISOString().slice(0,10)};
+      await saveItem("students",item);
+      setModal(null);
+    };
+    const remove=async(id)=>{if(confirm("Remove this student?"))await removeItem("students",id);};
+    return (
+      <>
+        <div className="section-header">
+          <h2>Catechumens</h2>
+          <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
+            <div className="search-wrap"><span className="search-icon">🔍</span><input className="search-input" placeholder="Search…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
+            <select className="form-input" style={{width:160}} value={stageFilter} onChange={e=>setStageFilter(e.target.value)}><option>All</option>{(stages||DEFAULT_STAGES).map(s=><option key={s}>{s}</option>)}</select>
+            <button className="btn btn-primary" onClick={openAdd}>+ Add</button>
           </div>
         </div>
-      );
-      return (
-        <>
-          <div className="section-header"><h2>Class Schedule</h2></div>
-          {upcoming.length>0&&(
-            <div className="card" style={{padding:0,marginBottom:16}}>
-              <div style={{padding:"10px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
-                <span style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.navy}}>Upcoming Sessions</span>
-              </div>
-              {upcoming.map(ev=><SessionCard key={ev.id} ev={ev} dim={false}/>)}
+        <div className="card" style={{padding:0}}>
+          <div className="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Stage</th><th>Att.</th><th></th></tr></thead>
+              <tbody>
+                {filtered.length===0&&<tr><td colSpan={6}><div className="empty"><div className="empty-icon">👤</div><p>No students found</p></div></td></tr>}
+                {filtered.map(s=>(
+                  <tr key={s.id}>
+                    <td><div style={{display:"flex",alignItems:"center",gap:8}}><div style={{width:30,height:30,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{initials(s.name)}</div><span style={{fontWeight:500,fontSize:13}}>{s.name}</span></div></td>
+                    <td><a href={`mailto:${s.email}`} style={{color:"#5B3FBE",textDecoration:"none",fontSize:13}}>{s.email}</a></td>
+                    <td style={{fontSize:13}}><a href={`tel:${s.phone}`} style={{color:C.navy,textDecoration:"none"}}>{s.phone}</a></td>
+                    <td><StageTag stage={s.stage} stages={stages}/></td>
+                    <td style={{fontSize:13}}>{s.attendance}%</td>
+                    <td><div style={{display:"flex",gap:4}}><button className="btn btn-outline btn-sm" onClick={()=>openView(s)}>View</button><button className="btn btn-outline btn-sm" onClick={()=>openEdit(s)}>Edit</button><button className="btn btn-danger btn-sm" onClick={()=>remove(s.id)}>✕</button></div></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {(modal==="add"||modal==="edit")&&(
+          <Modal title={modal==="add"?"Add Catechumen":"Edit Student"} onClose={()=>setModal(null)}>
+            <div className="form-row">
+              <div className="form-group"><label className="form-label">Full Name</label><input className="form-input" value={form.name||""} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="Full name"/></div>
+              <div className="form-group"><label className="form-label">Phone</label><input className="form-input" value={form.phone||""} onChange={e=>setForm(f=>({...f,phone:e.target.value}))} placeholder="972-555-0100"/></div>
             </div>
-          )}
-          {past.length>0&&(
-            <div className="card" style={{padding:0}}>
-              <div style={{padding:"10px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
-                <span style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.muted}}>Past Sessions</span>
-              </div>
-              {past.slice().reverse().map(ev=><SessionCard key={ev.id} ev={ev} dim={true}/>)}
+            <div className="form-group"><label className="form-label">Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm(f=>({...f,email:e.target.value}))} placeholder="email@example.com"/></div>
+            <div className="form-row">
+              <div className="form-group"><label className="form-label">Stage</label><select className="form-input" value={form.stage||(stages||DEFAULT_STAGES)[0]} onChange={e=>setForm(f=>({...f,stage:e.target.value}))}>{(stages||DEFAULT_STAGES).map(s=><option key={s}>{s}</option>)}</select></div>
+              <div className="form-group"><label className="form-label">Attendance %</label><input className="form-input" type="number" min="0" max="100" value={form.attendance||0} onChange={e=>setForm(f=>({...f,attendance:Number(e.target.value)}))}/></div>
             </div>
-          )}
-          {events.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions scheduled yet</p></div>}
-        </>
-      );
-    }
-
-    // ── SETTINGS ──
-    function AdminSettings({stages,setStages,students,setStudents}) {
-      const [newStage,setNewStage]=useState("");
-      const [editingIdx,setEditingIdx]=useState(null);
-      const [editingVal,setEditingVal]=useState("");
-
-      const addStage=()=>{
-        const t=newStage.trim();
-        if(!t||stages.includes(t))return;
-        setStages([...stages,t]);
-        setNewStage("");
-      };
-
-      const deleteStage=(idx)=>{
-        const name=stages[idx];
-        const inUse=students.some(s=>s.stage===name);
-        if(inUse){alert(`Cannot delete "${name}" — ${students.filter(s=>s.stage===name).length} student(s) are currently in this stage. Reassign them first.`);return;}
-        if(!confirm(`Delete stage "${name}"?`))return;
-        setStages(stages.filter((_,i)=>i!==idx));
-      };
-
-      const startEdit=(idx)=>{setEditingIdx(idx);setEditingVal(stages[idx]);};
-
-      const saveEdit=(idx)=>{
-        const t=editingVal.trim();
-        if(!t){setEditingIdx(null);return;}
-        const oldName=stages[idx];
-        const newStages=stages.map((s,i)=>i===idx?t:s);
-        setStages(newStages);
-        setStudents(students.map(s=>s.stage===oldName?{...s,stage:t}:s));
-        setEditingIdx(null);
-      };
-
-      const moveStage=(idx,dir)=>{
-        const arr=[...stages];
-        const swap=idx+dir;
-        if(swap<0||swap>=arr.length)return;
-        [arr[idx],arr[swap]]=[arr[swap],arr[idx]];
-        setStages(arr);
-      };
-
-      return (
-        <>
-          <div className="section-header"><h2>Settings</h2></div>
-          <div className="card" style={{maxWidth:520}}>
-            <h3 style={{fontSize:16,marginBottom:4}}>Journey Stages</h3>
-            <p style={{fontSize:13,color:C.muted,marginBottom:16}}>Add, rename, reorder, or remove stages. Changes apply to the whole program.</p>
-            {stages.map((s,i)=>(
-              <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 0",borderBottom:`1px solid ${C.border}`}}>
-                <span className={`badge-stage ${STAGE_CLASS[i%STAGE_CLASS.length]}`} style={{minWidth:24,textAlign:"center",flexShrink:0}}>{i+1}</span>
-                {editingIdx===i ? (
-                  <input className="form-input" style={{flex:1,padding:"5px 8px",fontSize:13}} value={editingVal}
-                    onChange={e=>setEditingVal(e.target.value)}
-                    onKeyDown={e=>{if(e.key==="Enter")saveEdit(i);if(e.key==="Escape")setEditingIdx(null);}}
-                    autoFocus/>
-                ) : (
-                  <span style={{flex:1,fontSize:14}}>{s}</span>
-                )}
-                <div style={{display:"flex",gap:3,flexShrink:0}}>
-                  {editingIdx===i ? (
-                    <><button className="btn btn-primary btn-sm" onClick={()=>saveEdit(i)}>✓</button><button className="btn btn-outline btn-sm" onClick={()=>setEditingIdx(null)}>✕</button></>
-                  ) : (
-                    <>
-                      <button className="btn btn-outline btn-sm" onClick={()=>moveStage(i,-1)} disabled={i===0} style={{padding:"4px 7px",opacity:i===0?0.3:1}}>↑</button>
-                      <button className="btn btn-outline btn-sm" onClick={()=>moveStage(i,1)} disabled={i===stages.length-1} style={{padding:"4px 7px",opacity:i===stages.length-1?0.3:1}}>↓</button>
-                      <button className="btn btn-outline btn-sm" onClick={()=>startEdit(i)}>Edit</button>
-                      <button className="btn btn-danger btn-sm" onClick={()=>deleteStage(i)}>✕</button>
-                    </>
-                  )}
-                </div>
+            <div className="form-group"><label className="form-label">Notes</label><textarea className="form-input" rows={2} value={form.notes||""} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} style={{resize:"vertical"}}/></div>
+            <ModalButtons onCancel={()=>setModal(null)} onSave={save}/>
+          </Modal>
+        )}
+        {modal==="view"&&(
+          <Modal title="Student Profile" onClose={()=>setModal(null)}>
+            <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:16}}>
+              <div style={{width:48,height:48,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontWeight:700}}>{initials(form.name||"")}</div>
+              <div><div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>{form.name}</div><StageTag stage={form.stage} stages={stages}/></div>
+            </div>
+            {[["Email",form.email],["Phone",form.phone],["Joined",form.joined],["Attendance",`${form.attendance}%`]].map(([k,v])=>(
+              <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}`,fontSize:14}}>
+                <span style={{color:C.muted}}>{k}</span><span style={{fontWeight:500}}>{v}</span>
               </div>
             ))}
-            <div style={{display:"flex",gap:8,marginTop:14}}>
-              <input className="form-input" value={newStage} onChange={e=>setNewStage(e.target.value)}
-                onKeyDown={e=>e.key==="Enter"&&addStage()}
-                placeholder="New stage name…" style={{flex:1}}/>
-              <button className="btn btn-primary" onClick={addStage}>+ Add</button>
+            {form.notes&&<div style={{marginTop:12,padding:10,background:C.cream,borderRadius:8,fontSize:13,color:C.muted}}>{form.notes}</div>}
+            <div style={{marginTop:16}}><button className="btn btn-primary" style={{width:"100%"}} onClick={()=>{openEdit(form);}}>Edit</button></div>
+          </Modal>
+        )}
+      </>
+    );
+  }
+
+  // ── ADMIN ANNOUNCEMENTS ──
+  function AdminAnnouncements({announcements}) {
+    const [modal,setModal]=useState(false);
+    const [form,setForm]=useState({});
+    const openAdd=()=>{setForm({title:"",body:"",urgent:false});setModal(true);};
+    const save=async()=>{
+      if(!form.title||!form.body)return;
+      await saveItem("announcements",{...form,id:form.id||Date.now(),date:new Date().toISOString().slice(0,10)});
+      setModal(false);
+    };
+    const remove=async(id)=>{if(confirm("Delete?"))await removeItem("announcements",id);};
+    return (
+      <>
+        <div className="section-header"><h2>Announcements</h2><button className="btn btn-primary" onClick={openAdd}>+ New</button></div>
+        {(announcements||[]).map(a=>(
+          <div key={a.id} className="announcement">
+            <div className="ann-meta">{a.date}{a.urgent&&<span style={{color:C.danger,fontWeight:600}}> · Urgent</span>}</div>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+              <div><div style={{fontWeight:500,fontSize:15,marginBottom:4}}>{a.title}</div><div className="ann-body">{a.body}</div></div>
+              <button className="btn btn-danger btn-sm" style={{marginLeft:12,flexShrink:0}} onClick={()=>remove(a.id)}>Delete</button>
             </div>
           </div>
-        </>
-      );
-    }
+        ))}
+        {(announcements||[]).length===0&&<div className="empty"><div className="empty-icon">📢</div><p>No announcements yet</p></div>}
+        {modal&&(
+          <Modal title="New Announcement" onClose={()=>setModal(false)}>
+            <div className="form-group"><label className="form-label">Title</label><input className="form-input" value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="Session this Wednesday…"/></div>
+            <div className="form-group"><label className="form-label">Message</label><textarea className="form-input" rows={4} value={form.body} onChange={e=>setForm(f=>({...f,body:e.target.value}))} style={{resize:"vertical"}}/></div>
+            <div style={{display:"flex",alignItems:"center",gap:8}}><input type="checkbox" id="urgent" checked={form.urgent} onChange={e=>setForm(f=>({...f,urgent:e.target.checked}))}/><label htmlFor="urgent" style={{fontSize:14,cursor:"pointer"}}>Mark as urgent</label></div>
+            <ModalButtons onCancel={()=>setModal(false)} onSave={save} saveLabel="Post"/>
+          </Modal>
+        )}
+      </>
+    );
+  }
 
-    // ── MAIN APP ──
-    function App() {
-      const [students,setStudents]=useStorage("ocia_students",SEED_STUDENTS);
-      const [announcements,setAnnouncements]=useStorage("ocia_announcements",SEED_ANN);
-      const [materials,setMaterials]=useStorage("ocia_materials",SEED_MAT);
-      const [events,setEvents]=useStorage("ocia_events",SEED_EVT);
-      const [stages,setStages]=useStorage("ocia_stages",DEFAULT_STAGES);
-      const [currentUser,setCurrentUser]=useState(null);
-      const [page,setPage]=useState("dashboard");
-      const [sidebarOpen,setSidebarOpen]=useState(false);
-
-      if(!currentUser) return <LoginPage onLogin={(u)=>{setCurrentUser(u);setPage(u.role==="admin"?"dashboard":"announcements");}}/>;
-
-      const isAdmin=currentUser.role==="admin";
-      const adminNav=[{id:"dashboard",label:"Dashboard",icon:"🏠"},{id:"students",label:"Catechumens",icon:"👥"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Calendar",icon:"📅"},{id:"settings",label:"Settings",icon:"⚙️"}];
-      const studentNav=[{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Calendar",icon:"📅"}];
-      const nav=isAdmin?adminNav:studentNav;
-      const titles={dashboard:"Overview",students:"Catechumens",announcements:"Announcements",materials:"Materials & Downloads",calendar:"Class Calendar",settings:"Settings"};
-
-      // For shared student login, show general student view (no specific student data)
-      const liveStudent=isAdmin?null:(students.find(s=>s.id===currentUser.id)||{name:"Student",stage:stages[0]||"",attendance:0});
-
-      const navigate=(id)=>{setPage(id);setSidebarOpen(false);};
-      // Bottom nav shows first 4 items on mobile
-      const bottomNav=nav.slice(0,5);
-
-      return (
-        <div className="app">
-          {/* Sidebar overlay for mobile */}
-          {sidebarOpen&&<div className="sidebar-overlay" onClick={()=>setSidebarOpen(false)}/>}
-
-          <div className={`sidebar${sidebarOpen?" open":""}`}>
-            <div className="sidebar-logo">
-              <div className="parish">St. Catherine of Siena</div>
-              <h2>OCIA<br/>Program</h2>
-              <span className="badge">Carrollton, TX</span>
+  // ── ADMIN MATERIALS ──
+  function AdminMaterials({materials}) {
+    const [modal,setModal]=useState(false);
+    const [form,setForm]=useState({});
+    const openAdd=()=>{setForm({name:"",type:"pdf",url:"",category:""});setModal(true);};
+    const save=async()=>{
+      if(!form.name||!form.url)return;
+      await saveItem("materials",{...form,id:form.id||Date.now()});
+      setModal(false);
+    };
+    const remove=async(id)=>{if(confirm("Remove?"))await removeItem("materials",id);};
+    return (
+      <>
+        <div className="section-header"><h2>Materials &amp; Downloads</h2><button className="btn btn-primary" onClick={openAdd}>+ Add</button></div>
+        {(materials||[]).map(m=>(
+          <div key={m.id} className="material-item">
+            <MatIcon type={m.type}/>
+            <div className="material-info"><div className="material-name">{m.name}</div><div className="material-meta">{m.category} · {m.type.toUpperCase()}</div></div>
+            <div style={{display:"flex",gap:6}}>
+              <a href={m.url} target="_blank" rel="noreferrer"><button className="btn btn-outline btn-sm">Open ↗</button></a>
+              <button className="btn btn-danger btn-sm" onClick={()=>remove(m.id)}>✕</button>
             </div>
-            <div className="sidebar-nav">
+          </div>
+        ))}
+        {(materials||[]).length===0&&<div className="empty"><div className="empty-icon">📁</div><p>No materials yet</p></div>}
+        {modal&&(
+          <Modal title="Add Material" onClose={()=>setModal(false)}>
+            <div className="form-group"><label className="form-label">Name</label><input className="form-input" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="OCIA Workbook Ch. 5"/></div>
+            <div className="form-row">
+              <div className="form-group"><label className="form-label">Type</label><select className="form-input" value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}><option value="pdf">PDF</option><option value="drive">Google Drive</option><option value="link">Website Link</option></select></div>
+              <div className="form-group"><label className="form-label">Category</label><input className="form-input" value={form.category} onChange={e=>setForm(f=>({...f,category:e.target.value}))} placeholder="Slides, Prayer…"/></div>
+            </div>
+            <div className="form-group"><label className="form-label">URL</label><input className="form-input" type="url" value={form.url} onChange={e=>setForm(f=>({...f,url:e.target.value}))} placeholder="https://…"/></div>
+            <ModalButtons onCancel={()=>setModal(false)} onSave={save}/>
+          </Modal>
+        )}
+      </>
+    );
+  }
+
+  // ── ADMIN CALENDAR ──
+  function AdminCalendar({events}) {
+    const [modal,setModal]=useState(false);
+    const [form,setForm]=useState({});
+    const [error,setError]=useState("");
+    const sorted=(events||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
+    const openAdd=()=>{setForm({date:"",content:"",catechist:"Fr. Michael"});setError("");setModal("add");};
+    const openEdit=(ev)=>{setForm({...ev});setError("");setModal("edit");};
+    const save=async()=>{
+      if(!form.date){setError("Please select a date.");return;}
+      if(!form.content){setError("Please enter the content.");return;}
+      await saveItem("events",{...form,id:form.id||Date.now()});
+      setModal(false);setError("");
+    };
+    const remove=async(id)=>{if(confirm("Remove this session?"))await removeItem("events",id);};
+    const SessionRow=({ev})=>(
+      <div style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:`1px solid ${C.border}`}}>
+        <div style={{background:C.navy,color:C.goldLight,borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:48,flexShrink:0}}>
+          <div style={{fontSize:9,textTransform:"uppercase",opacity:0.8}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
+          <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+          <div style={{fontSize:9,opacity:0.8}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:14,color:C.navy,marginBottom:3,lineHeight:1.4}}>{ev.content}</div>
+          <div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist}</div>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:4,flexShrink:0}}>
+          <button className="btn btn-outline btn-sm" onClick={()=>openEdit(ev)}>Edit</button>
+          <button className="btn btn-danger btn-sm" onClick={()=>remove(ev.id)}>✕</button>
+        </div>
+      </div>
+    );
+    return (
+      <>
+        <div className="section-header"><h2>Class Schedule</h2><button className="btn btn-primary" onClick={openAdd}>+ Add Session</button></div>
+        <div className="card" style={{padding:0}}>
+          {sorted.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions yet</p></div>}
+          {sorted.map(ev=><SessionRow key={ev.id} ev={ev}/>)}
+        </div>
+        {(modal==="add"||modal==="edit")&&(
+          <Modal title={modal==="add"?"Add Session":"Edit Session"} onClose={()=>setModal(false)}>
+            {error&&<div className="error-msg">{error}</div>}
+            <div className="form-group"><label className="form-label">Date</label><input className="form-input" type="date" value={form.date||""} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+            <div className="form-group"><label className="form-label">Content</label><textarea className="form-input" rows={3} value={form.content||""} onChange={e=>setForm(f=>({...f,content:e.target.value}))} placeholder="Topic or description…" style={{resize:"vertical"}}/></div>
+            <div className="form-group"><label className="form-label">Catechist</label><input className="form-input" value={form.catechist||""} onChange={e=>setForm(f=>({...f,catechist:e.target.value}))} placeholder="Fr. Michael"/></div>
+            <ModalButtons onCancel={()=>setModal(false)} onSave={save} saveLabel="Save Session"/>
+          </Modal>
+        )}
+      </>
+    );
+  }
+
+  // ── ADMIN SETTINGS ──
+  function AdminSettings({stages,setStages,students}) {
+    const [newStage,setNewStage]=useState("");
+    const [editingIdx,setEditingIdx]=useState(null);
+    const [editingVal,setEditingVal]=useState("");
+    const addStage=()=>{const t=newStage.trim();if(!t||stages.includes(t))return;setStages([...stages,t]);setNewStage("");};
+    const deleteStage=(idx)=>{
+      const name=stages[idx];
+      const inUse=(students||[]).some(s=>s.stage===name);
+      if(inUse){alert(`Cannot delete "${name}" — students are in this stage.`);return;}
+      if(!confirm(`Delete "${name}"?`))return;
+      setStages(stages.filter((_,i)=>i!==idx));
+    };
+    const saveEdit=async(idx)=>{
+      const t=editingVal.trim();if(!t){setEditingIdx(null);return;}
+      const oldName=stages[idx];
+      const newStages=stages.map((s,i)=>i===idx?t:s);
+      setStages(newStages);
+      for(const s of (students||[]).filter(s=>s.stage===oldName)){
+        await saveItem("students",{...s,stage:t});
+      }
+      setEditingIdx(null);
+    };
+    const moveStage=(idx,dir)=>{const arr=[...stages];const swap=idx+dir;if(swap<0||swap>=arr.length)return;[arr[idx],arr[swap]]=[arr[swap],arr[idx]];setStages(arr);};
+    return (
+      <>
+        <div className="section-header"><h2>Settings</h2></div>
+        <div className="card" style={{maxWidth:520}}>
+          <h3 style={{fontSize:16,marginBottom:4}}>Journey Stages</h3>
+          <p style={{fontSize:13,color:C.muted,marginBottom:16}}>Add, rename, reorder, or remove stages.</p>
+          {stages.map((s,i)=>(
+            <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 0",borderBottom:`1px solid ${C.border}`}}>
+              <span className={`badge-stage ${STAGE_CLASS[i%STAGE_CLASS.length]}`}>{i+1}</span>
+              {editingIdx===i?(
+                <input className="form-input" style={{flex:1,padding:"5px 8px",fontSize:13}} value={editingVal} onChange={e=>setEditingVal(e.target.value)} onKeyDown={e=>{if(e.key==="Enter")saveEdit(i);if(e.key==="Escape")setEditingIdx(null);}} autoFocus/>
+              ):(
+                <span style={{flex:1,fontSize:14}}>{s}</span>
+              )}
+              <div style={{display:"flex",gap:3,flexShrink:0}}>
+                {editingIdx===i?(
+                  <><button className="btn btn-primary btn-sm" onClick={()=>saveEdit(i)}>✓</button><button className="btn btn-outline btn-sm" onClick={()=>setEditingIdx(null)}>✕</button></>
+                ):(
+                  <><button className="btn btn-outline btn-sm" onClick={()=>moveStage(i,-1)} style={{padding:"4px 7px",opacity:i===0?0.3:1}} disabled={i===0}>↑</button>
+                  <button className="btn btn-outline btn-sm" onClick={()=>moveStage(i,1)} style={{padding:"4px 7px",opacity:i===stages.length-1?0.3:1}} disabled={i===stages.length-1}>↓</button>
+                  <button className="btn btn-outline btn-sm" onClick={()=>{setEditingIdx(i);setEditingVal(s);}}>Edit</button>
+                  <button className="btn btn-danger btn-sm" onClick={()=>deleteStage(i)}>✕</button></>
+                )}
+              </div>
+            </div>
+          ))}
+          <div style={{display:"flex",gap:8,marginTop:14}}>
+            <input className="form-input" value={newStage} onChange={e=>setNewStage(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addStage()} placeholder="New stage name…" style={{flex:1}}/>
+            <button className="btn btn-primary" onClick={addStage}>+ Add</button>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // ── STUDENT VIEWS ──
+  function StudentAnnouncements({announcements}) {
+    return (
+      <>
+        <div className="section-header"><h2>Announcements</h2></div>
+        {(announcements||[]).map(a=>(
+          <div key={a.id} className="announcement">
+            <div className="ann-meta">{a.date}{a.urgent&&<span style={{color:C.danger,fontWeight:600}}> · Urgent</span>}</div>
+            <div style={{fontWeight:500,fontSize:15,marginBottom:4}}>{a.title}</div>
+            <div className="ann-body">{a.body}</div>
+          </div>
+        ))}
+        {(announcements||[]).length===0&&<div className="empty"><div className="empty-icon">📢</div><p>No announcements yet</p></div>}
+      </>
+    );
+  }
+
+  function StudentMaterials({materials}) {
+    const cats=[...new Set((materials||[]).map(m=>m.category))];
+    return (
+      <>
+        <div className="section-header"><h2>Materials &amp; Resources</h2></div>
+        {cats.map(cat=>(
+          <div key={cat} style={{marginBottom:20}}>
+            <h3 style={{fontSize:13,color:C.muted,marginBottom:10,textTransform:"uppercase",letterSpacing:1,fontFamily:"Source Sans 3,sans-serif",fontWeight:500}}>{cat}</h3>
+            {(materials||[]).filter(m=>m.category===cat).map(m=>(
+              <div key={m.id} className="material-item">
+                <MatIcon type={m.type}/>
+                <div className="material-info"><div className="material-name">{m.name}</div><div className="material-meta">{m.type==="pdf"?"PDF":m.type==="drive"?"Google Drive":"Link"}</div></div>
+                <a href={m.url} target="_blank" rel="noreferrer"><button className="btn btn-gold btn-sm">Open ↗</button></a>
+              </div>
+            ))}
+          </div>
+        ))}
+        {(materials||[]).length===0&&<div className="empty"><div className="empty-icon">📚</div><p>No materials yet</p></div>}
+      </>
+    );
+  }
+
+  function StudentCalendar({events}) {
+    const todayStr=new Date().toISOString().slice(0,10);
+    const sorted=(events||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
+    const upcoming=sorted.filter(e=>e.date>=todayStr);
+    const past=sorted.filter(e=>e.date<todayStr).reverse();
+    const SessionCard=({ev,dim})=>(
+      <div style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:`1px solid ${C.border}`,opacity:dim?0.5:1}}>
+        <div style={{background:dim?C.muted:C.navy,color:"#DDD0F5",borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:48,flexShrink:0}}>
+          <div style={{fontSize:9,textTransform:"uppercase",opacity:0.8}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
+          <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+          <div style={{fontSize:9,opacity:0.8}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:14,color:dim?C.muted:C.navy,lineHeight:1.4,marginBottom:3}}>{ev.content}</div>
+          <div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist}</div>
+        </div>
+      </div>
+    );
+    return (
+      <>
+        <div className="section-header"><h2>Class Schedule</h2></div>
+        {upcoming.length>0&&(
+          <div className="card" style={{padding:0,marginBottom:16}}>
+            <div style={{padding:"10px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
+              <span style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.navy}}>Upcoming</span>
+            </div>
+            {upcoming.map(ev=><SessionCard key={ev.id} ev={ev} dim={false}/>)}
+          </div>
+        )}
+        {past.length>0&&(
+          <div className="card" style={{padding:0}}>
+            <div style={{padding:"10px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
+              <span style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.muted}}>Past Sessions</span>
+            </div>
+            {past.map(ev=><SessionCard key={ev.id} ev={ev} dim={true}/>)}
+          </div>
+        )}
+        {(events||[]).length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions scheduled yet</p></div>}
+      </>
+    );
+  }
+
+  // ── MAIN APP ──
+  function App() {
+    const students  = useCollection("students",  SEED_STUDENTS);
+    const announcements = useCollection("announcements", SEED_ANN);
+    const materials = useCollection("materials", SEED_MAT);
+    const events    = useCollection("events",    SEED_EVT);
+    const [stages, setStages] = useConfig("stages", DEFAULT_STAGES);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [page, setPage] = useState("dashboard");
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    const loading = students===null || announcements===null || materials===null || events===null;
+
+    if (loading) return (
+      <div className="loading-screen">
+        <div className="cross">✝</div>
+        <div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>Loading OCIA Program…</div>
+      </div>
+    );
+
+    if (!currentUser) return <LoginPage onLogin={u=>{setCurrentUser(u);setPage(u.role==="admin"?"dashboard":"announcements");}}/>;
+
+    const isAdmin = currentUser.role==="admin";
+    const adminNav = [{id:"dashboard",label:"Dashboard",icon:"🏠"},{id:"students",label:"Catechumens",icon:"👥"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Schedule",icon:"📅"},{id:"settings",label:"Settings",icon:"⚙️"}];
+    const studentNav = [{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Schedule",icon:"📅"}];
+    const nav = isAdmin ? adminNav : studentNav;
+    const titles = {dashboard:"Overview",students:"Catechumens",announcements:"Announcements",materials:"Materials",calendar:"Class Schedule",settings:"Settings"};
+    const navigate = id => { setPage(id); setSidebarOpen(false); };
+
+    return (
+      <div className="app">
+        {sidebarOpen&&<div className="sidebar-overlay" onClick={()=>setSidebarOpen(false)}/>}
+        <div className={`sidebar${sidebarOpen?" open":""}`}>
+          <div className="sidebar-logo">
+            <div className="parish">St. Catherine of Siena</div>
+            <h2>OCIA<br/>Program</h2>
+            <span className="badge">Carrollton, TX</span>
+          </div>
+          <div className="sidebar-nav">
+            {nav.map(item=>(
+              <div key={item.id} className={`nav-item${page===item.id?" active":""}`} onClick={()=>navigate(item.id)}>
+                <span className="nav-icon">{item.icon}</span>{item.label}
+              </div>
+            ))}
+          </div>
+          <div className="sidebar-footer">
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
+              <div style={{width:30,height:30,borderRadius:"50%",background:"rgba(255,255,255,0.12)",color:"#DDD0F5",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{isAdmin?"M":"✝"}</div>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:12,color:"#FFF",fontWeight:500}}>{isAdmin?"Mary":"Student Portal"}</div>
+                <div style={{fontSize:10,color:"rgba(255,255,255,0.4)"}}>{isAdmin?"Teacher":"St. Catherine OCIA"}</div>
+              </div>
+            </div>
+            <button className="logout-btn" style={{width:"100%",justifyContent:"center"}} onClick={()=>{setCurrentUser(null);setPage("dashboard");setSidebarOpen(false);}}>Sign Out</button>
+          </div>
+        </div>
+        <div className="main">
+          <div className="topbar">
+            <button className="hamburger" onClick={()=>setSidebarOpen(o=>!o)}><span/><span/><span/></button>
+            <div className="topbar-title">{titles[page]}</div>
+            <div className="topbar-right"><div className="avatar">{isAdmin?"M":"✝"}</div></div>
+          </div>
+          <div className="content">
+            {isAdmin&&page==="dashboard"&&<AdminDashboard students={students} announcements={announcements} events={events} stages={stages}/>}
+            {isAdmin&&page==="students"&&<AdminStudents students={students} stages={stages}/>}
+            {isAdmin&&page==="announcements"&&<AdminAnnouncements announcements={announcements}/>}
+            {isAdmin&&page==="materials"&&<AdminMaterials materials={materials}/>}
+            {isAdmin&&page==="calendar"&&<AdminCalendar events={events}/>}
+            {isAdmin&&page==="settings"&&<AdminSettings stages={stages} setStages={setStages} students={students}/>}
+            {!isAdmin&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
+            {!isAdmin&&page==="materials"&&<StudentMaterials materials={materials}/>}
+            {!isAdmin&&page==="calendar"&&<StudentCalendar events={events}/>}
+          </div>
+          <nav className="bottom-nav">
+            <div className="bottom-nav-inner">
               {nav.map(item=>(
-                <div key={item.id} className={`nav-item${page===item.id?" active":""}`} onClick={()=>navigate(item.id)}>
-                  <span className="nav-icon">{item.icon}</span>{item.label}
+                <div key={item.id} className={`bottom-nav-item${page===item.id?" active":""}`} onClick={()=>navigate(item.id)}>
+                  <span className="bn-icon">{item.icon}</span>
+                  <span className="bn-label">{item.label}</span>
                 </div>
               ))}
             </div>
-            <div className="sidebar-footer">
-              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
-                <div style={{width:30,height:30,borderRadius:"50%",background:"rgba(255,255,255,0.12)",color:"#DDD0F5",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{isAdmin?"M":"✝"}</div>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:12,color:"#FFFFFF",fontWeight:500}}>{isAdmin?"Mary":"Student Portal"}</div>
-                  <div style={{fontSize:10,color:"rgba(255,255,255,0.4)"}}>{isAdmin?"Teacher":"St. Catherine OCIA"}</div>
-                </div>
-              </div>
-              <button className="logout-btn" style={{width:"100%",justifyContent:"center"}} onClick={()=>{setCurrentUser(null);setPage("dashboard");setSidebarOpen(false);}}>Sign Out</button>
-            </div>
-          </div>
-
-          <div className="main">
-            <div className="topbar">
-              <button className="hamburger" onClick={()=>setSidebarOpen(o=>!o)} aria-label="Menu">
-                <span/><span/><span/>
-              </button>
-              <div className="topbar-title">{titles[page]}</div>
-              <div className="topbar-right">
-                <div className="avatar" title={isAdmin?"Mary":"Student"}>{isAdmin?"M":"✝"}</div>
-              </div>
-            </div>
-
-            <div className="content">
-              {isAdmin&&page==="dashboard"&&<AdminDashboard students={students} announcements={announcements} events={events} stages={stages}/>}
-              {isAdmin&&page==="students"&&<AdminStudents students={students} setStudents={setStudents} stages={stages}/>}
-              {isAdmin&&page==="announcements"&&<AdminAnnouncements announcements={announcements} setAnnouncements={setAnnouncements}/>}
-              {isAdmin&&page==="materials"&&<AdminMaterials materials={materials} setMaterials={setMaterials}/>}
-              {isAdmin&&page==="calendar"&&<AdminCalendar events={events} setEvents={setEvents}/>}
-              {isAdmin&&page==="settings"&&<AdminSettings stages={stages} setStages={setStages} students={students} setStudents={setStudents}/>}
-              {!isAdmin&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
-              {!isAdmin&&page==="materials"&&<StudentMaterials materials={materials}/>}
-              {!isAdmin&&page==="calendar"&&<StudentCalendar events={events}/>}
-            </div>
-
-            {/* Bottom nav for mobile */}
-            <nav className="bottom-nav">
-              <div className="bottom-nav-inner">
-                {bottomNav.map(item=>(
-                  <div key={item.id} className={`bottom-nav-item${page===item.id?" active":""}`} onClick={()=>navigate(item.id)}>
-                    <span className="bn-icon">{item.icon}</span>
-                    <span className="bn-label">{item.label}</span>
-                  </div>
-                ))}
-              </div>
-            </nav>
-          </div>
+          </nav>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-  </script>
+  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
 </body>
 </html>
