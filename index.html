@@ -560,14 +560,16 @@
     function AdminCalendar({events,setEvents}) {
       const [modal,setModal]=useState(false);
       const [form,setForm]=useState({});
+      const [error,setError]=useState("");
       const sorted=events.slice().sort((a,b)=>a.date.localeCompare(b.date));
-      const openAdd=()=>{setForm({date:"",content:"",catechist:"Fr. Michael"});setModal("add");};
-      const openEdit=(ev)=>{setForm({...ev});setModal("edit");};
+      const openAdd=()=>{setForm({date:"",content:"",catechist:"Fr. Michael"});setError("");setModal("add");};
+      const openEdit=(ev)=>{setForm({...ev});setError("");setModal("edit");};
       const save=()=>{
-        if(!form.date||!form.content)return;
+        if(!form.date){setError("Please select a date.");return;}
+        if(!form.content){setError("Please enter the session content.");return;}
         if(modal==="add")setEvents([...events,{...form,id:Date.now()}]);
         else setEvents(events.map(e=>e.id===form.id?form:e));
-        setModal(false);
+        setModal(false);setError("");
       };
       const remove=(id)=>{if(confirm("Remove this session?"))setEvents(events.filter(e=>e.id!==id));};
       const fmt=(d)=>{try{return new Date(d+"T12:00:00").toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"2-digit"});}catch{return d;}};
@@ -617,6 +619,7 @@
                   <button className="close-btn" onClick={()=>setModal(false)}>×</button>
                 </div>
                 <div className="modal-body">
+                  {error&&<div className="error-msg">{error}</div>}
                   <div className="form-group"><label className="form-label">Date</label><input className="form-input" type="date" value={form.date||""} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
                   <div className="form-group"><label className="form-label">Content</label><textarea className="form-input" rows={3} value={form.content||""} onChange={e=>setForm(f=>({...f,content:e.target.value}))} placeholder="Topic or description for this session…" style={{resize:"vertical"}}/></div>
                   <div className="form-group"><label className="form-label">Catechist</label><input className="form-input" value={form.catechist||""} onChange={e=>setForm(f=>({...f,catechist:e.target.value}))} placeholder="Fr. Michael"/></div>
