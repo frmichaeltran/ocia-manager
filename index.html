@@ -610,16 +610,23 @@
             </div>
           </div>
           {(modal==="add"||modal==="edit")&&(
-            <Modal title={modal==="add"?"Add Session":"Edit Session"} onClose={()=>setModal(false)}
-              footer={null}>
-              <div className="form-group"><label className="form-label">Date</label><input className="form-input" type="date" value={form.date||""} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
-              <div className="form-group"><label className="form-label">Content</label><textarea className="form-input" rows={3} value={form.content||""} onChange={e=>setForm(f=>({...f,content:e.target.value}))} placeholder="Topic or description for this session…" style={{resize:"vertical"}}/></div>
-              <div className="form-group"><label className="form-label">Catechist</label><input className="form-input" value={form.catechist||""} onChange={e=>setForm(f=>({...f,catechist:e.target.value}))} placeholder="Fr. Michael"/></div>
-              <div style={{display:"flex",gap:8,marginTop:8}}>
-                <button className="btn btn-outline" style={{flex:1}} onClick={()=>setModal(false)}>Cancel</button>
-                <button className="btn btn-primary" style={{flex:2}} onClick={save}>✓ Save Session</button>
+            <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&setModal(false)}>
+              <div className="modal">
+                <div className="modal-header">
+                  <h3>{modal==="add"?"Add Session":"Edit Session"}</h3>
+                  <button className="close-btn" onClick={()=>setModal(false)}>×</button>
+                </div>
+                <div className="modal-body">
+                  <div className="form-group"><label className="form-label">Date</label><input className="form-input" type="date" value={form.date||""} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
+                  <div className="form-group"><label className="form-label">Content</label><textarea className="form-input" rows={3} value={form.content||""} onChange={e=>setForm(f=>({...f,content:e.target.value}))} placeholder="Topic or description for this session…" style={{resize:"vertical"}}/></div>
+                  <div className="form-group"><label className="form-label">Catechist</label><input className="form-input" value={form.catechist||""} onChange={e=>setForm(f=>({...f,catechist:e.target.value}))} placeholder="Fr. Michael"/></div>
+                  <div style={{display:"flex",gap:8,paddingTop:14,borderTop:`1px solid #DDD5EE`,marginTop:8}}>
+                    <button className="btn btn-outline" style={{flex:1}} onClick={()=>setModal(false)}>Cancel</button>
+                    <button className="btn btn-primary" style={{flex:2}} onClick={save}>✓ Save Session</button>
+                  </div>
+                </div>
               </div>
-            </Modal>
+            </div>
           )}
         </>
       );
