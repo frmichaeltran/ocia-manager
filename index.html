@@ -92,11 +92,11 @@
 
     /* ── MODAL ── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: flex-end; justify-content: center; z-index: 100; padding: 0; }
-    .modal { background: #FFFFFF; border-radius: 20px 20px 0 0; width: 100%; max-width: 560px; max-height: 92dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .modal-header { padding: 20px 20px 0; display: flex; align-items: flex-start; justify-content: space-between; }
+    .modal { background: #FFFFFF; border-radius: 20px 20px 0 0; width: 100%; max-width: 560px; max-height: 92dvh; overflow-y: auto; display: flex; flex-direction: column; -webkit-overflow-scrolling: touch; }
+    .modal-header { padding: 20px 20px 0; display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; }
     .modal-header h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #3D2C6B; }
-    .modal-body { padding: 16px 20px 20px; }
-    .modal-footer { padding: 0 20px 20px; display: flex; justify-content: flex-end; gap: 8px; }
+    .modal-body { padding: 16px 20px; flex: 1; overflow-y: auto; }
+    .modal-footer { padding: 0 20px 20px; display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0; border-top: 1px solid #DDD5EE; padding-top: 14px; margin-top: 4px; }
     .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #7B6FA0; line-height: 1; padding: 4px 8px; border-radius: 4px; }
 
     /* ── FORM ── */
@@ -569,7 +569,7 @@
         setModal(false);
       };
       const remove=(id)=>{if(confirm("Remove this session?"))setEvents(events.filter(e=>e.id!==id));};
-      const fmt=(d)=>{try{return new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"});}catch{return d;}};
+      const fmt=(d)=>{try{return new Date(d+"T12:00:00").toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"2-digit"});}catch{return d;}};
       return (
         <>
           <div className="section-header">
@@ -610,10 +610,14 @@
           </div>
           {(modal==="add"||modal==="edit")&&(
             <Modal title={modal==="add"?"Add Session":"Edit Session"} onClose={()=>setModal(false)}
-              footer={<><button className="btn btn-outline" onClick={()=>setModal(false)}>Cancel</button><button className="btn btn-primary" onClick={save}>Save</button></>}>
+              footer={null}>
               <div className="form-group"><label className="form-label">Date</label><input className="form-input" type="date" value={form.date||""} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
               <div className="form-group"><label className="form-label">Content</label><textarea className="form-input" rows={3} value={form.content||""} onChange={e=>setForm(f=>({...f,content:e.target.value}))} placeholder="Topic or description for this session…" style={{resize:"vertical"}}/></div>
               <div className="form-group"><label className="form-label">Catechist</label><input className="form-input" value={form.catechist||""} onChange={e=>setForm(f=>({...f,catechist:e.target.value}))} placeholder="Fr. Michael"/></div>
+              <div style={{display:"flex",gap:8,marginTop:8}}>
+                <button className="btn btn-outline" style={{flex:1}} onClick={()=>setModal(false)}>Cancel</button>
+                <button className="btn btn-primary" style={{flex:2}} onClick={save}>✓ Save Session</button>
+              </div>
             </Modal>
           )}
         </>
@@ -710,7 +714,7 @@
       const todayStr=new Date().toISOString().slice(0,10);
       const upcoming=sorted.filter(e=>e.date>=todayStr);
       const past=sorted.filter(e=>e.date<todayStr);
-      const fmt=(d)=>{try{return new Date(d+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"});}catch{return d;}};
+      const fmt=(d)=>{try{return new Date(d+"T12:00:00").toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"2-digit"});}catch{return d;}};
       const Row=({ev,dim})=>(
         <tr style={{opacity:dim?0.5:1}}>
           <td style={{fontSize:13,fontWeight:500,whiteSpace:"nowrap",color:dim?C.muted:C.navy}}>{fmt(ev.date)}</td>
