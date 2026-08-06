@@ -166,19 +166,25 @@
 
   // ── FIREBASE HELPERS ──
   function useCollection(colName, seedData) {
-    const [data, setData] = useState(null); // null = loading
+    const [data, setData] = useState(null);
     useEffect(() => {
       const db = window.__db;
-      const { collection, onSnapshot, setDoc, doc } = window.__firebase;
+      const { collection, onSnapshot, setDoc, doc, getDocs } = window.__firebase;
       if (!db) return;
+      // Check if this collection was ever initialized
+      const initKey = `ocia_init_${colName}`;
+      const alreadyInited = localStorage.getItem(initKey);
       const col = collection(db, colName);
       const unsub = onSnapshot(col, async snap => {
-        if (snap.empty && seedData && seedData.length > 0) {
-          // Seed initial data
+        if (snap.empty && !alreadyInited && seedData && seedData.length > 0) {
+          // First time ever — seed default data
+          localStorage.setItem(initKey, "1");
           for (const item of seedData) {
             await setDoc(doc(db, colName, String(item.id)), item);
           }
         } else {
+          // Always show what's in Firebase, even if empty
+          if(!alreadyInited) localStorage.setItem(initKey, "1");
           setData(snap.docs.map(d => d.data()));
         }
       });
