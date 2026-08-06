@@ -679,16 +679,16 @@
     const sorted=(events||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
     const upcoming=sorted.filter(e=>e.date>=todayStr);
     const past=sorted.filter(e=>e.date<todayStr).reverse();
-    const SessionCard=({ev,dim})=>(
-      <div style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:`1px solid ${C.border}`,opacity:dim?0.5:1}}>
-        <div style={{background:dim?C.muted:C.navy,color:"#DDD0F5",borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:48,flexShrink:0}}>
-          <div style={{fontSize:9,textTransform:"uppercase",opacity:0.8}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
-          <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
-          <div style={{fontSize:9,opacity:0.8}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
+    const SessionCard=({ev,isPast})=>(
+      <div style={{display:"flex",alignItems:"flex-start",gap:12,padding:"14px 16px",borderBottom:`1px solid ${C.border}`}}>
+        <div style={{background:isPast?"#9B9B9B":C.navy,color:"#DDD0F5",borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:50,flexShrink:0}}>
+          <div style={{fontSize:10,textTransform:"uppercase",opacity:0.9}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
+          <div style={{fontSize:20,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+          <div style={{fontSize:10,opacity:0.9}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:14,color:dim?C.muted:C.navy,lineHeight:1.4,marginBottom:3}}>{ev.content}</div>
-          <div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist}</div>
+          <div style={{fontSize:15,color:C.navy,lineHeight:1.5,marginBottom:4,fontWeight:isPast?400:500}}>{ev.content}</div>
+          <div style={{fontSize:13,color:C.muted}}>👤 {ev.catechist}</div>
         </div>
       </div>
     );
@@ -700,7 +700,7 @@
             <div style={{padding:"10px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
               <span style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.navy}}>Upcoming</span>
             </div>
-            {upcoming.map(ev=><SessionCard key={ev.id} ev={ev} dim={false}/>)}
+            {upcoming.map(ev=><SessionCard key={ev.id} ev={ev} isPast={false}/>)}
           </div>
         )}
         {past.length>0&&(
@@ -708,7 +708,7 @@
             <div style={{padding:"10px 16px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0"}}>
               <span style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.muted}}>Past Sessions</span>
             </div>
-            {past.map(ev=><SessionCard key={ev.id} ev={ev} dim={true}/>)}
+            {past.map(ev=><SessionCard key={ev.id} ev={ev} isPast={true}/>)}
           </div>
         )}
         {(events||[]).length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions scheduled yet</p></div>}
