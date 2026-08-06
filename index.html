@@ -270,15 +270,36 @@
 
   // ── LOGIN ──
   function LoginPage({onLogin}) {
-    const [username,setUsername]=useState("");
+    const [role,setRole]=useState(null); // null = pick role, "admin", "catechist"
     const [password,setPassword]=useState("");
     const [showPw,setShowPw]=useState(false);
     const [error,setError]=useState("");
+
     const login=()=>{
       setError("");
-      if(username.trim().toLowerCase()==="mary"&&password.trim()==="ruby"){onLogin({name:"Mary",role:"admin"});return;}
-      setError("Incorrect username or password.");
+      if(role==="admin"){
+        if(password.trim().toLowerCase()==="ruby"){onLogin({name:"Mary",role:"admin"});return;}
+        setError("Incorrect password.");
+      } else if(role==="catechist"){
+        if(password.trim().toLowerCase()==="jesus"){onLogin({name:"Catechist",role:"catechist"});return;}
+        setError("Incorrect password.");
+      }
     };
+
+    const RoleButton=({r,label,icon,desc})=>(
+      <button onClick={()=>{setRole(r);setPassword("");setError("");}}
+        style={{width:"100%",padding:"16px",marginBottom:10,borderRadius:12,border:`2px solid ${role===r?C.gold:C.border}`,background:role===r?"#F3EFFE":C.cream,cursor:"pointer",textAlign:"left",transition:"all 0.15s",fontFamily:"Source Sans 3,sans-serif"}}>
+        <div style={{display:"flex",alignItems:"center",gap:12}}>
+          <span style={{fontSize:24}}>{icon}</span>
+          <div>
+            <div style={{fontSize:15,fontWeight:600,color:C.navy}}>{label}</div>
+            <div style={{fontSize:12,color:C.muted}}>{desc}</div>
+          </div>
+          {role===r&&<span style={{marginLeft:"auto",color:C.gold,fontSize:18}}>✓</span>}
+        </div>
+      </button>
+    );
+
     return (
       <div className="login-page">
         <div className="login-card">
@@ -288,23 +309,35 @@
             <h2>OCIA Program</h2>
             <p style={{fontSize:13,color:C.muted,marginTop:4}}>Carrollton, Texas</p>
           </div>
-          {error&&<div className="error-msg">{error}</div>}
-          <div className="form-group">
-            <label className="form-label">Username</label>
-            <input className="form-input" type="text" value={username} onChange={e=>setUsername(e.target.value)} onKeyDown={e=>e.key==="Enter"&&login()} placeholder="Enter username" autoCapitalize="none" autoCorrect="off"/>
-          </div>
-          <div className="form-group">
-            <label className="form-label">Password</label>
-            <div style={{position:"relative"}}>
-              <input className="form-input" type={showPw?"text":"password"} value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={e=>e.key==="Enter"&&login()} placeholder="••••••••" style={{paddingRight:44}}/>
-              <button onClick={()=>setShowPw(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:16,color:C.muted}}>{showPw?"🙈":"👁️"}</button>
+
+          <p style={{fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.muted,marginBottom:12}}>Login as</p>
+
+          <RoleButton r="admin" label="Admin" icon="🔐" desc="Full access — manage everything"/>
+          <RoleButton r="catechist" label="Catechist" icon="✝" desc="Take attendance & view schedule"/>
+          <button onClick={()=>onLogin({name:"Student",role:"student"})}
+            style={{width:"100%",padding:"16px",marginBottom:10,borderRadius:12,border:`2px solid ${C.border}`,background:C.cream,cursor:"pointer",textAlign:"left",fontFamily:"Source Sans 3,sans-serif"}}>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <span style={{fontSize:24}}>📖</span>
+              <div>
+                <div style={{fontSize:15,fontWeight:600,color:C.navy}}>Student</div>
+                <div style={{fontSize:12,color:C.muted}}>No password required</div>
+              </div>
             </div>
-          </div>
-          <button className="btn btn-primary btn-block" onClick={login} style={{marginBottom:12}}>Sign In as Teacher</button>
-          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
-            <div style={{flex:1,height:1,background:C.border}}/><span style={{fontSize:12,color:C.muted}}>or</span><div style={{flex:1,height:1,background:C.border}}/>
-          </div>
-          <button className="btn btn-gold btn-block" onClick={()=>onLogin({name:"Student",role:"student"})}>✝ Login as Student</button>
+          </button>
+
+          {(role==="admin"||role==="catechist")&&(
+            <div style={{marginTop:8}}>
+              {error&&<div className="error-msg">{error}</div>}
+              <div className="form-group">
+                <label className="form-label">Password</label>
+                <div style={{position:"relative"}}>
+                  <input className="form-input" type={showPw?"text":"password"} value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={e=>e.key==="Enter"&&login()} placeholder="••••••••" style={{paddingRight:44}} autoFocus/>
+                  <button onClick={()=>setShowPw(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:16,color:C.muted}}>{showPw?"🙈":"👁️"}</button>
+                </div>
+              </div>
+              <button className="btn btn-primary btn-block" onClick={login}>Sign In</button>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -402,7 +435,7 @@
                 {filtered.length===0&&<tr><td colSpan={6}><div className="empty"><div className="empty-icon">👤</div><p>No students found</p></div></td></tr>}
                 {filtered.map(s=>(
                   <tr key={s.id}>
-                    <td><div style={{display:"flex",alignItems:"center",gap:8}}><div style={{width:30,height:30,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{initials(s.name)}</div><span style={{fontWeight:500,fontSize:13}}>{s.name}</span></div></td>
+                    <td><span style={{fontWeight:500,fontSize:13}}>{s.name}</span></td>
                     <td><a href={`mailto:${s.email}`} style={{color:"#5B3FBE",textDecoration:"none",fontSize:13}}>{s.email}</a></td>
                     <td style={{fontSize:13}}><a href={`tel:${s.phone}`} style={{color:C.navy,textDecoration:"none"}}>{s.phone}</a></td>
                     <td><StageTag stage={s.stage} stages={stages}/></td>
@@ -810,12 +843,14 @@
       </div>
     );
 
-    if (!currentUser) return <LoginPage onLogin={u=>{setCurrentUser(u);setPage(u.role==="admin"?"dashboard":"announcements");}}/>;
+    if (!currentUser) return <LoginPage onLogin={u=>{setCurrentUser(u);setPage(u.role==="admin"?"dashboard":u.role==="catechist"?"calendar":"announcements");}}/>;
 
     const isAdmin = currentUser.role==="admin";
+    const isCatechist = currentUser.role==="catechist";
     const adminNav = [{id:"dashboard",label:"Dashboard",icon:"🏠"},{id:"students",label:"Catechumens",icon:"👥"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Schedule",icon:"📅"},{id:"settings",label:"Settings",icon:"⚙️"}];
+    const catechistNav = [{id:"calendar",label:"Schedule",icon:"📅"}];
     const studentNav = [{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Schedule",icon:"📅"}];
-    const nav = isAdmin ? adminNav : studentNav;
+    const nav = isAdmin ? adminNav : isCatechist ? catechistNav : studentNav;
     const titles = {dashboard:"Overview",students:"Catechumens",announcements:"Announcements",materials:"Materials",calendar:"Class Schedule",settings:"Settings"};
     const navigate = id => { setPage(id); setSidebarOpen(false); };
 
@@ -837,10 +872,10 @@
           </div>
           <div className="sidebar-footer">
             <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
-              <div style={{width:30,height:30,borderRadius:"50%",background:"rgba(255,255,255,0.12)",color:"#DDD0F5",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{isAdmin?"M":"✝"}</div>
+              <div style={{width:30,height:30,borderRadius:"50%",background:"rgba(255,255,255,0.12)",color:"#DDD0F5",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{isAdmin?"M":isCatechist?"C":"✝"}</div>
               <div style={{flex:1,minWidth:0}}>
-                <div style={{fontSize:12,color:"#FFF",fontWeight:500}}>{isAdmin?"Mary":"Student Portal"}</div>
-                <div style={{fontSize:10,color:"rgba(255,255,255,0.4)"}}>{isAdmin?"Teacher":"St. Catherine OCIA"}</div>
+                <div style={{fontSize:12,color:"#FFF",fontWeight:500}}>{isAdmin?"Mary":isCatechist?"Catechist":"Student Portal"}</div>
+                <div style={{fontSize:10,color:"rgba(255,255,255,0.4)"}}>{isAdmin?"Admin":isCatechist?"Catechist":"St. Catherine OCIA"}</div>
               </div>
             </div>
             <button className="logout-btn" style={{width:"100%",justifyContent:"center"}} onClick={()=>{setCurrentUser(null);setPage("dashboard");setSidebarOpen(false);}}>Sign Out</button>
@@ -850,7 +885,7 @@
           <div className="topbar">
             <button className="hamburger" onClick={()=>setSidebarOpen(o=>!o)}><span/><span/><span/></button>
             <div className="topbar-title">{titles[page]}</div>
-            <div className="topbar-right"><div className="avatar">{isAdmin?"M":"✝"}</div></div>
+            <div className="topbar-right"><div className="avatar">{isAdmin?"M":isCatechist?"C":"✝"}</div></div>
           </div>
           <div className="content">
             {isAdmin&&page==="dashboard"&&<AdminDashboard students={students} announcements={announcements} events={events} stages={stages}/>}
@@ -859,9 +894,10 @@
             {isAdmin&&page==="materials"&&<AdminMaterials materials={materials}/>}
             {isAdmin&&page==="calendar"&&<AdminCalendar events={events} students={students}/>}
             {isAdmin&&page==="settings"&&<AdminSettings stages={stages} setStages={setStages} students={students}/>}
-            {!isAdmin&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
-            {!isAdmin&&page==="materials"&&<StudentMaterials materials={materials}/>}
-            {!isAdmin&&page==="calendar"&&<StudentCalendar events={events}/>}
+            {isCatechist&&page==="calendar"&&<AdminCalendar events={events} students={students}/>}
+            {!isAdmin&&!isCatechist&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
+            {!isAdmin&&!isCatechist&&page==="materials"&&<StudentMaterials materials={materials}/>}
+            {!isAdmin&&!isCatechist&&page==="calendar"&&<StudentCalendar events={events}/>}
           </div>
           <nav className="bottom-nav">
             <div className="bottom-nav-inner">
