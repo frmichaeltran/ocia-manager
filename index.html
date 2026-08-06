@@ -524,12 +524,16 @@
     );
   }
 
-  // ── ADMIN CALENDAR ──
-  function AdminCalendar({events}) {
+  // ── ADMIN CALENDAR + ATTENDANCE ──
+  function AdminCalendar({events, students}) {
     const [modal,setModal]=useState(false);
     const [form,setForm]=useState({});
     const [error,setError]=useState("");
+    const [attendanceSession,setAttendanceSession]=useState(null);
+    const [attendance,setAttendance]=useState({});
+    const [savingAtt,setSavingAtt]=useState(false);
     const sorted=(events||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
+
     const openAdd=()=>{setForm({date:"",content:"",catechist:"Fr. Michael"});setError("");setModal("add");};
     const openEdit=(ev)=>{setForm({...ev});setError("");setModal("edit");};
     const save=async()=>{
@@ -539,23 +543,74 @@
       setModal(false);setError("");
     };
     const remove=async(id)=>{if(confirm("Remove this session?"))await removeItem("events",id);};
-    const SessionRow=({ev})=>(
-      <div style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:`1px solid ${C.border}`}}>
-        <div style={{background:C.navy,color:C.goldLight,borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:48,flexShrink:0}}>
-          <div style={{fontSize:9,textTransform:"uppercase",opacity:0.8}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
-          <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
-          <div style={{fontSize:9,opacity:0.8}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
+
+    const openAttendance=async(ev)=>{
+      setAttendanceSession(ev);
+      // Load existing attendance for this session
+      const existing=ev.attendance||{};
+      // Default all students to "present" if not yet recorded
+      const init={};
+      (students||[]).forEach(s=>{ init[s.id]=existing[s.id]||"present"; });
+      setAttendance(init);
+    };
+
+    const cycleStatus=(studentId)=>{
+      const order=["present","absent","excused"];
+      const current=attendance[studentId]||"present";
+      const next=order[(order.indexOf(current)+1)%order.length];
+      setAttendance(a=>({...a,[studentId]:next}));
+    };
+
+    const saveAttendance=async()=>{
+      setSavingAtt(true);
+      // Save attendance on the event
+      const updatedEvent={...attendanceSession,attendance};
+      await saveItem("events",updatedEvent);
+      // Recalculate each student's overall attendance %
+      const allEvents=(events||[]).map(e=>e.id===attendanceSession.id?updatedEvent:e).filter(e=>e.attendance);
+      for(const s of (students||[])){
+        const sessions=allEvents.filter(e=>e.attendance&&e.attendance[s.id]);
+        if(sessions.length===0)continue;
+        const present=sessions.filter(e=>e.attendance[s.id]==="present").length;
+        const pct=Math.round((present/sessions.length)*100);
+        await saveItem("students",{...s,attendance:pct});
+      }
+      setSavingAtt(false);
+      setAttendanceSession(null);
+    };
+
+    const statusStyle=(status)=>{
+      if(status==="present") return {background:"#D1FAE5",color:"#065F46",border:"1px solid #6EE7B7"};
+      if(status==="absent")  return {background:"#FEE2E2",color:"#B91C1C",border:"1px solid #FCA5A5"};
+      if(status==="excused") return {background:"#DBEAFE",color:"#1E40AF",border:"1px solid #93C5FD"};
+      return {};
+    };
+    const statusIcon=(s)=>s==="present"?"✅":s==="absent"?"❌":"🔵";
+
+    const SessionRow=({ev})=>{
+      const hasAtt=ev.attendance&&Object.keys(ev.attendance).length>0;
+      const presentCount=hasAtt?Object.values(ev.attendance).filter(v=>v==="present").length:null;
+      return (
+        <div style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:`1px solid ${C.border}`}}>
+          <div style={{background:C.navy,color:C.goldLight,borderRadius:8,padding:"6px 8px",textAlign:"center",minWidth:48,flexShrink:0}}>
+            <div style={{fontSize:9,textTransform:"uppercase",opacity:0.8}}>{new Date(ev.date+"T12:00:00").toLocaleString("en",{month:"short"})}</div>
+            <div style={{fontSize:18,fontFamily:"Playfair Display,serif",fontWeight:700,lineHeight:1}}>{new Date(ev.date+"T12:00:00").getDate()}</div>
+            <div style={{fontSize:9,opacity:0.8}}>{new Date(ev.date+"T12:00:00").getFullYear()}</div>
+          </div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:14,color:C.navy,marginBottom:3,lineHeight:1.4}}>{ev.content}</div>
+            <div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist}</div>
+            {hasAtt&&<div style={{fontSize:11,color:C.success,marginTop:3}}>✓ Attendance recorded — {presentCount} present</div>}
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:4,flexShrink:0}}>
+            <button className="btn btn-gold btn-sm" onClick={()=>openAttendance(ev)}>📋 Attendance</button>
+            <button className="btn btn-outline btn-sm" onClick={()=>openEdit(ev)}>Edit</button>
+            <button className="btn btn-danger btn-sm" onClick={()=>remove(ev.id)}>✕</button>
+          </div>
         </div>
-        <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:14,color:C.navy,marginBottom:3,lineHeight:1.4}}>{ev.content}</div>
-          <div style={{fontSize:12,color:C.muted}}>👤 {ev.catechist}</div>
-        </div>
-        <div style={{display:"flex",flexDirection:"column",gap:4,flexShrink:0}}>
-          <button className="btn btn-outline btn-sm" onClick={()=>openEdit(ev)}>Edit</button>
-          <button className="btn btn-danger btn-sm" onClick={()=>remove(ev.id)}>✕</button>
-        </div>
-      </div>
-    );
+      );
+    };
+
     return (
       <>
         <div className="section-header"><h2>Class Schedule</h2><button className="btn btn-primary" onClick={openAdd}>+ Add Session</button></div>
@@ -563,6 +618,8 @@
           {sorted.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions yet</p></div>}
           {sorted.map(ev=><SessionRow key={ev.id} ev={ev}/>)}
         </div>
+
+        {/* Add/Edit modal */}
         {(modal==="add"||modal==="edit")&&(
           <Modal title={modal==="add"?"Add Session":"Edit Session"} onClose={()=>setModal(false)}>
             {error&&<div className="error-msg">{error}</div>}
@@ -570,6 +627,36 @@
             <div className="form-group"><label className="form-label">Content</label><textarea className="form-input" rows={3} value={form.content||""} onChange={e=>setForm(f=>({...f,content:e.target.value}))} placeholder="Topic or description…" style={{resize:"vertical"}}/></div>
             <div className="form-group"><label className="form-label">Catechist</label><input className="form-input" value={form.catechist||""} onChange={e=>setForm(f=>({...f,catechist:e.target.value}))} placeholder="Fr. Michael"/></div>
             <ModalButtons onCancel={()=>setModal(false)} onSave={save} saveLabel="Save Session"/>
+          </Modal>
+        )}
+
+        {/* Attendance modal */}
+        {attendanceSession&&(
+          <Modal title={`Attendance — ${attendanceSession.date}`} onClose={()=>setAttendanceSession(null)}>
+            <p style={{fontSize:13,color:C.muted,marginBottom:14}}>Tap a student to cycle: ✅ Present → ❌ Absent → 🔵 Excused</p>
+            <div style={{fontSize:12,color:C.muted,marginBottom:10,display:"flex",gap:16}}>
+              <span>✅ {Object.values(attendance).filter(v=>v==="present").length} Present</span>
+              <span>❌ {Object.values(attendance).filter(v=>v==="absent").length} Absent</span>
+              <span>🔵 {Object.values(attendance).filter(v=>v==="excused").length} Excused</span>
+            </div>
+            {(students||[]).length===0&&<p style={{fontSize:13,color:C.muted}}>No students added yet.</p>}
+            {(students||[]).sort((a,b)=>a.name.localeCompare(b.name)).map(s=>(
+              <div key={s.id} onClick={()=>cycleStatus(s.id)}
+                style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",marginBottom:8,borderRadius:10,cursor:"pointer",border:`1px solid ${C.border}`,background:C.cream,...statusStyle(attendance[s.id]||"present")}}>
+                <div style={{width:36,height:36,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:600,flexShrink:0}}>{initials(s.name)}</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:15,fontWeight:500}}>{s.name}</div>
+                  <div style={{fontSize:12,opacity:0.7}}>{s.stage}</div>
+                </div>
+                <div style={{fontSize:22}}>{statusIcon(attendance[s.id]||"present")}</div>
+              </div>
+            ))}
+            <div style={{display:"flex",gap:8,marginTop:16,paddingTop:14,borderTop:`1px solid ${C.border}`}}>
+              <button className="btn btn-outline" style={{flex:1}} onClick={()=>setAttendanceSession(null)}>Cancel</button>
+              <button className="btn btn-primary" style={{flex:2}} onClick={saveAttendance} disabled={savingAtt}>
+                {savingAtt?"Saving…":"✓ Save Attendance"}
+              </button>
+            </div>
           </Modal>
         )}
       </>
@@ -770,7 +857,7 @@
             {isAdmin&&page==="students"&&<AdminStudents students={students} stages={stages}/>}
             {isAdmin&&page==="announcements"&&<AdminAnnouncements announcements={announcements}/>}
             {isAdmin&&page==="materials"&&<AdminMaterials materials={materials}/>}
-            {isAdmin&&page==="calendar"&&<AdminCalendar events={events}/>}
+            {isAdmin&&page==="calendar"&&<AdminCalendar events={events} students={students}/>}
             {isAdmin&&page==="settings"&&<AdminSettings stages={stages} setStages={setStages} students={students}/>}
             {!isAdmin&&page==="announcements"&&<StudentAnnouncements announcements={announcements}/>}
             {!isAdmin&&page==="materials"&&<StudentMaterials materials={materials}/>}
