@@ -435,7 +435,7 @@
         <div className="card" style={{padding:0}}>
           <div className="table-wrap">
             <table>
-              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Stage</th><th>Start Day</th><th>Sacrament Date</th><th></th></tr></thead>
+              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Stage</th><th>Start Date</th><th>Sacrament Date</th><th></th></tr></thead>
               <tbody>
                 {filtered.length===0&&<tr><td colSpan={6}><div className="empty"><div className="empty-icon">👤</div><p>No students found</p></div></td></tr>}
                 {filtered.map(s=>(
@@ -462,8 +462,9 @@
             <div className="form-group"><label className="form-label">Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm(f=>({...f,email:e.target.value}))} placeholder="email@example.com"/></div>
             <div className="form-row">
               <div className="form-group"><label className="form-label">Stage</label><select className="form-input" value={form.stage||(stages||DEFAULT_STAGES)[0]} onChange={e=>setForm(f=>({...f,stage:e.target.value}))}>{(stages||DEFAULT_STAGES).map(s=><option key={s}>{s}</option>)}</select></div>
-              <div className="form-group"><label className="form-label">Start Day</label><input className="form-input" type="date" value={form.startDay||""} onChange={e=>setForm(f=>({...f,startDay:e.target.value}))}/></div>
+              <div className="form-group"><label className="form-label">Start Date</label><input className="form-input" type="date" value={form.startDay||""} onChange={e=>setForm(f=>({...f,startDay:e.target.value}))}/></div>
             </div>
+            <div className="form-group"><label className="form-label">Home Address</label><input className="form-input" value={form.address||""} onChange={e=>setForm(f=>({...f,address:e.target.value}))} placeholder="Street, City, State, ZIP"/></div>
             <div className="form-group"><label className="form-label">Date of Sacrament(s) Received</label><input className="form-input" type="date" value={form.sacramentDate||""} onChange={e=>setForm(f=>({...f,sacramentDate:e.target.value}))}/></div>
             <div className="form-group">
               <label className="form-label">Sacraments Needed</label>
@@ -488,7 +489,7 @@
               <div style={{width:48,height:48,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontWeight:700}}>{initials(form.name||"")}</div>
               <div><div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>{form.name}</div><StageTag stage={form.stage} stages={stages}/></div>
             </div>
-            {[["Email",form.email],["Phone",form.phone],["Stage",form.stage],["Start Day",form.startDay||"—"],["Sacrament(s) Received",form.sacramentDate||"—"],["Sacraments Needed",(form.sacramentsNeeded||[]).join(", ")||"—"]].map(([k,v])=>(
+            {[["Email",form.email],["Phone",form.phone],["Address",form.address||"—"],["Stage",form.stage],["Start Date",form.startDay||"—"],["Sacrament(s) Received",form.sacramentDate||"—"],["Sacraments Needed",(form.sacramentsNeeded||[]).join(", ")||"—"]].map(([k,v])=>(
               <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}`,fontSize:14}}>
                 <span style={{color:C.muted}}>{k}</span><span style={{fontWeight:500}}>{v}</span>
               </div>
