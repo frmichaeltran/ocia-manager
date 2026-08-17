@@ -700,12 +700,12 @@
       <>
         <div className="section-header">
           <h2>Class Schedule</h2>
-          <div className="btn-group">
-            <button className="btn btn-outline" onClick={printSchedule}>🖨️ Print</button>
-            <button className="btn btn-primary" onClick={openAdd}>+ Add Session</button>
-          </div>
+          <button className="btn btn-primary" onClick={openAdd}>+ Add Session</button>
         </div>
         <div className="card" style={{padding:0}}>
+          <div style={{padding:"10px 14px",borderBottom:`1px solid ${C.border}`,background:C.cream,borderRadius:"12px 12px 0 0",display:"flex",justifyContent:"flex-end"}}>
+            <button className="btn btn-outline btn-sm" onClick={printSchedule}>🖨️ Print Schedule</button>
+          </div>
           {sorted.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions yet</p></div>}
           {sorted.map(ev=><SessionRow key={ev.id} ev={ev}/>)}
         </div>
