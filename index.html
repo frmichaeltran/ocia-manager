@@ -244,9 +244,9 @@
     {id:2,name:"Prayer Booklet for Catechumens",type:"pdf",url:"https://drive.google.com/",category:"Prayer"},
   ];
   const SEED_EVT = [
-    {id:1,date:"2026-06-04",content:"Introduction to the OCIA Process",catechist:"Fr. Michael"},
-    {id:2,date:"2026-06-11",content:"The Sacrament of Baptism",catechist:"Fr. Michael"},
-    {id:3,date:"2026-06-18",content:"The Creed — What Catholics Believe",catechist:"Fr. Michael"},
+    {id:1,date:"2026-06-04",content:"Introduction to the OCIA Process",catechist:""},
+    {id:2,date:"2026-06-11",content:"The Sacrament of Baptism",catechist:""},
+    {id:3,date:"2026-06-18",content:"The Creed — What Catholics Believe",catechist:""},
   ];
 
   function initials(name) { return (name||"").split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase(); }
@@ -286,7 +286,7 @@
 
     const login=()=>{
       setError("");
-      if(role==="admin"&&password.trim().toLowerCase()==="ruby"){onLogin({name:"Mary",role:"admin"});return;}
+      if(role==="admin"&&password.trim().toLowerCase()==="ruby"){onLogin({name:"Admin",role:"admin"});return;}
       if(role==="catechist"&&password.trim().toLowerCase()==="jesus"){onLogin({name:"Catechist",role:"catechist"});return;}
       setError("Incorrect password.");
     };
@@ -619,7 +619,7 @@
       win.document.close();
     };
 
-    const openAdd=()=>{setForm({date:"",content:"",catechist:"Fr. Michael"});setError("");setModal("add");};
+    const openAdd=()=>{setForm({date:"",content:"",catechist:""});setError("");setModal("add");};
     const openEdit=(ev)=>{setForm({...ev});setError("");setModal("edit");};
     const save=async()=>{
       if(!form.date){setError("Please select a date.");return;}
@@ -716,7 +716,7 @@
             {error&&<div className="error-msg">{error}</div>}
             <div className="form-group"><label className="form-label">Date</label><input className="form-input" type="date" value={form.date||""} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></div>
             <div className="form-group"><label className="form-label">Content</label><textarea className="form-input" rows={3} value={form.content||""} onChange={e=>setForm(f=>({...f,content:e.target.value}))} placeholder="Topic or description…" style={{resize:"vertical"}}/></div>
-            <div className="form-group"><label className="form-label">Catechist</label><input className="form-input" value={form.catechist||""} onChange={e=>setForm(f=>({...f,catechist:e.target.value}))} placeholder="Fr. Michael"/></div>
+            <div className="form-group"><label className="form-label">Catechist</label><input className="form-input" value={form.catechist||""} onChange={e=>setForm(f=>({...f,catechist:e.target.value}))} placeholder="Catechist name"/></div>
             <ModalButtons onCancel={()=>setModal(false)} onSave={save} saveLabel="Save Session"/>
           </Modal>
         )}
@@ -932,7 +932,7 @@
             <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
               <div style={{width:30,height:30,borderRadius:"50%",background:"rgba(255,255,255,0.12)",color:"#DDD0F5",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,flexShrink:0}}>{isAdmin?"M":isCatechist?"C":"✝"}</div>
               <div style={{flex:1,minWidth:0}}>
-                <div style={{fontSize:12,color:"#FFF",fontWeight:500}}>{isAdmin?"Mary":isCatechist?"Catechist":"Student Portal"}</div>
+                <div style={{fontSize:12,color:"#FFF",fontWeight:500}}>{isAdmin?"Admin":isCatechist?"Catechist":"Student Portal"}</div>
                 <div style={{fontSize:10,color:"rgba(255,255,255,0.4)"}}>{isAdmin?"Admin":isCatechist?"Catechist":"St. Catherine OCIA"}</div>
               </div>
             </div>
