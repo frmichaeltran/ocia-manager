@@ -353,11 +353,15 @@
     const today=new Date().toISOString().slice(0,10);
     const upcoming=(events||[]).filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
     const withSacrament=(students||[]).filter(s=>s.sacramentDate).length;
+    const [now,setNow]=useState(new Date());
+    useEffect(()=>{const t=setInterval(()=>setNow(new Date()),1000);return()=>clearInterval(t);},[]);
+    const txTime=now.toLocaleString("en-US",{timeZone:"America/Chicago",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
+    const txDate=now.toLocaleString("en-US",{timeZone:"America/Chicago",weekday:"short",month:"short",day:"numeric",year:"numeric"});
     return (
       <>
         <div className="stats-grid">
           <div className="stat-card"><div className="stat-label">Students</div><div className="stat-value">{(students||[]).length}</div><div className="stat-sub">Active</div></div>
-          <div className="stat-card"><div className="stat-label">Sacraments Received</div><div className="stat-value">{withSacrament}</div><div className="stat-sub">Students</div></div>
+          <div className="stat-card"><div className="stat-label">Carrollton, TX</div><div className="stat-value" style={{fontSize:20,marginTop:2}}>{txTime}</div><div className="stat-sub">{txDate}</div></div>
           <div className="stat-card"><div className="stat-label">Announcements</div><div className="stat-value">{(announcements||[]).length}</div><div className="stat-sub">Posted</div></div>
           <div className="stat-card"><div className="stat-label">Sessions</div><div className="stat-value">{(events||[]).length}</div><div className="stat-sub">Scheduled</div></div>
         </div>
