@@ -416,14 +416,17 @@
     const [modal,setModal]=useState(null);
     const [form,setForm]=useState({});
     const [saveError,setSaveError]=useState("");
-    const filtered=(students||[]).filter(s=>(stageFilter==="All"||s.stage===stageFilter)&&(s.name.toLowerCase().includes(search.toLowerCase())||s.email.toLowerCase().includes(search.toLowerCase())));
-    const openAdd=()=>{setForm({name:"",email:"",phone:"",stage:(stages||DEFAULT_STAGES)[0],notes:"",address:"",startDay:"",sacramentDate:"",sacramentsNeeded:[],maritalStatus:""});setSaveError("");setModal("add");};
+    const filtered=(students||[]).filter(s=>{
+      const full=`${s.firstName||""} ${s.lastName||""} ${s.name||""}`.toLowerCase();
+      return (stageFilter==="All"||s.stage===stageFilter)&&(full.includes(search.toLowerCase())||(s.email||"").toLowerCase().includes(search.toLowerCase()));
+    }).sort((a,b)=>(a.lastName||"").localeCompare(b.lastName||""));
+    const openAdd=()=>{setForm({firstName:"",lastName:"",email:"",phone:"",stage:(stages||DEFAULT_STAGES)[0],notes:"",address:"",startDay:"",sacramentDate:"",sacramentsNeeded:[],maritalStatus:""});setSaveError("");setModal("add");};
     const openEdit=(s)=>{setForm({...s});setSaveError("");setModal("edit");};
     const openView=(s)=>{setForm({...s});setModal("view");};
     const save=async()=>{
-      if(!form.name){setSaveError("Please enter the student's name.");return;}
+      if(!form.lastName&&!form.firstName){setSaveError("Please enter the student's name.");return;}
       setSaveError("");
-      const item={...form,id:form.id||Date.now(),joined:form.joined||new Date().toISOString().slice(0,10)};
+      const item={...form,name:`${form.firstName||""} ${form.lastName||""}`.trim(),id:form.id||Date.now(),joined:form.joined||new Date().toISOString().slice(0,10)};
       await saveItem("students",item);
       setModal(null);
     };
@@ -441,12 +444,13 @@
         <div className="card" style={{padding:0}}>
           <div className="table-wrap">
             <table>
-              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Stage</th><th>Start Date</th><th>Sacrament Date</th><th></th></tr></thead>
+              <thead><tr><th>Last Name</th><th>First Name</th><th>Email</th><th>Phone</th><th>Stage</th><th>Start Date</th><th>Sacrament Date</th><th></th></tr></thead>
               <tbody>
-                {filtered.length===0&&<tr><td colSpan={6}><div className="empty"><div className="empty-icon">👤</div><p>No students found</p></div></td></tr>}
+                {filtered.length===0&&<tr><td colSpan={8}><div className="empty"><div className="empty-icon">👤</div><p>No students found</p></div></td></tr>}
                 {filtered.map(s=>(
                   <tr key={s.id}>
-                    <td><span style={{fontWeight:500,fontSize:13}}>{s.name}</span></td>
+                    <td><span style={{fontWeight:500,fontSize:13}}>{s.lastName||s.name||"—"}</span></td>
+                    <td><span style={{fontSize:13}}>{s.firstName||"—"}</span></td>
                     <td><a href={`mailto:${s.email}`} style={{color:"#5B3FBE",textDecoration:"none",fontSize:13}}>{s.email}</a></td>
                     <td style={{fontSize:13}}><a href={`tel:${s.phone}`} style={{color:C.navy,textDecoration:"none"}}>{s.phone}</a></td>
                     <td><StageTag stage={s.stage} stages={stages}/></td>
@@ -463,9 +467,10 @@
           <Modal title={modal==="add"?"Add New Student":"Edit Student"} onClose={()=>setModal(null)}>
             {saveError&&<div className="error-msg">{saveError}</div>}
             <div className="form-row">
-              <div className="form-group"><label className="form-label">Full Name</label><input className="form-input" value={form.name||""} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="Full name"/></div>
-              <div className="form-group"><label className="form-label">Phone</label><input className="form-input" value={form.phone||""} onChange={e=>setForm(f=>({...f,phone:e.target.value}))} placeholder="972-555-0100"/></div>
+              <div className="form-group"><label className="form-label">First Name</label><input className="form-input" value={form.firstName||""} onChange={e=>setForm(f=>({...f,firstName:e.target.value}))} placeholder="First name"/></div>
+              <div className="form-group"><label className="form-label">Last Name</label><input className="form-input" value={form.lastName||""} onChange={e=>setForm(f=>({...f,lastName:e.target.value}))} placeholder="Last name"/></div>
             </div>
+            <div className="form-group"><label className="form-label">Phone</label><input className="form-input" value={form.phone||""} onChange={e=>setForm(f=>({...f,phone:e.target.value}))} placeholder="972-555-0100"/></div>
             <div className="form-group"><label className="form-label">Email</label><input className="form-input" type="email" value={form.email||""} onChange={e=>setForm(f=>({...f,email:e.target.value}))} placeholder="email@example.com"/></div>
             <div className="form-group"><label className="form-label">Home Address</label><input className="form-input" value={form.address||""} onChange={e=>setForm(f=>({...f,address:e.target.value}))} placeholder="Street, City, State, ZIP"/></div>
             <div className="form-row">
@@ -500,10 +505,10 @@
         {modal==="view"&&(
           <Modal title="Student Profile" onClose={()=>setModal(null)}>
             <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:16}}>
-              <div style={{width:48,height:48,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontWeight:700}}>{initials(form.name||"")}</div>
-              <div><div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>{form.name}</div><StageTag stage={form.stage} stages={stages}/></div>
+              <div style={{width:48,height:48,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontWeight:700}}>{((form.firstName||"")[0]||"")}{((form.lastName||"")[0]||"")}</div>
+              <div><div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>{form.firstName} {form.lastName}</div><StageTag stage={form.stage} stages={stages}/></div>
             </div>
-            {[["Email",form.email],["Phone",form.phone],["Address",form.address||"—"],["Stage",form.stage],["Start Date",form.startDay||"—"],["Sacrament(s) Received",form.sacramentDate||"—"],["Sacraments Needed",(form.sacramentsNeeded||[]).join(", ")||"—"],["Marital Status",form.maritalStatus||"—"]].map(([k,v])=>(
+            {[["First Name",form.firstName||"—"],["Last Name",form.lastName||"—"],["Email",form.email||"—"],["Phone",form.phone||"—"],["Address",form.address||"—"],["Stage",form.stage],["Start Date",form.startDay||"—"],["Sacrament(s) Received",form.sacramentDate||"—"],["Sacraments Needed",(form.sacramentsNeeded||[]).join(", ")||"—"],["Marital Status",form.maritalStatus||"—"]].map(([k,v])=>(
               <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}`,fontSize:14}}>
                 <span style={{color:C.muted}}>{k}</span><span style={{fontWeight:500}}>{v}</span>
               </div>
