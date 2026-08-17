@@ -422,7 +422,6 @@
     const openView=(s)=>{setForm({...s});setModal("view");};
     const save=async()=>{
       if(!form.name){setSaveError("Please enter the student's name.");return;}
-      if(!form.email){setSaveError("Please enter an email address.");return;}
       setSaveError("");
       const item={...form,id:form.id||Date.now(),joined:form.joined||new Date().toISOString().slice(0,10)};
       await saveItem("students",item);
