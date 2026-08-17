@@ -356,7 +356,7 @@
     return (
       <>
         <div className="stats-grid">
-          <div className="stat-card"><div className="stat-label">Catechumens</div><div className="stat-value">{(students||[]).length}</div><div className="stat-sub">Active</div></div>
+          <div className="stat-card"><div className="stat-label">Students/div><div className="stat-value">{(students||[]).length}</div><div className="stat-sub">Active</div></div>
           <div className="stat-card"><div className="stat-label">Avg Attendance</div><div className="stat-value">{avgAtt}%</div><div className="stat-sub">This term</div></div>
           <div className="stat-card"><div className="stat-label">Announcements</div><div className="stat-value">{(announcements||[]).length}</div><div className="stat-sub">Posted</div></div>
           <div className="stat-card"><div className="stat-label">Sessions</div><div className="stat-value">{(events||[]).length}</div><div className="stat-sub">Scheduled</div></div>
@@ -425,7 +425,7 @@
     return (
       <>
         <div className="section-header">
-          <h2>Catechumens</h2>
+          <h2>Students</h2>
           <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
             <div className="search-wrap"><span className="search-icon">🔍</span><input className="search-input" placeholder="Search…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
             <select className="form-input" style={{width:160}} value={stageFilter} onChange={e=>setStageFilter(e.target.value)}><option>All</option>{(stages||DEFAULT_STAGES).map(s=><option key={s}>{s}</option>)}</select>
@@ -905,11 +905,11 @@
 
     const isAdmin = currentUser.role==="admin";
     const isCatechist = currentUser.role==="catechist";
-    const adminNav = [{id:"dashboard",label:"Dashboard",icon:"🏠"},{id:"students",label:"Catechumens",icon:"👥"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Schedule",icon:"📅"},{id:"settings",label:"Settings",icon:"⚙️"}];
+    const adminNav = [{id:"dashboard",label:"Dashboard",icon:"🏠"},{id:"students",label:"Students",icon:"👥"},{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Schedule",icon:"📅"},{id:"settings",label:"Settings",icon:"⚙️"}];
     const catechistNav = [{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Schedule",icon:"📅"}];
     const studentNav = [{id:"announcements",label:"Announcements",icon:"📢"},{id:"materials",label:"Materials",icon:"📚"},{id:"calendar",label:"Schedule",icon:"📅"}];
     const nav = isAdmin ? adminNav : isCatechist ? catechistNav : studentNav;
-    const titles = {dashboard:"Overview",students:"Catechumens",announcements:"Announcements",materials:"Materials",calendar:"Class Schedule",settings:"Settings"};
+    const titles = {dashboard:"Overview",students:"Students",announcements:"Announcements",materials:"Materials",calendar:"Class Schedule",settings:"Settings"};
     const navigate = id => { setPage(id); setSidebarOpen(false); };
 
     return (
