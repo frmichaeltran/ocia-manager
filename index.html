@@ -465,6 +465,19 @@
               <div className="form-group"><label className="form-label">Start Day</label><input className="form-input" type="date" value={form.startDay||""} onChange={e=>setForm(f=>({...f,startDay:e.target.value}))}/></div>
             </div>
             <div className="form-group"><label className="form-label">Date of Sacrament(s) Received</label><input className="form-input" type="date" value={form.sacramentDate||""} onChange={e=>setForm(f=>({...f,sacramentDate:e.target.value}))}/></div>
+            <div className="form-group">
+              <label className="form-label">Sacraments Needed</label>
+              {["Confirmation only","Sacraments of Initiation","Profession of Faith"].map(opt=>(
+                <div key={opt} style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                  <input type="checkbox" id={opt} checked={(form.sacramentsNeeded||[]).includes(opt)}
+                    onChange={e=>{
+                      const cur=form.sacramentsNeeded||[];
+                      setForm(f=>({...f,sacramentsNeeded:e.target.checked?[...cur,opt]:cur.filter(x=>x!==opt)}));
+                    }}/>
+                  <label htmlFor={opt} style={{fontSize:14,cursor:"pointer"}}>{opt}</label>
+                </div>
+              ))}
+            </div>
             <div className="form-group"><label className="form-label">Notes</label><textarea className="form-input" rows={2} value={form.notes||""} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} style={{resize:"vertical"}}/></div>
             <ModalButtons onCancel={()=>setModal(null)} onSave={save}/>
           </Modal>
@@ -475,7 +488,7 @@
               <div style={{width:48,height:48,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontWeight:700}}>{initials(form.name||"")}</div>
               <div><div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>{form.name}</div><StageTag stage={form.stage} stages={stages}/></div>
             </div>
-            {[["Email",form.email],["Phone",form.phone],["Stage",form.stage],["Start Day",form.startDay||"—"],["Sacrament(s) Received",form.sacramentDate||"—"]].map(([k,v])=>(
+            {[["Email",form.email],["Phone",form.phone],["Stage",form.stage],["Start Day",form.startDay||"—"],["Sacrament(s) Received",form.sacramentDate||"—"],["Sacraments Needed",(form.sacramentsNeeded||[]).join(", ")||"—"]].map(([k,v])=>(
               <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}`,fontSize:14}}>
                 <span style={{color:C.muted}}>{k}</span><span style={{fontWeight:500}}>{v}</span>
               </div>
