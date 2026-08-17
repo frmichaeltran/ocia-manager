@@ -136,7 +136,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-  import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+  import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc, getDocs, writeBatch, getDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCk2f8a_388w6XqP6TR61iC-Kg3vvGG69U",
@@ -150,7 +150,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   window.__db = db;
-  window.__firebase = { collection, doc, onSnapshot, setDoc, deleteDoc, getDocs, writeBatch };
+  window.__firebase = { collection, doc, onSnapshot, setDoc, deleteDoc, getDocs, writeBatch, getDoc };
 </script>
 
 <script type="text/babel">
@@ -169,22 +169,24 @@
     const [data, setData] = useState(null);
     useEffect(() => {
       const db = window.__db;
-      const { collection, onSnapshot, setDoc, doc, getDocs } = window.__firebase;
+      const { collection, onSnapshot, setDoc, doc, getDoc } = window.__firebase;
       if (!db) return;
-      // Check if this collection was ever initialized
-      const initKey = `ocia_init_${colName}`;
-      const alreadyInited = localStorage.getItem(initKey);
       const col = collection(db, colName);
       const unsub = onSnapshot(col, async snap => {
-        if (snap.empty && !alreadyInited && seedData && seedData.length > 0) {
-          // First time ever — seed default data
-          localStorage.setItem(initKey, "1");
-          for (const item of seedData) {
-            await setDoc(doc(db, colName, String(item.id)), item);
+        if (snap.empty && seedData && seedData.length > 0) {
+          // Check Firebase if this collection was ever initialized
+          const initDoc = await getDoc(doc(db, "config", `init_${colName}`));
+          if (!initDoc.exists()) {
+            // First time ever — seed and mark as initialized
+            await setDoc(doc(db, "config", `init_${colName}`), { initialized: true });
+            for (const item of seedData) {
+              await setDoc(doc(db, colName, String(item.id)), item);
+            }
+          } else {
+            // Was initialized before — just show empty list
+            setData([]);
           }
         } else {
-          // Always show what's in Firebase, even if empty
-          if(!alreadyInited) localStorage.setItem(initKey, "1");
           setData(snap.docs.map(d => d.data()));
         }
       });
@@ -569,6 +571,53 @@
     const [savingAtt,setSavingAtt]=useState(false);
     const sorted=(events||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
 
+    const printSchedule=()=>{
+      const rows=sorted.map((ev,i)=>`
+        <tr style="background:${i%2===0?"#F7F4FC":"#FFFFFF"}">
+          <td style="padding:10px 14px;border:1px solid #DDD5EE;font-size:13px;white-space:nowrap;">${new Date(ev.date+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"})}</td>
+          <td style="padding:10px 14px;border:1px solid #DDD5EE;font-size:13px;">${ev.content||""}</td>
+          <td style="padding:10px 14px;border:1px solid #DDD5EE;font-size:13px;">${ev.catechist||""}</td>
+        </tr>`).join("");
+      const win=window.open("","_blank");
+      win.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>OCIA Class Schedule — St. Catherine of Siena</title>
+          <style>
+            @page { size: letter portrait; margin: 0.75in; }
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body { font-family: 'Georgia', serif; color: #1a1a2e; }
+            .header { text-align: center; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 3px solid #3D2C6B; }
+            .cross { font-size: 24px; color: #9B7FD4; margin-bottom: 6px; }
+            .parish { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #9B7FD4; margin-bottom: 4px; }
+            h1 { font-size: 22px; color: #3D2C6B; margin-bottom: 2px; }
+            .subtitle { font-size: 12px; color: #7B6FA0; }
+            table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+            th { background: #3D2C6B; color: #FFFFFF; padding: 10px 14px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid #3D2C6B; text-align: left; }
+            .footer { margin-top: 24px; text-align: center; font-size: 11px; color: #7B6FA0; border-top: 1px solid #DDD5EE; padding-top: 12px; }
+            @media print { button { display: none; } }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="cross">✝</div>
+            <div class="parish">St. Catherine of Siena Catholic Church</div>
+            <h1>OCIA Class Schedule</h1>
+            <div class="subtitle">Carrollton, Texas · ${new Date().getFullYear()}–${new Date().getFullYear()+1} Program Year</div>
+          </div>
+          <table>
+            <thead><tr><th style="width:22%">Date</th><th style="width:56%">Content</th><th style="width:22%">Catechist</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+          <div class="footer">St. Catherine of Siena Catholic Church · OCIA Program · Carrollton, TX · Printed ${new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}</div>
+          <script>window.onload=()=>{window.print();}<\/script>
+        </body>
+        </html>
+      `);
+      win.document.close();
+    };
+
     const openAdd=()=>{setForm({date:"",content:"",catechist:"Fr. Michael"});setError("");setModal("add");};
     const openEdit=(ev)=>{setForm({...ev});setError("");setModal("edit");};
     const save=async()=>{
@@ -648,7 +697,13 @@
 
     return (
       <>
-        <div className="section-header"><h2>Class Schedule</h2><button className="btn btn-primary" onClick={openAdd}>+ Add Session</button></div>
+        <div className="section-header">
+          <h2>Class Schedule</h2>
+          <div style={{display:"flex",gap:8}}>
+            <button className="btn btn-outline" onClick={printSchedule}>🖨️ Print</button>
+            <button className="btn btn-primary" onClick={openAdd}>+ Add Session</button>
+          </div>
+        </div>
         <div className="card" style={{padding:0}}>
           {sorted.length===0&&<div className="empty"><div className="empty-icon">📅</div><p>No sessions yet</p></div>}
           {sorted.map(ev=><SessionRow key={ev.id} ev={ev}/>)}
