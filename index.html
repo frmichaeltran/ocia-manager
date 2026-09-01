@@ -420,7 +420,7 @@
       const full=`${s.firstName||""} ${s.lastName||""} ${s.name||""}`.toLowerCase();
       return (stageFilter==="All"||s.stage===stageFilter)&&(full.includes(search.toLowerCase())||(s.email||"").toLowerCase().includes(search.toLowerCase()));
     }).sort((a,b)=>(a.lastName||"").localeCompare(b.lastName||""));
-    const openAdd=()=>{setForm({firstName:"",lastName:"",email:"",phone:"",stage:(stages||DEFAULT_STAGES)[0],notes:"",address:"",startDay:"",sacramentDate:"",sacramentsNeeded:[],maritalStatus:""});setSaveError("");setModal("add");};
+    const openAdd=()=>{setForm({firstName:"",lastName:"",email:"",phone:"",stage:(stages||DEFAULT_STAGES)[0],notes:"",address:"",startDay:"",sacramentDate:"",sacramentsNeeded:[],maritalStatus:"",sponsor:"",confirmationName:""});setSaveError("");setModal("add");};
     const openEdit=(s)=>{setForm({...s});setSaveError("");setModal("edit");};
     const openView=(s)=>{setForm({...s});setModal("view");};
     const save=async()=>{
@@ -480,7 +480,7 @@
             <div className="form-group"><label className="form-label">Date of Sacrament(s) Received</label><input className="form-input" type="date" value={form.sacramentDate||""} onChange={e=>setForm(f=>({...f,sacramentDate:e.target.value}))}/></div>
             <div className="form-group">
               <label className="form-label">Sacraments Needed</label>
-              {["Confirmation only","Sacraments of Initiation","Profession of Faith"].map(opt=>(
+              {["Baptism","First Holy Communion & Confirmation","Profession of Faith"].map(opt=>(
                 <div key={opt} style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
                   <input type="checkbox" id={`sn_${opt}`} checked={(form.sacramentsNeeded||[]).includes(opt)}
                     onChange={e=>{const cur=form.sacramentsNeeded||[];setForm(f=>({...f,sacramentsNeeded:e.target.checked?[...cur,opt]:cur.filter(x=>x!==opt)}));}}/>
@@ -499,6 +499,10 @@
               ))}
             </div>
             <div className="form-group"><label className="form-label">Notes</label><textarea className="form-input" rows={2} value={form.notes||""} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} style={{resize:"vertical"}}/></div>
+            <div className="form-row">
+              <div className="form-group"><label className="form-label">Sponsor</label><input className="form-input" value={form.sponsor||""} onChange={e=>setForm(f=>({...f,sponsor:e.target.value}))} placeholder="Sponsor name"/></div>
+              <div className="form-group"><label className="form-label">Confirmation Name</label><input className="form-input" value={form.confirmationName||""} onChange={e=>setForm(f=>({...f,confirmationName:e.target.value}))} placeholder="Saint name"/></div>
+            </div>
             <ModalButtons onCancel={()=>setModal(null)} onSave={save}/>
           </Modal>
         )}
@@ -508,7 +512,7 @@
               <div style={{width:48,height:48,borderRadius:"50%",background:C.navy,color:C.goldLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontWeight:700}}>{((form.firstName||"")[0]||"")}{((form.lastName||"")[0]||"")}</div>
               <div><div style={{fontFamily:"Playfair Display,serif",fontSize:18}}>{form.firstName} {form.lastName}</div><StageTag stage={form.stage} stages={stages}/></div>
             </div>
-            {[["First Name",form.firstName||"—"],["Last Name",form.lastName||"—"],["Email",form.email||"—"],["Phone",form.phone||"—"],["Address",form.address||"—"],["Stage",form.stage],["Start Date",form.startDay||"—"],["Sacrament(s) Received",form.sacramentDate||"—"],["Sacraments Needed",(form.sacramentsNeeded||[]).join(", ")||"—"],["Marital Status",form.maritalStatus||"—"]].map(([k,v])=>(
+            {[["First Name",form.firstName||"—"],["Last Name",form.lastName||"—"],["Email",form.email||"—"],["Phone",form.phone||"—"],["Address",form.address||"—"],["Stage",form.stage],["Start Date",form.startDay||"—"],["Sacrament(s) Received",form.sacramentDate||"—"],["Sacraments Needed",(form.sacramentsNeeded||[]).join(", ")||"—"],["Marital Status",form.maritalStatus||"—"],["Sponsor",form.sponsor||"—"],["Confirmation Name",form.confirmationName||"—"]].map(([k,v])=>(
               <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}`,fontSize:14}}>
                 <span style={{color:C.muted}}>{k}</span><span style={{fontWeight:500}}>{v}</span>
               </div>
