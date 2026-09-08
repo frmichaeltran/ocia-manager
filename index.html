@@ -433,15 +433,13 @@
     const remove=async(id)=>{if(confirm("Remove this student?"))await removeItem("students",id);};
 
     const sendEmail=()=>{
-      const targets = emailGroup==="All"
+      const targets = stageFilter==="All"
         ? (students||[])
-        : (students||[]).filter(s=>s.stage===emailGroup);
+        : (students||[]).filter(s=>s.stage===stageFilter);
       const emails=targets.filter(s=>s.email).map(s=>s.email).join(";");
       if(!emails){alert("No student emails found for this group.");return;}
       window.location.href=`mailto:${emails}`;
     };
-
-    const [emailGroup,setEmailGroup]=useState("All");
 
     return (
       <>
@@ -449,14 +447,8 @@
           <h2>OCIA Students</h2>
           <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
             <div className="search-wrap"><span className="search-icon">🔍</span><input className="search-input" placeholder="Search…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
-            <select className="form-input" style={{width:160}} value={stageFilter} onChange={e=>setStageFilter(e.target.value)}><option>All</option>{(stages||DEFAULT_STAGES).map(s=><option key={s}>{s}</option>)}</select>
-            <div style={{display:"flex",gap:6,alignItems:"center"}}>
-              <select className="form-input" style={{width:170}} value={emailGroup} onChange={e=>setEmailGroup(e.target.value)}>
-                <option value="All">All Students</option>
-                {(stages||DEFAULT_STAGES).map(s=><option key={s} value={s}>{s}</option>)}
-              </select>
-              <button className="btn btn-outline" onClick={sendEmail}>✉️ Email</button>
-            </div>
+            <select className="form-input" style={{width:180}} value={stageFilter} onChange={e=>setStageFilter(e.target.value)}><option value="All">All Students</option>{(stages||DEFAULT_STAGES).map(s=><option key={s} value={s}>{s}</option>)}</select>
+            <button className="btn btn-outline" onClick={sendEmail}>✉️ Email</button>
             <button className="btn btn-primary" onClick={openAdd}>+ Add</button>
           </div>
         </div>
