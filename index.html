@@ -412,13 +412,15 @@
   // ── ADMIN STUDENTS ──
   function AdminStudents({students,stages}) {
     const [search,setSearch]=useState("");
-    const [stageFilter,setStageFilter]=useState("All");
+    const [stageFilter,setStageFilter]=useState([]);
+    const [showStageMenu,setShowStageMenu]=useState(false);
     const [modal,setModal]=useState(null);
     const [form,setForm]=useState({});
     const [saveError,setSaveError]=useState("");
     const filtered=(students||[]).filter(s=>{
       const full=`${s.firstName||""} ${s.lastName||""} ${s.name||""}`.toLowerCase();
-      return (stageFilter==="All"||s.stage===stageFilter)&&(full.includes(search.toLowerCase())||(s.email||"").toLowerCase().includes(search.toLowerCase()));
+      const stageMatch=stageFilter.length===0||stageFilter.includes(s.stage);
+      return stageMatch&&(full.includes(search.toLowerCase())||(s.email||"").toLowerCase().includes(search.toLowerCase()));
     }).sort((a,b)=>(a.lastName||"").localeCompare(b.lastName||""));
     const openAdd=()=>{setForm({firstName:"",lastName:"",email:"",phone:"",stage:(stages||DEFAULT_STAGES)[0],notes:"",address:"",startDay:"",sacramentDate:"",sacramentsNeeded:[],maritalStatus:"",sponsor:"",confirmationName:"",dob:""});setSaveError("");setModal("add");};
     const openEdit=(s)=>{setForm({...s});setSaveError("");setModal("edit");};
@@ -435,9 +437,9 @@
     const calcAge=(dob)=>{if(!dob)return"—";const b=new Date(dob);const today=new Date();let age=today.getFullYear()-b.getFullYear();if(today<new Date(today.getFullYear(),b.getMonth(),b.getDate()))age--;return age;};
 
     const sendEmail=()=>{
-      const targets = stageFilter==="All"
+      const targets=stageFilter.length===0
         ? (students||[])
-        : (students||[]).filter(s=>s.stage===stageFilter);
+        : (students||[]).filter(s=>stageFilter.includes(s.stage));
       const emails=targets.filter(s=>s.email).map(s=>s.email).join(";");
       if(!emails){alert("No student emails found for this group.");return;}
       window.location.href=`mailto:${emails}`;
@@ -449,7 +451,28 @@
           <h2>OCIA Students</h2>
           <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
             <div className="search-wrap"><span className="search-icon">🔍</span><input className="search-input" placeholder="Search…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
-            <select className="form-input" style={{width:180}} value={stageFilter} onChange={e=>setStageFilter(e.target.value)}><option value="All">All Students</option>{(stages||DEFAULT_STAGES).map(s=><option key={s} value={s}>{s}</option>)}</select>
+            {/* Stage checklist */}
+            <div style={{position:"relative"}}>
+              <button className="btn btn-outline" onClick={()=>setShowStageMenu(v=>!v)}>
+                {stageFilter.length===0?"All Stages":stageFilter.length===1?stageFilter[0]:`${stageFilter.length} Stages`} ▾
+              </button>
+              {showStageMenu&&(
+                <div style={{position:"absolute",top:"100%",left:0,marginTop:4,background:C.white,border:`1px solid ${C.border}`,borderRadius:10,padding:"10px 14px",zIndex:50,minWidth:220,boxShadow:"0 4px 16px rgba(0,0,0,0.1)"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:8}}>
+                    <span style={{fontSize:11,fontWeight:600,textTransform:"uppercase",letterSpacing:1,color:C.muted}}>Filter by Stage</span>
+                    <button onClick={()=>setStageFilter([])} style={{fontSize:11,color:C.gold,background:"none",border:"none",cursor:"pointer"}}>Clear</button>
+                  </div>
+                  {(stages||DEFAULT_STAGES).map(s=>(
+                    <div key={s} style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                      <input type="checkbox" id={`sf_${s}`} checked={stageFilter.includes(s)}
+                        onChange={e=>setStageFilter(f=>e.target.checked?[...f,s]:f.filter(x=>x!==s))}/>
+                      <label htmlFor={`sf_${s}`} style={{fontSize:13,cursor:"pointer"}}>{s}</label>
+                    </div>
+                  ))}
+                  <button className="btn btn-primary btn-sm" style={{width:"100%",marginTop:4}} onClick={()=>setShowStageMenu(false)}>Done</button>
+                </div>
+              )}
+            </div>
             <button className="btn btn-outline" onClick={sendEmail}>✉️ Email</button>
             <button className="btn btn-primary" onClick={openAdd}>+ Add</button>
           </div>
