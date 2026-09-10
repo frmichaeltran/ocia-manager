@@ -66,10 +66,10 @@
     .progress-bar { height: 6px; background: #DDD5EE; border-radius: 3px; overflow: hidden; }
     .progress-fill { height: 100%; background: #9B7FD4; border-radius: 3px; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
-    .modal { background: #FFF; border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-    .modal-header { padding: 20px 20px 12px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #DDD5EE; position: sticky; top: 0; background: #FFF; z-index: 1; }
+    .modal { background: #FFF; border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; }
+    .modal-header { padding: 20px 20px 12px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #DDD5EE; flex-shrink: 0; background: #FFF; }
     .modal-header h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #3D2C6B; }
-    .modal-body { padding: 16px 20px 20px; }
+    .modal-body { padding: 16px 20px 20px; overflow-y: auto; flex: 1 1 auto; }
     .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #7B6FA0; padding: 4px 8px; }
     .form-group { margin-bottom: 14px; }
     .form-label { display: block; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: #7B6FA0; margin-bottom: 5px; }
@@ -270,7 +270,7 @@
 
   function ModalButtons({onCancel,onSave,saveLabel="Save"}) {
     return (
-      <div style={{display:"flex",gap:8,marginTop:16,paddingTop:14,borderTop:`1px solid ${C.border}`}}>
+      <div style={{display:"flex",gap:8,marginTop:16,paddingTop:14,borderTop:`1px solid ${C.border}`,position:"sticky",bottom:0,background:"#FFF",zIndex:2,marginLeft:-20,marginRight:-20,paddingLeft:20,paddingRight:20,paddingBottom:4}}>
         <button className="btn btn-outline" style={{flex:1}} onClick={onCancel}>Cancel</button>
         <button className="btn btn-primary" style={{flex:2}} onClick={onSave}>✓ {saveLabel}</button>
       </div>
