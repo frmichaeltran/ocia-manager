@@ -349,22 +349,81 @@
   }
 
   // ── ADMIN DASHBOARD ──
-  function AdminDashboard({students,announcements,events,stages}) {
+  function AdminDashboard({students,confirmands,announcements,events,stages}) {
     const today=new Date().toISOString().slice(0,10);
     const upcoming=(events||[]).filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
-    const withSacrament=(students||[]).filter(s=>s.sacramentDate).length;
     const [now,setNow]=useState(new Date());
+    const [nameTagModal,setNameTagModal]=useState(false);
+    const [tagGroup,setTagGroup]=useState("OCIA");
+    const [tagStages,setTagStages]=useState([]);
+    const [tagDate,setTagDate]=useState(new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}));
     useEffect(()=>{const t=setInterval(()=>setNow(new Date()),1000);return()=>clearInterval(t);},[]);
     const txTime=now.toLocaleString("en-US",{timeZone:"America/Chicago",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
     const txDate=now.toLocaleString("en-US",{timeZone:"America/Chicago",weekday:"short",month:"short",day:"numeric",year:"numeric"});
+
+    const printNameTags=()=>{
+      let tagStudents=tagGroup==="OCIA"
+        ? (students||[]).filter(s=>tagStages.length===0||tagStages.includes(s.stage))
+        : (confirmands||[]);
+      tagStudents=[...tagStudents].sort((a,b)=>(a.lastName||"").localeCompare(b.lastName||""));
+      if(tagStudents.length===0){alert("No students found for selected group.");return;}
+
+      // Avery 5392: 2 columns x 4 rows = 8 tags per page, 2.33" x 3.5"
+      const tagHTML=tagStudents.map(s=>`
+        <div class="tag">
+          <div class="tag-parish">St. Catherine of Siena</div>
+          <div class="tag-program">${tagGroup==="OCIA"?"OCIA Program":"Adult Confirmation"}</div>
+          <div class="tag-name">${s.firstName||""} ${s.lastName||""}</div>
+          <div class="tag-row"><span class="tag-label">Confirmation Name:</span> ${s.confirmationName||"___________________"}</div>
+          <div class="tag-row"><span class="tag-label">Sponsor:</span> ${s.sponsor||"___________________"}</div>
+          <div class="tag-date">${tagDate}</div>
+        </div>`).join("");
+
+      const win=window.open("","_blank");
+      win.document.write(`<!DOCTYPE html><html><head>
+        <title>Name Tags — St. Catherine of Siena</title>
+        <style>
+          @page { size: letter portrait; margin: 0.5in 0.19in; }
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body { font-family: Arial, sans-serif; }
+          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+          .tag {
+            width: 3.5in; height: 2.33in;
+            border: 1px dashed #ccc;
+            padding: 14px 16px;
+            display: flex; flex-direction: column; justify-content: center;
+            page-break-inside: avoid;
+          }
+          .tag-parish { font-size: 9pt; color: #7B6FA0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+          .tag-program { font-size: 8pt; color: #9B7FD4; margin-bottom: 8px; font-weight: bold; }
+          .tag-name { font-size: 22pt; font-weight: bold; color: #3D2C6B; margin-bottom: 10px; line-height: 1.1; }
+          .tag-row { font-size: 9pt; color: #333; margin-bottom: 5px; }
+          .tag-label { font-weight: bold; color: #3D2C6B; }
+          .tag-date { font-size: 8pt; color: #aaa; margin-top: auto; text-align: right; }
+          @media print { .tag { border: 1px dashed #ccc; } }
+        </style>
+      </head><body>
+        <div class="grid">${tagHTML}</div>
+        <script>window.onload=()=>{window.print();}<\/script>
+      </body></html>`);
+      win.document.close();
+      setNameTagModal(false);
+    };
+
     return (
       <>
         <div className="stats-grid">
-          <div className="stat-card"><div className="stat-label">Students</div><div className="stat-value">{(students||[]).length}</div><div className="stat-sub">Active</div></div>
+          <div className="stat-card"><div className="stat-label">OCIA Students</div><div className="stat-value">{(students||[]).length}</div><div className="stat-sub">Active</div></div>
           <div className="stat-card"><div className="stat-label">Carrollton, TX</div><div className="stat-value" style={{fontSize:20,marginTop:2}}>{txTime}</div><div className="stat-sub">{txDate}</div></div>
           <div className="stat-card"><div className="stat-label">Announcements</div><div className="stat-value">{(announcements||[]).length}</div><div className="stat-sub">Posted</div></div>
           <div className="stat-card"><div className="stat-label">Sessions</div><div className="stat-value">{(events||[]).length}</div><div className="stat-sub">Scheduled</div></div>
         </div>
+
+        {/* Name Tags button */}
+        <div style={{marginBottom:20}}>
+          <button className="btn btn-gold" onClick={()=>setNameTagModal(true)}>🏷️ Print Name Tags</button>
+        </div>
+
         <div className="two-col" style={{marginBottom:20}}>
           <div className="card">
             <h3 style={{fontSize:16,marginBottom:14}}>Journey Progress</h3>
@@ -405,6 +464,40 @@
             </div>
           ))}
         </div>
+
+        {/* Name Tags Modal */}
+        {nameTagModal&&(
+          <Modal title="🏷️ Print Name Tags" onClose={()=>setNameTagModal(false)}>
+            <div className="form-group">
+              <label className="form-label">Program</label>
+              <div style={{display:"flex",gap:10}}>
+                {["OCIA","Adult Confirmation"].map(g=>(
+                  <button key={g} onClick={()=>{setTagGroup(g);setTagStages([]);}}
+                    style={{flex:1,padding:"10px",borderRadius:8,border:`2px solid ${tagGroup===g?C.gold:C.border}`,background:tagGroup===g?"#F3EFFE":C.white,cursor:"pointer",fontSize:13,fontWeight:600,color:tagGroup===g?C.navy:"#374151",fontFamily:"Source Sans 3,sans-serif"}}>
+                    {g}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {tagGroup==="OCIA"&&(
+              <div className="form-group">
+                <label className="form-label">Filter by Stage (leave blank for all)</label>
+                {(stages||DEFAULT_STAGES).map(s=>(
+                  <div key={s} style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+                    <input type="checkbox" id={`nt_${s}`} checked={tagStages.includes(s)}
+                      onChange={e=>setTagStages(f=>e.target.checked?[...f,s]:f.filter(x=>x!==s))}/>
+                    <label htmlFor={`nt_${s}`} style={{fontSize:13,cursor:"pointer"}}>{s}</label>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="form-group">
+              <label className="form-label">Event Date (shown on tag)</label>
+              <input className="form-input" value={tagDate} onChange={e=>setTagDate(e.target.value)} placeholder="e.g. June 4, 2026"/>
+            </div>
+            <ModalButtons onCancel={()=>setNameTagModal(false)} onSave={printNameTags} saveLabel="🖨️ Print Name Tags"/>
+          </Modal>
+        )}
       </>
     );
   }
@@ -1048,7 +1141,7 @@
             <div className="topbar-right"><div className="avatar">{isAdmin?"M":isCatechist?"C":"✝"}</div></div>
           </div>
           <div className="content">
-            {isAdmin&&page==="dashboard"&&<AdminDashboard students={students} announcements={announcements} events={events} stages={stages}/>}
+            {isAdmin&&page==="dashboard"&&<AdminDashboard students={students} confirmands={confirmands} announcements={announcements} events={events} stages={stages}/>}
             {isAdmin&&page==="students"&&<AdminStudents students={students} stages={stages}/>}
             {isAdmin&&page==="confirmation"&&<AdminConfirmation confirmands={confirmands}/>}
             {isAdmin&&page==="announcements"&&<AdminAnnouncements announcements={announcements}/>}
