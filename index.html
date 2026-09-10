@@ -369,63 +369,50 @@
       if(tagStudents.length===0){alert("No students found for selected group.");return;}
 
       const TAGS_PER_PAGE=6;
-
-      const PRAYER_CELL=`<div style="width:3.997in;height:3in;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;text-align:center;background:white;">
-        <div style="font-size:13pt;font-weight:bold;color:#0d2b4e;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Anima Christi</div>
-        <div style="width:50%;height:0;border-top:1px solid #c9a84c;margin-bottom:8px;"></div>
-        <div style="font-size:8pt;color:#000;line-height:1.6;font-style:italic;">
-          Soul of Christ, sanctify me.<br>Body of Christ, save me.<br>
-          Blood of Christ, inebriate me.<br>Water from the side of Christ, wash me.<br>
-          Passion of Christ, strengthen me.<br>O good Jesus, hear me.<br>
-          Within your wounds, hide me.<br>Let me never be separated from you.<br>
-          From the malignant enemy, defend me.<br>In the hour of my death, call me,<br>
-          And bid me come to you,<br>That with your saints I may praise you<br>
-          Forever and ever. Amen.
-        </div>
-      </div>`;
+      const PRAYER_TEXT="Soul of Christ, sanctify me.<br>Body of Christ, save me.<br>Blood of Christ, inebriate me.<br>Water from the side of Christ, wash me.<br>Passion of Christ, strengthen me.<br>O good Jesus, hear me.<br>Within your wounds, hide me.<br>Let me never be separated from you.<br>From the malignant enemy, defend me.<br>In the hour of my death, call me,<br>And bid me come to you,<br>That with your saints I may praise you<br>Forever and ever. Amen.";
+      const PRAYER_CELL=`<div class="prayer-tag"><div class="prayer-title">Anima Christi</div><div class="prayer-divider"></div><div class="prayer-body">${PRAYER_TEXT}</div></div>`;
+      const CHURCH_HTML=`<div style="font-family:'EB Garamond',Georgia,serif;font-size:13pt;font-weight:bold;color:#000000;letter-spacing:1px;">St. Catherine of Siena</div>`;
 
       let pagesHtml="";
       for(let i=0;i<Math.max(tagStudents.length,1);i+=TAGS_PER_PAGE){
         const chunk=tagStudents.slice(i,i+TAGS_PER_PAGE);
-        let frontTags=chunk.map(s=>{
+        let front=chunk.map(s=>{
           const fullName=`${s.firstName||""} ${s.lastName||""}`.trim()||s.name||"";
-          const confName=s.confirmationName||"—";
-          return `<div style="width:3.997in;height:3in;position:relative;overflow:hidden;background:white;page-break-inside:avoid;">
-            <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px 14px;text-align:center;">
-              <div style="display:flex;justify-content:center;align-items:center;width:100%;margin-bottom:6px;">
-                <div style="font-size:9pt;letter-spacing:2px;text-transform:uppercase;color:#000;">St. Catherine of Siena</div>
-              </div>
-              <div style="font-family:'EB Garamond',Georgia,serif;font-size:40pt;font-weight:bold;color:#000000;line-height:1.05;margin-top:10px;margin-bottom:4px;">${confName}</div>
-              <div style="width:80%;height:2px;border:none;background:linear-gradient(to right,transparent,#c9a84c,transparent);margin:6px auto;-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div>
-              <div style="font-family:'Palatino Linotype',Palatino,Georgia,serif;font-size:15pt;font-weight:bold;color:#000000;position:absolute;bottom:46px;left:14px;right:14px;">${fullName}</div>
-              <div style="font-size:12pt;color:#0d2b4e;position:absolute;bottom:20px;left:14px;right:14px;text-align:center;">${tagDate}</div>
-            </div>
-          </div>`;
+          const confName=(s.confirmationName||"").trim()||"—";
+          return `<div class="tag"><div class="content"><div class="top-row">${CHURCH_HTML}</div><div class="conf-name">${confName}</div><div class="divider"></div><div class="full-name">${fullName}</div><div class="event-date">${tagDate}</div></div></div>`;
         }).join("");
-        // Fill empty slots
-        for(let j=chunk.length;j<TAGS_PER_PAGE;j++) frontTags+=`<div style="width:3.997in;height:3in;background:white;"></div>`;
-        const pb=i>0?`page-break-before:always;`:"";
-        pagesHtml+=`<div style="${pb}display:grid;grid-template-columns:repeat(2,3.997in);grid-template-rows:repeat(3,3in);">${frontTags}</div>`;
-        // Prayer back page
-        pagesHtml+=`<div style="page-break-before:always;display:grid;grid-template-columns:repeat(2,3.997in);grid-template-rows:repeat(3,3in);">${PRAYER_CELL.repeat(TAGS_PER_PAGE)}</div>`;
+        for(let j=chunk.length;j<TAGS_PER_PAGE;j++) front+=`<div class="tag empty"></div>`;
+        const pb=i>0?" page-break":"";
+        pagesHtml+=`<div class="grid${pb}">${front}</div>`;
+        pagesHtml+=`<div class="grid page-break">${PRAYER_CELL.repeat(TAGS_PER_PAGE)}</div>`;
       }
 
       const win=window.open("","_blank");
-      win.document.write(`<!DOCTYPE html><html lang="en"><head>
-        <meta charset="UTF-8">
-        <title>Name Tags — St. Catherine of Siena</title>
-        <style>
-          @page{size:letter portrait;margin:1in 0.253in 1in 0.253in}
-          *{box-sizing:border-box;margin:0;padding:0}
-          body{font-family:Georgia,serif;background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-          @media screen{body{padding:20px;background:#f0f4f8}.print-btn{position:fixed;top:16px;right:16px;padding:10px 24px;background:#0d2b4e;color:white;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:700}}
-          @media print{.print-btn{display:none}}
-        </style>
-      </head><body>
-        <button class="print-btn" onclick="window.print()">🖨 Print</button>
-        ${pagesHtml}
-        <script>window.onload=()=>{window.print();}<\/script>
-      </body></html>`);
+      win.document.write(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<title>Name Tags — St. Catherine of Siena</title><style>
+@page{size:letter portrait;margin:1in 0.253in 1in 0.253in}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.grid{display:grid;grid-template-columns:repeat(2,3.997in);grid-template-rows:repeat(3,3in)}
+.page-break{page-break-before:always}
+.tag{width:3.997in;height:3in;position:relative;overflow:hidden;background:white;page-break-inside:avoid}
+.content{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px 14px;text-align:center}
+.top-row{display:flex;justify-content:center;align-items:center;width:100%;margin-bottom:6px}
+.conf-name{font-family:"EB Garamond",Georgia,serif;font-size:40pt;font-weight:bold;color:#000000;line-height:1.05;margin-top:40px;margin-bottom:4px}
+.divider{width:80%;height:2px;border:none;background:linear-gradient(to right,transparent,#c9a84c,transparent);margin:6px auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.full-name{font-family:"Palatino Linotype",Palatino,Georgia,serif;font-size:15pt;font-weight:bold;color:#000000;position:absolute;bottom:46px;left:14px;right:14px}
+.event-date{font-size:12pt;color:#0d2b4e;position:absolute;bottom:20px;left:14px;right:14px;text-align:center}
+.prayer-tag{width:3.997in;height:3in;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;text-align:center;background:white}
+.prayer-title{font-size:13pt;font-weight:bold;color:#0d2b4e;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.prayer-divider{width:50%;height:0;border-top:1px solid #c9a84c;margin-bottom:8px}
+.prayer-body{font-size:8pt;color:#000;line-height:1.6;font-style:italic}
+@media screen{body{padding:20px;background:#f0f4f8}.grid{background:white;margin-bottom:4px;box-shadow:0 2px 8px rgba(0,0,0,.1)}.print-btn{position:fixed;top:16px;right:16px;padding:10px 24px;background:#0d2b4e;color:white;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:700}}
+@media print{.print-btn{display:none}}
+</style></head><body>
+<button class="print-btn" onclick="window.print()">🖨 Print</button>
+${pagesHtml}
+<script>window.onload=()=>{window.print();}<\/script>
+</body></html>`);
       win.document.close();
       setNameTagModal(false);
     };
