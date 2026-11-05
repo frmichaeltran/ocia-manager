@@ -580,20 +580,18 @@ ${pagesHtml}
         <div className="card" style={{padding:0}}>
           <div className="table-wrap">
             <table>
-              <thead><tr><th>Last Name</th><th>First Name</th><th>DoB</th><th>Age</th><th>Email</th><th>Phone</th><th>Stage</th><th>Start Date</th><th>Date of Sacraments Received</th><th></th></tr></thead>
+              <thead><tr><th>Last Name</th><th>First Name</th><th>Email</th><th>Phone</th><th>Stage</th><th>Sponsor</th><th>Confirmation Name</th><th></th></tr></thead>
               <tbody>
                 {filtered.length===0&&<tr><td colSpan={8}><div className="empty"><div className="empty-icon">👤</div><p>No students found</p></div></td></tr>}
                 {filtered.map(s=>(
                   <tr key={s.id}>
                     <td><span style={{fontWeight:500,fontSize:13}}>{s.lastName||s.name||"—"}</span></td>
                     <td><span style={{fontSize:13}}>{s.firstName||"—"}</span></td>
-                    <td style={{fontSize:13}}>{s.dob||"—"}</td>
-                    <td style={{fontSize:13}}>{calcAge(s.dob)}</td>
                     <td><a href={`mailto:${s.email}`} style={{color:"#5B3FBE",textDecoration:"none",fontSize:13}}>{s.email}</a></td>
                     <td style={{fontSize:13}}><a href={`tel:${s.phone}`} style={{color:C.navy,textDecoration:"none"}}>{s.phone}</a></td>
                     <td><StageTag stage={s.stage} stages={stages}/></td>
-                    <td style={{fontSize:13}}>{s.startDay||"—"}</td>
-                    <td style={{fontSize:13}}>{s.sacramentDate||"—"}</td>
+                    <td style={{fontSize:13}}>{s.sponsor||"—"}</td>
+                    <td style={{fontSize:13}}>{s.confirmationName||"—"}</td>
                     <td><div style={{display:"flex",gap:4}}><button className="btn btn-outline btn-sm" onClick={()=>openView(s)}>View</button><button className="btn btn-outline btn-sm" onClick={()=>openEdit(s)}>Edit</button><button className="btn btn-danger btn-sm" onClick={()=>remove(s.id)}>✕</button></div></td>
                   </tr>
                 ))}
@@ -882,7 +880,7 @@ ${pagesHtml}
         <div className="card" style={{padding:0}}>
           <div className="table-wrap">
             <table>
-              <thead><tr><th>Last Name</th><th>First Name</th><th>Email</th><th>Phone</th><th>Start Date</th><th>Date of Sacrament Received</th><th></th></tr></thead>
+              <thead><tr><th>Last Name</th><th>First Name</th><th>Email</th><th>Phone</th><th>Sponsor</th><th>Confirmation Name</th><th></th></tr></thead>
               <tbody>
                 {filtered.length===0&&<tr><td colSpan={7}><div className="empty"><div className="empty-icon">👤</div><p>No students found</p></div></td></tr>}
                 {filtered.map(s=>(
@@ -891,8 +889,8 @@ ${pagesHtml}
                     <td><span style={{fontSize:13}}>{s.firstName||"—"}</span></td>
                     <td><a href={`mailto:${s.email}`} style={{color:"#5B3FBE",textDecoration:"none",fontSize:13}}>{s.email||"—"}</a></td>
                     <td style={{fontSize:13}}><a href={`tel:${s.phone}`} style={{color:C.navy,textDecoration:"none"}}>{s.phone||"—"}</a></td>
-                    <td style={{fontSize:13}}>{s.startDay||"—"}</td>
-                    <td style={{fontSize:13}}>{s.sacramentDate||"—"}</td>
+                    <td style={{fontSize:13}}>{s.sponsor||"—"}</td>
+                    <td style={{fontSize:13}}>{s.confirmationName||"—"}</td>
                     <td><div style={{display:"flex",gap:4}}><button className="btn btn-outline btn-sm" onClick={()=>openView(s)}>View</button><button className="btn btn-outline btn-sm" onClick={()=>openEdit(s)}>Edit</button><button className="btn btn-danger btn-sm" onClick={()=>remove(s.id)}>✕</button></div></td>
                   </tr>
                 ))}
